@@ -1,0 +1,26 @@
+// app/api/diplomas/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+
+export async function GET(request: NextRequest) {
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get('page') || '1';
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+
+    if (!token) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+
+    try {
+        const response = await fetch(
+            `https://exam-app.elevate-bootcamp.cloud/api/diplomas?page=${page}&limit=10`, // تأكد من v1
+            {
+                headers: { Authorization: `Bearer ${token}` },
+                cache: 'no-store',
+            }
+        );
+        const data = await response.json();
+        return NextResponse.json(data); // رجع الـ object كامل عشان الـ metadata
+    } catch (err) {
+        return NextResponse.json({ message: 'Error' }, { status: 500 });
+    }
+}

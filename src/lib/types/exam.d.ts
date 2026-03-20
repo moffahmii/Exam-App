@@ -3,8 +3,14 @@ declare interface IExam {
     title: string;
     description: string;
     image: string;
-    duration: number; 
+    duration: number;
     diplomaId: number;
     createdAt: string;
     updatedAt: string;
+}declare interface IDiplomaDetail {
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    exams: IExam[];
 }

@@ -1,34 +1,61 @@
 'use client';
+
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { EyeOff } from 'lucide-react';
-import Link from 'next/link';
-import React, { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react';
+import React, { useState, forwardRef } from 'react'
 
-export default function PasswordInput() {
+// زودنا الـ error والـ ...props عشان الـ register يشتغل
+interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    label?: string;
+    error?: string;
+}
+
+const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({
+    label = "Password",
+    id = "password",
+    placeholder = "********",
+    error,
+    className,
+    ...props // دي بتشمل الـ value, onChange, name اللي جايين من الـ register
+}, ref) => {
 
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className="space-y-2 font-mono">
-            <Label htmlFor="password" className="text-sm font-medium text-slate-700 font-sans">
-                Password
+        <div className="space-y-2 font-mono w-full">
+            <Label htmlFor={id} className="text-sm font-medium text-slate-700 font-sans">
+                {label}
             </Label>
             <div className="relative">
                 <Input
-                    id="password"
+                    {...props}
+                    ref={ref} // الخطوة دي هي اللي بتشيل الـ Error الأحمر في الـ page
+                    id={id}
+                    autoComplete='new-password'
                     type={showPassword ? "text" : "password"}
-                    placeholder="********"
-                    className="h-11 border-slate-200 pr-10 focus-visible:ring-blue-500"
+                    placeholder={placeholder}
+                    className={`h-11 border-slate-200 pr-10 focus-visible:ring-blue-500 ${error ? "border-red-500 focus-visible:ring-red-500" : ""} ${className}`}
                 />
                 <button
                     type="button"
-                    className="absolute right-3 top-1/2 cursor-pointer -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 cursor-pointer -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                 >
-                    <EyeOff size={18} />
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
                 </button>
             </div>
+
+            {/* مكان عرض رسالة الخطأ */}
+            {error && (
+                <p className="text-[10px] text-red-500 font-mono mt-1 ml-1">
+                    {error}
+                </p>
+            )}
         </div>
     );
-}
+});
+
+PasswordInput.displayName = "PasswordInput";
+
+export default PasswordInput;
