@@ -1,4 +1,3 @@
-// hooks/use-countdown-timer.ts
 import { useState, useEffect } from "react";
 
 export function useCountdownTimer(initialTime: number = 60) {

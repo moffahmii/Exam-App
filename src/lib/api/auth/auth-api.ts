@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/lib/types/api";
 import { ILoginFields, IloginResponse } from "@/lib/types/auth";
 import { cookies } from "next/headers";
+import { redirect } from 'next/navigation'
 
 const BASE_URL = 'https://exam-app.elevate-bootcamp.cloud/api';
 
@@ -22,13 +23,9 @@ export async function loginAction(fields: ILoginFields) {
         body: JSON.stringify(fields),
         headers: { 'Content-Type': 'application/json' }
     });
-
     const data: ApiResponse<IloginResponse> = await handleResponse(response);
-
     if (data.status === true && data.payload) {
         const cookieStore = await cookies();
-
-        // 1. تخزين التوكن (HttpOnly للأمان - المتصفح مش بيشوفه)
         cookieStore.set('token', data.payload.token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -36,9 +33,6 @@ export async function loginAction(fields: ILoginFields) {
             sameSite: 'lax',
             path: '/',
         });
-
-        // 2. تخزين بيانات اليوزر (عشان الـ Context والـ Sidebar يشوفوها)
-        // بنحول الـ object لـ string عشان الكوكيز مش بتقبل غير نصوص
         cookieStore.set('user_info', JSON.stringify(data.payload.user), {
             secure: process.env.NODE_ENV === 'production',
             maxAge: 60 * 60 * 24 * 7,
@@ -46,7 +40,6 @@ export async function loginAction(fields: ILoginFields) {
             path: '/',
         });
     }
-
     return data;
 }
 
@@ -100,4 +93,6 @@ export async function ForgorPasswordAction(email: string) {
 export async function logoutAction() {
     const cookieStore = await cookies();
     cookieStore.delete('token');
+    cookieStore.delete('user_info');
+    redirect('/login');
 }

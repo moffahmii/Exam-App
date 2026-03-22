@@ -17,7 +17,6 @@ export default function VerifyOTPPage() {
     const { timer, canResend, resetTimer } = useCountdownTimer(60);
     const { mutate, isPending, error } = useOTPVerification();
 
-    // حل مشكلة الـ Hydration Error
     useEffect(() => {
         const email = Cookies.get("user_email");
         if (email) setUserEmail(email);
@@ -29,8 +28,6 @@ export default function VerifyOTPPage() {
             mutate({ email: userEmail, code: otp });
         }
     };
-
-    // لو لسه مخلصش الـ Render الأول على الـ Client ميعرضش حاجة
     if (!mounted) return null;
 
     return (

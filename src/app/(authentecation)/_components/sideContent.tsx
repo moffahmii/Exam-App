@@ -3,7 +3,7 @@ import { BackCircle } from "./backCircle";
 
 export default function SideContent() {
     return (
-        <div className="hidden lg:flex flex-col justify-center overflow-hidden px-16 bg-gray-100 h-screen border-r relative">
+        <div className="hidden lg:flex flex-col justify-center overflow-hidden px-16 bg-gray-100 h-screen relative">
             {/* Background Layer */}
             <div className="absolute inset-0 blur-3xl opacity-40 pointer-events-none">
                 <BackCircle

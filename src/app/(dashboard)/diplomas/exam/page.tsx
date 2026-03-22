@@ -1,13 +1,13 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Clock, HelpCircle, ChevronLeft, ArrowRight, BookOpenText } from 'lucide-react';
+import { Clock, HelpCircle, ArrowRight } from 'lucide-react';
 import { getDiplomaDetails } from '@/lib/api/dashboard/diploma-details.api';
 
 export default async function ExamPage({
   searchParams,
 }: {
-  searchParams: Promise<{ id: string }>; // استقبال الـ Query Params
+  searchParams: Promise<{ id: string }>;
 }) {
   const { id } = await searchParams;
 
@@ -18,19 +18,22 @@ export default async function ExamPage({
 
   return (
     <main className="min-h-screen">
-      {/* Container */}
+
       <div className="container mx-auto p-4">
-        {/* Whole Card */}
         <div className="bg-white p-4 space-y-4">
-          {diploma.exams?.map((exam: IExam, index: number) => (
+          {diploma.exams?.map((exam: IExam) => (
             <div
               key={exam.id}
               className="group flex flex-col md:flex-row items-start md:items-center bg-blue-50 gap-6 p-6 relative"
             >
-              {/* Icon */}
-              <div className="relative w-24 h-24 bg-blue-100  overflow-hidden shrink-0  shadow-inner border border-blue-300">
+              {/* Image */}
+              <div className="relative w-24 h-24 bg-blue-100 overflow-hidden shrink-0 shadow-inner border border-blue-300">
                 <Image
-                  src={exam.image.startsWith('/') ? `https://www.elevate-bootcamp.cloud${exam.image}` : exam.image}
+                  src={
+                    exam.image.startsWith('/')
+                      ? `https://www.elevate-bootcamp.cloud${exam.image}`
+                      : exam.image
+                  }
                   alt={exam.title}
                   fill
                   className="object-contain p-3"
@@ -46,7 +49,7 @@ export default async function ExamPage({
                   </h3>
                   <div className="flex items-center gap-4 text-sm text-gray-800 font-medium">
                     <span className="flex items-center gap-2">
-                      <HelpCircle size={16} className="text-sm" />
+                      <HelpCircle size={16} />
                       25 Questions
                     </span>
                     <span className="flex items-center gap-2">
@@ -60,11 +63,11 @@ export default async function ExamPage({
                 </p>
               </div>
 
-              {/* Start Exam */}
+              {/* Start Button */}
               <div className="absolute -bottom-2 right-2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0 hidden md:block">
                 <Link
                   href={`/exams/${exam.id}`}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 font-normal text- font-mono transition-all"
+                  className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 font-mono"
                 >
                   START
                   <ArrowRight size={16} />
@@ -72,9 +75,10 @@ export default async function ExamPage({
               </div>
             </div>
           ))}
+
           {/* Footer */}
           <div className="text-center">
-            <p className="text-gray-600 font-mono text-lg font-noraml">
+            <p className="text-gray-600 font-mono text-lg">
               End of list
             </p>
           </div>

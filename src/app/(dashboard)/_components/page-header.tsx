@@ -1,26 +1,82 @@
 "use client";
-import React from "react";
-import { GraduationCap } from "lucide-react";
-import { useUserStore } from "@/lib/store/user-store";
 
-export default function PageHeader() {
-    const { headerTitle } = useUserStore();
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+type Breadcrumb = {
+    label: string;
+    href?: string;
+};
+
+type Props = {
+    title: string;
+    icon?: React.ReactNode;
+    breadcrumbs?: Breadcrumb[];
+    isLoading?: boolean;
+};
+
+export function PageHeader({
+    title,
+    icon,
+    breadcrumbs,
+    isLoading,
+}: Props) {
+    const router = useRouter();
 
     return (
-        <div className="space-y-4 mb-6">
-            <div className="flex items-center text-xs font-mono text-gray-400 lowercase tracking-widest">
-                <span>home</span>
-                <span className="mx-2">/</span>
-                <span className="text-blue-500 font-bold">{headerTitle}</span>
-            </div>
-            <div className="bg-[#1762EF] rounded-xl p-6 flex items-center gap-5 text-white shadow-lg transition-all duration-300">
-                <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-md">
-                    <GraduationCap size={32} strokeWidth={2.5} />
+        <div className="border-b bg-white">
+            {/* ================= HEADER ================= */}
+            <div className="flex items-center gap-4 px-6 py-4">
+                <button
+                    onClick={() => router.back()}
+                    className="p-2 rounded border hover:bg-gray-100"
+                >
+                    <ArrowLeft size={18} />
+                </button>
+
+                {icon && (
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full border bg-gray-50">
+                        {icon}
+                    </div>
+                )}
+
+                <div>
+                    {isLoading ? (
+                        <div className="h-5 w-40 bg-gray-200 rounded animate-pulse" />
+                    ) : (
+                        <h1 className="text-xl font-semibold">{title}</h1>
+                    )}
                 </div>
-                <h1 className="text-3xl font-black tracking-tight uppercase italic">
-                    {headerTitle}
-                </h1>
             </div>
+
+            {/* ================= BREADCRUMB ================= */}
+            {breadcrumbs && breadcrumbs.length > 0 && (
+                <div className="flex items-center gap-2 text-sm text-gray-500 px-6 pb-4">
+                    {breadcrumbs.map((item, index) => {
+                        const isLast = index === breadcrumbs.length - 1;
+
+                        return (
+                            <div key={index} className="flex items-center gap-2">
+                                {item.href && !isLast ? (
+                                    <Link
+                                        href={item.href}
+                                        className="hover:text-black transition"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ) : (
+                                    <span className="text-black font-medium">
+                                        {isLoading && isLast ? "..." : item.label}
+                                    </span>
+                                )}
+
+                                {!isLast && <span>/</span>}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }

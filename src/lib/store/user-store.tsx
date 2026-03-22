@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 import { IUser } from '../types/user';
+import { logoutAction } from '../api/auth/auth-api';
 
 interface UserState {
     user: IUser | null;
@@ -12,7 +13,7 @@ interface UserState {
     toggleDropdown: () => void;
     closeDropdown: () => void;
     setHeaderTitle: (title: string) => void;
-    logout: () => void;
+    logout: () => Promise<void>;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -39,10 +40,19 @@ export const useUserStore = create<UserState>((set) => ({
     closeDropdown: () => set({ isDropdownOpen: false }),
     setHeaderTitle: (title) => set({ headerTitle: title }),
 
-    logout: () => {
-        Cookies.remove('token');
-        Cookies.remove('user_info');
+    logout: async () => {
+        try {
+            // السيرفر أكشن هنا هيمسح الـ httpOnly cookies بنجاح
+            await logoutAction();
+        } catch (error) {
+            // إذا حصل Error غالباً بيكون بسبب الـ redirect اللي جوه الـ Action 
+            // وده طبيعي في Next.js، المهم إن الكوكيز اتمسحت فعلاً
+        }
+
+        // تنظيف الـ State داخلياً
         set({ user: null, isDropdownOpen: false });
+
+        // تأكيد التحويل (احتياطي)
         window.location.href = '/login';
-    },
+    }
 }));

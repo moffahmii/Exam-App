@@ -4,9 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GraduationCap, Settings } from "lucide-react";
 
-
-
-
 export default function SidebarnavLinks() {
     const pathname = usePathname();
     const isDiplomasActive = pathname === "/" || pathname === "/diplomas/**";
