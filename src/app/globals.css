@@ -121,10 +121,45 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
+
+
+  /* تنسيقات مكتبة Phone Input لتتوافق مع ShadCN UI */
+  @layer base {
+    .PhoneInput {
+      @apply flex items-center gap-2;
+    }
+
+    .PhoneInputCountry {
+      /* شلنا !important وحولنا الألوان لمتغيرات الثيم بتاعك */
+      @apply flex items-center justify-center px-3 h-12 border border-input rounded-lg bg-background hover:bg-muted transition-all cursor-pointer;
+      min-width: 70px;
+    }
+
+    .PhoneInputCountrySelectArrow {
+      @apply text-muted-foreground ml-1 opacity-50;
+      border-bottom-width: 1px;
+      border-right-width: 1px;
+      width: 6px;
+      height: 6px;
+    }
+
+    .PhoneInputCountryIcon {
+      @apply w-6 h-auto shadow-none;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
+    }
+
+    .PhoneInputInput {
+      /* شلنا !important واستخدمنا متغيرات v4 */
+      @apply flex h-12 w-full rounded-lg border border-input bg-transparent px-4 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+    }
+  }
+
 }

@@ -12,7 +12,6 @@ export default function PasswordPage() {
                     Create a strong password
                 </p>
             </header>
-
             <PasswordStepForm />
         </div>
     )

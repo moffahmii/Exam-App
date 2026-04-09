@@ -1,4 +1,3 @@
-// hooks/use-diplomas.ts
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 export const fetchDiplomas = async ({ pageParam = 1 }): Promise<DiplomasPayload> => {

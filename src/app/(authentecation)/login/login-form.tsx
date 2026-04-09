@@ -6,18 +6,32 @@ import PasswordInput from '../_components/password-Input'
 import { Button } from '@/components/ui/button'
 import useLogin from '../hooks/use-login'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 
 export default function LoginForm() {
-
+    const router = useRouter()
+    const [error, setError] = useState<string | null>(null);
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const { isPending, error, mutate } = useLogin()
+    const { isPending, mutate } = useLogin()
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+
         e.preventDefault()
-        mutate({ username, password })
+        // mutate({ username, password })
+        const res = await signIn('credentials', {
+            username,
+            password,
+            redirect: false,
+        })
+        if (!res?.ok) {
+            setError(res?.error || 'Login failed')
+            return;
+        }
+        location.href = '/'
     }
 
     return (
@@ -42,7 +56,6 @@ export default function LoginForm() {
                     />
                 </div>
             </div>
-
             <PasswordInput
                 value={password}
                 onChange={(e: any) => setPassword(e.target.value)}
@@ -59,7 +72,7 @@ export default function LoginForm() {
             {/* Error Message */}
             {error && (
                 <p className="text-sm text-red-600 font-mono text-center border bg-red-50 border-red-500 p-2">
-                    {error.message}
+                    {error}
                 </p>
             )}
             <Button type="submit" className="w-full h-11" disabled={isPending}>

@@ -1,9 +1,11 @@
+import { use } from 'react';
 import { USER_ROLES } from "../constants/user.constant";
 
 declare interface IUser {
-    id: number;
+    id: string;
     name: string;
     email: string;
+    username: string;
     phone: string | null;
     firstName: string;
     lastName: string;

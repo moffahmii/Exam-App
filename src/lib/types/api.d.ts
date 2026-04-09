@@ -13,7 +13,7 @@ declare interface SuccessResponse<T> {
     status: true;
     code: number;
     message?: string;
-    payload?: T;
+    payload: T;
 }
 
-export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
+export type IApiResponse<T> = SuccessResponse<T> | ErrorResponse;

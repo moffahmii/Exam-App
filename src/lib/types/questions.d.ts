@@ -1,11 +1,16 @@
-declare interface IQuestion {
-    id: number;
+export interface IAnswer {
+    id: string; 
     text: string;
-    examId: number;
-    answers: IAnswer;
 }
-
-declare interface IAnswer {
-    id: number;
+export interface IQuestion {
+    id: string;    
     text: string;
+    examId: string; 
+    answers: IAnswer[]; 
+    immutable?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+}
+export interface IExamPayload {
+    questions: IQuestion[];
 }

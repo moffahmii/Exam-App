@@ -22,11 +22,8 @@ export default function PasswordStepForm() {
     });
 
     const onSubmit = (values: PasswordFormValues) => {
-        // 1. فك الشنط (سحب البيانات المخزنة من الكوكيز)
         const email = Cookies.get("user_email");
         const infoData = JSON.parse(Cookies.get("user_info_step") || "{}");
-
-        // 2. تجميع الـ Payload النهائي
         const finalPayload = {
             username: infoData.username,
             email: email,
@@ -37,7 +34,6 @@ export default function PasswordStepForm() {
             phone: infoData.phone,
         };
 
-        // 3. التنفيذ وضرب الـ API
         mutate(finalPayload);
     };
 
@@ -58,15 +54,13 @@ export default function PasswordStepForm() {
                 <div className="space-y-1">
                     <PasswordInput
                         label="Confirm Password"
-                        id="confirmPassword" // تم تغيير الـ ID ليتماشى مع السكيما
+                        id="confirmPassword" 
                         placeholder="Confirm your password"
-                        {...register("confirmPassword")} // تم التعديل هنا
-                        error={errors.confirmPassword?.message} // تم التعديل هنا
+                        {...register("confirmPassword")}
+                        error={errors.confirmPassword?.message} 
                     />
                 </div>
             </div>
-
-            {/* عرض خطأ الـ API لو موجود (زي Email already exists) */}
             {error && (
                 <p className="text-sm text-red-500 font-mono bg-red-50 p-3 rounded-md border border-red-100">
                     {(error as Error).message}

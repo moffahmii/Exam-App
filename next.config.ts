@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         hostname: 'www.elevate-bootcamp.cloud',
         pathname: '/storage/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'exam-app.elevate-bootcamp.cloud',
+        pathname: '/storage/**',
+      },
     ],
   },
 };
