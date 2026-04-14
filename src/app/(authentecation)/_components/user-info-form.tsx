@@ -11,26 +11,28 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function UserInfoForm() {
 
+    // Initialize the router for navigation
     const router = useRouter();
 
+    // Initialize the form with react-hook-form and zod validation
     const { register, handleSubmit, formState: { errors }, } = useForm<UserInfoValues>({
-
         resolver: zodResolver(userInfoSchema),
         mode: "onChange",
     });
 
+    // Handle form submission
     const onSubmit = (values: UserInfoValues) => {
         Cookies.set("user_info_step", JSON.stringify(values), { expires: 1 / 24 });
         router.push("/register/password");
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 ">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 font-mono ">
             <div className="space-y-6">
                 <div className='flex gap-4'>
                     {/* First Name */}
                     <div className="space-y-2 flex-1">
-                        <Label htmlFor="firstName" className="text-sm font-medium text-slate-700 font-sans">
+                        <Label htmlFor="firstName" className="text-sm font-medium text-slate-700">
                             First Name
                         </Label>
                         <Input
@@ -41,7 +43,6 @@ export default function UserInfoForm() {
                         />
                         {errors.firstName && <p className="text-xs text-red-500 font-mono">{errors.firstName.message}</p>}
                     </div>
-
                     {/* Last Name */}
                     <div className="space-y-2 flex-1">
                         <Label htmlFor="lastName" className="text-sm font-medium text-slate-700 font-sans">
@@ -56,7 +57,6 @@ export default function UserInfoForm() {
                         {errors.lastName && <p className="text-xs text-red-500 font-mono">{errors.lastName.message}</p>}
                     </div>
                 </div>
-
                 {/* Username */}
                 <div className="space-y-2">
                     <Label htmlFor="username" className="text-sm font-medium text-slate-700 font-sans">
@@ -70,7 +70,6 @@ export default function UserInfoForm() {
                     />
                     {errors.username && <p className="text-xs text-red-500 font-mono">{errors.username.message}</p>}
                 </div>
-
                 {/* Phone Number */}
                 <div className="space-y-2">
                     <Label htmlFor="phone" className="text-sm font-medium text-slate-700 font-sans">
@@ -86,7 +85,7 @@ export default function UserInfoForm() {
                     {errors.phone && <p className="text-xs text-red-500 font-mono">{errors.phone.message}</p>}
                 </div>
             </div>
-
+            {/* Next Step Button */}
             <Button
                 type="submit"
                 className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-sm"

@@ -1,5 +1,7 @@
 import { z } from "zod";
+// Schemas for form validation using Zod
 
+// Email validation schema
 export const emailSchema = z.object({
     email: z
         .string()
@@ -8,6 +10,7 @@ export const emailSchema = z.object({
 });
 export type EmailFormValues = z.infer<typeof emailSchema>;
 
+// OTP validation schema
 export const otpSchema = z.object({
     otp: z
         .string()
@@ -16,6 +19,7 @@ export const otpSchema = z.object({
 });
 export type OTPFormValues = z.infer<typeof otpSchema>;
 
+// User Info validation schema
 export const userInfoSchema = z.object({
     firstName: z
         .string()
@@ -35,6 +39,7 @@ export const userInfoSchema = z.object({
 });
 export type UserInfoValues = z.infer<typeof userInfoSchema>;
 
+// Password validation schema
 export const passwordSchema = z.object({
     password: z
         .string()
@@ -47,5 +52,4 @@ export const passwordSchema = z.object({
     message: "Passwords do not match",
     path: ["confirmPassword"], 
 });
-
 export type PasswordFormValues = z.infer<typeof passwordSchema>;

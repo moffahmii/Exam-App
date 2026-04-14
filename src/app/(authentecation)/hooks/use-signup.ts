@@ -1,5 +1,4 @@
 'use client'
-
 import { useMutation } from '@tanstack/react-query'
 import { signupAction } from '@/lib/api/auth/auth-api'
 import { useRouter } from 'next/navigation'
