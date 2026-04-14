@@ -9,6 +9,8 @@ import useEmailVerification from '../hooks/use-verify-email'
 import { Label } from '@/components/ui/label'
 
 export default function EmailInputForm() {
+
+    
     const { mutate, isPending, error } = useEmailVerification()
     const form = useForm<EmailFormValues>({
         resolver: zodResolver(emailSchema),
@@ -20,7 +22,7 @@ export default function EmailInputForm() {
     }
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 font-mono">
             <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">
                     Email Address
@@ -31,7 +33,7 @@ export default function EmailInputForm() {
                     placeholder="user@example.com"
                     type="email"
                     disabled={isPending}
-                    className={form.formState.errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    className={form.formState.errors.email ? "border-red-500 focus-visible:ring-red-500 h-11" : " h-11"}
                 />
                 {form.formState.errors.email && (
                     <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
@@ -42,7 +44,7 @@ export default function EmailInputForm() {
             </div>
             <Button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                className="w-full h-11 "
                 disabled={isPending}
             >
                 {isPending ? "Sending code..." : "Continue"}

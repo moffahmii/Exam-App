@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { updateProfileAction } from "@/lib/api/dashboard/update-profile.api"
+import { updateProfileAction } from "@/lib/api/website/update-profile.api"
 import { IUpdateProfileFields } from "@/lib/types/auth"
 
 export function useUpdateProfile() {

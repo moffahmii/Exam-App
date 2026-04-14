@@ -5,9 +5,20 @@ import { getToken } from 'next-auth/jwt'
 
 export async function proxy(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-    const isPrivateRoute = /^\/($|account|settings)/.test(pathname);
-    const isAuthRoute = /^\/(login|register)/.test(pathname);
+
+    const token = await getToken({
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET
+    });
+
+    const isPrivateRoute =
+        pathname.startsWith('/dashboard') ||
+        pathname.startsWith('/account') ||
+        pathname.startsWith('/settings');
+
+    const isAuthRoute =
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/register');
 
     if (isPrivateRoute) {
         if (token) return NextResponse.next();

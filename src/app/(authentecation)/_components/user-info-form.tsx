@@ -1,5 +1,4 @@
 "use client";
-
 import React from 'react'
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
@@ -11,25 +10,22 @@ import { userInfoSchema, UserInfoValues } from '@/lib/schemas/auth-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function UserInfoForm() {
+
     const router = useRouter();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<UserInfoValues>({
+    const { register, handleSubmit, formState: { errors }, } = useForm<UserInfoValues>({
+
         resolver: zodResolver(userInfoSchema),
         mode: "onChange",
     });
 
     const onSubmit = (values: UserInfoValues) => {
-        // تخزين البيانات "مسودة" للخطوة الأخيرة
         Cookies.set("user_info_step", JSON.stringify(values), { expires: 1 / 24 });
         router.push("/register/password");
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 ">
             <div className="space-y-6">
                 <div className='flex gap-4'>
                     {/* First Name */}

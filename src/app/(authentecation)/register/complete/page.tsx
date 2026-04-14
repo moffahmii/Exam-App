@@ -4,7 +4,7 @@ import UserInfoForm from '../../_components/user-info-form'
 
 export default function UserInfoPage() {
     return (
-        <div className="w-full max-w-lg space-y-8 px-4">
+        <div className="w-full max-w-lg space-y-8 px-4 font-mono">
             {/* Header Section */}
             <header className="space-y-2">
                 <h1 className="text-3xl font-bold text-gray-800 font-inter tracking-tight">

@@ -1,65 +1,49 @@
 import { useState, useEffect } from 'react';
-import { requestEmailUpdateOTP, verifyEmailUpdateOTP } from "@/lib/api/dashboard/update-profile.api";
+import { useMutation } from '@tanstack/react-query';
+import { requestEmailUpdateOTP, verifyEmailUpdateOTP } from "@/lib/api/website/update-profile.api";
 
 export function useChangeEmail() {
     const [step, setStep] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
     const [timeLeft, setTimeLeft] = useState(0);
+    const [email, setEmail] = useState(""); 
 
     useEffect(() => {
-        if (timeLeft > 0) {
-            const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-            return () => clearTimeout(timer);
-        }
+        if (timeLeft <= 0) return;
+        const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+        return () => clearInterval(timer);
     }, [timeLeft]);
 
-    // تنفيذ الخطوة الأولى (طلب الكود)
-    // داخل useChangeEmail.ts
-    const handleRequest = async (newEmail: string) => {
-        if (!newEmail) return { success: false, error: "Email is required" };
-        setIsLoading(true);
-        try {
-            await requestEmailUpdateOTP(newEmail);
+    const requestMutation = useMutation({
+        mutationFn: (newEmail: string) => requestEmailUpdateOTP(newEmail),
+        onSuccess: (_, newEmail) => {
+            setEmail(newEmail);
             setStep(2);
             setTimeLeft(60);
-            return { success: true }; // نرجع كائن نجاح
-        } catch (error: any) {
-            // هنا نمسك رسالة الخطأ من الباك-أند
-            return { success: false, error: error.message };
-        } finally {
-            setIsLoading(false);
         }
-    };
+    });
 
-    // تنفيذ الخطوة الثانية (التأكيد)
-    const handleVerify = async (otp: string) => {
-        if (otp.length < 6) return { success: false };
-
-        setIsLoading(true);
-        try {
-            // أرسلنا الإيميل فاضي كبرامتر ثاني بناءً على تعديلك الأخير
-            const res = await verifyEmailUpdateOTP(otp);
-            return { success: true, data: res.data };
-        } catch (error: any) {
-            console.error("Verify OTP Error:", error.message);
-            return { success: false, error: error.message };
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const verifyMutation = useMutation({
+        mutationFn: (otp: string) => verifyEmailUpdateOTP(otp),
+    });
 
     const reset = () => {
         setStep(1);
         setTimeLeft(0);
+        setEmail("");
+        requestMutation.reset();
+        verifyMutation.reset();
     };
 
     return {
         step,
-        setStep,
-        isLoading,
+        email,
         timeLeft,
-        handleRequest,
-        handleVerify,
+        isRequesting: requestMutation.isPending,
+        isVerifying: verifyMutation.isPending,
+        requestError: requestMutation.error?.message,
+        verifyError: verifyMutation.error?.message,
+        handleRequest: requestMutation.mutateAsync,
+        handleVerify: verifyMutation.mutateAsync,
         reset
     };
 }

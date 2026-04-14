@@ -2,17 +2,13 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Clock, HelpCircle, ArrowRight } from 'lucide-react';
-import { getDiplomaDetails } from '@/lib/api/dashboard/diploma-details.api';
 import { IExam } from '@/lib/types/exam';
+import { getDiplomaExams } from '@/lib/api/website/diploma-details.api';
 
-export default async function ExamPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ id?: string }>;
-}) {
+export default async function ExamPage({searchParams}: {searchParams: Promise<{ id?: string }>;}) {
   const { id } = await searchParams;
   if (!id) return notFound();
-  const response = await getDiplomaDetails(id);
+  const response = await getDiplomaExams(id);
   const exams = response?.payload?.diploma?.exams;
   if (!exams || !Array.isArray(exams)) {
     return notFound();
@@ -33,7 +29,7 @@ export default async function ExamPage({
                   alt={exam.title || "Exam Image"}
                   fill
                   className="object-contain p-1"
-                  unoptimized // مطلوب لأن روابط الصور لا تمر عبر بروكسب Next.js
+                  unoptimized 
                 />
               </div>
               <div className="grow font-mono">

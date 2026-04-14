@@ -1,6 +1,5 @@
-import { ApiResponse } from '@/lib/types/api';
+import { IApiResponse } from '@/lib/types/api';
 import { IloginResponse } from '@/lib/types/auth';
-import { Session } from 'inspector/promises';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -21,7 +20,7 @@ export const authOptions: NextAuthOptions = {
                         password: credentials?.password
                     })
                 });
-                const data: ApiResponse<IloginResponse> = await response.json();
+                const data: IApiResponse<IloginResponse> = await response.json();
                 if (!data.status) {
                     throw new Error(data.message)
                 }

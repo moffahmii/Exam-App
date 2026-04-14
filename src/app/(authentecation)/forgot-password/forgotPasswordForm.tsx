@@ -5,6 +5,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ArrowRight, Mail, Loader2 } from 'lucide-react'
 import useForgotPassword from '../hooks/use-forgot-pass'
+import { EmailFormValues, emailSchema } from '@/lib/schemas/auth-schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 
 export default function ForgotPasswordForm({ onSent }: { onSent: (email: string) => void }) {
     const [email, setEmail] = useState('')
@@ -13,6 +16,10 @@ export default function ForgotPasswordForm({ onSent }: { onSent: (email: string)
         onSent(email)
     })
 
+    const form = useForm<EmailFormValues>({
+        resolver: zodResolver(emailSchema),
+        defaultValues: { email: "" },
+    })
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (email) {

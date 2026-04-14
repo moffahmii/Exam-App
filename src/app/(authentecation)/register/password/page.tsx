@@ -8,7 +8,7 @@ export default function PasswordPage() {
                 <h1 className="text-3xl font-bold text-gray-800 font-inter tracking-tight">
                     Create Account
                 </h1>
-                <p className="text-blue-600 font-semibold text-lg">
+                <p className="text-blue-600 font-bold text-2xl font-inter">
                     Create a strong password
                 </p>
             </header>

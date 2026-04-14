@@ -1,12 +1,9 @@
-import { IQuestion } from "@/lib/types/questions";
 import { getNextAuthToken } from "@/lib/utils/auth.util";
-
-export async function getExamQuestions(examId: string): Promise<{ questions: IQuestion[] } | null> {
-
+export async function getDiplomaExams(id: string): Promise<DiplomaDetailResponse | null> {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/questions/exam/${examId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/diplomas/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -14,8 +11,7 @@ export async function getExamQuestions(examId: string): Promise<{ questions: IQu
         });
         if (!res.ok) return null;
         return await res.json();
-    } 
-    catch (error) {
+    } catch (error) {
         return null;
     }
 }

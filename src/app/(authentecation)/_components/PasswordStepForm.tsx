@@ -1,5 +1,4 @@
 "use client";
-
 import React from 'react'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -10,15 +9,12 @@ import { PasswordFormValues, passwordSchema } from '@/lib/schemas/auth-schema';
 import useSignup from '../hooks/use-signup';
 
 export default function PasswordStepForm() {
+
     const { mutate, isPending, error } = useSignup();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<PasswordFormValues>({
+    const { register,handleSubmit,formState: { errors },} = useForm<PasswordFormValues>({
         resolver: zodResolver(passwordSchema),
-        mode: "onChange",
+        mode: "onChange", 
     });
 
     const onSubmit = (values: PasswordFormValues) => {
@@ -34,7 +30,7 @@ export default function PasswordStepForm() {
             phone: infoData.phone,
         };
 
-        mutate(finalPayload);
+        mutate(finalPayload as any);
     };
 
     return (
@@ -66,7 +62,6 @@ export default function PasswordStepForm() {
                     {(error as Error).message}
                 </p>
             )}
-
             <Button
                 type="submit"
                 disabled={isPending}

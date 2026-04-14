@@ -1,21 +1,25 @@
 'use client'
-import { loginAction } from '@/lib/api/auth/auth-api'
 import { useMutation } from '@tanstack/react-query'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import React from 'react'
-
 export default function useLogin() {
     const router = useRouter()
-    const { isPending, mutate, error } = useMutation({
+    return useMutation({
         mutationKey: ['login'],
-        mutationFn: loginAction,
-        onSuccess: (data) => {
-            console.log(data)
-            router.push('/')
+        mutationFn: async (credentials: any) => {
+            const res = await signIn('credentials', {
+                username: credentials.username,
+                password: credentials.password,
+                redirect: false, 
+            })
+            if (!res?.ok) {
+                throw new Error(res?.error || 'Login failed')
+            }
+            return res
         },
-        onError: (error) => {
-            console.log(error);
-        }
+        onSuccess: () => {
+            router.push('/')
+            router.refresh() 
+        },
     })
-    return { isPending, mutate, error }
 }

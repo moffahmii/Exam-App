@@ -1,29 +1,32 @@
-import { signupAction } from "@/lib/api/auth/auth-api";
-import { useMutation } from "@tanstack/react-query";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+'use client'
+
+import { useMutation } from '@tanstack/react-query'
+import { signupAction } from '@/lib/api/auth/auth-api'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 export default function useSignup() {
-    const router = useRouter();
+    const router = useRouter()
 
     return useMutation({
-        mutationKey: ['Signup'],
+        mutationKey: ['signup'],
         mutationFn: signupAction,
-        onSuccess: (data) => {
-            // 1. تخزين الـ Token الحقيقي (عشان يفضل عامل Login)
-            Cookies.set("token", data.token, { expires: 7 }); // يعيش 7 أيام مثلاً
+        onSuccess: async (data, variables) => {
+            const res = await signIn('credentials', {
+                username: variables.username,
+                password: variables.password,
+                redirect: false,
+            })
 
-            // 2. تنظيف "الشنط" المؤقتة (Cleaning up)
-            Cookies.remove("user_email");
-            Cookies.remove("user_info_step");
-            Cookies.remove("auth_stage");
+            if (!res?.ok) {
+                throw new Error('Auto login failed')
+            }
 
-
-            // 3. التحويل لصفحة الـ Home أو الـ Login
-            router.push("/");
+            router.push('/')
         },
+
         onError: (error: any) => {
-            console.log(error)
-        }
-    });
+            console.log(error.message)
+        },
+    })
 }

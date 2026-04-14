@@ -1,11 +1,8 @@
 'use client';
-
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
 import React, { useState, forwardRef } from 'react'
-
-// زودنا الـ error والـ ...props عشان الـ register يشتغل
 interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     error?: string;
@@ -17,7 +14,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({
     placeholder = "********",
     error,
     className,
-    ...props // دي بتشمل الـ value, onChange, name اللي جايين من الـ register
+    ...props 
 }, ref) => {
 
     const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +27,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({
             <div className="relative">
                 <Input
                     {...props}
-                    ref={ref} // الخطوة دي هي اللي بتشيل الـ Error الأحمر في الـ page
+                    ref={ref} 
                     id={id}
                     autoComplete='new-password'
                     type={showPassword ? "text" : "password"}
@@ -45,8 +42,6 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({
                     {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
                 </button>
             </div>
-
-            {/* مكان عرض رسالة الخطأ */}
             {error && (
                 <p className="text-[10px] text-red-500 font-mono mt-1 ml-1">
                     {error}
