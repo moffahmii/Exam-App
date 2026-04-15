@@ -1,16 +1,16 @@
 export interface IAnswer {
-    id: string; 
+    id: string;
     text: string;
 }
 export interface IQuestion {
-    id: string;    
+    id: string;
     text: string;
-    examId: string; 
-    answers: IAnswer[]; 
-    immutable?: boolean;
-    createdAt?: string;
-    updatedAt?: string;
-}
-export interface IExamPayload {
-    questions: IQuestion[];
+    examId: string;
+    answers: IAnswer[];
+}export interface ExamApiResponse {
+    status: boolean;
+    message: string;
+    payload: {
+        questions: IQuestion[];
+    };
 }

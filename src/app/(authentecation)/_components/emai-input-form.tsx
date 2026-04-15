@@ -7,9 +7,11 @@ import { Input } from '@/components/ui/input'
 import { EmailFormValues, emailSchema } from '@/lib/schemas/auth-schema'
 import useEmailVerification from '../hooks/use-verify-email'
 import { Label } from '@/components/ui/label'
+import { useRouter } from 'next/router'
 
 export default function EmailInputForm() {
 
+    const router = useRouter()
     
     const { mutate, isPending, error } = useEmailVerification()
     const form = useForm<EmailFormValues>({
@@ -19,6 +21,7 @@ export default function EmailInputForm() {
 
     const onSubmit = (values: EmailFormValues) => {
         mutate(values.email)
+        router.push("/register/verify")
     }
 
     return (

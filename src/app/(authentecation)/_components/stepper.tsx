@@ -5,13 +5,11 @@ import { cn } from "@/lib/utils";
 
 export default function RegistrationStepper() {
     const pathname = usePathname();
-
-    // الخطوات الـ 4 بالترتيب الجديد
     const steps = [
         { label: "Email", path: "/register" },
         { label: "Verify", path: "/register/verify" },
-        { label: "Info", path: "/register/complete" }, // الصفحة اللي فيها الاسم والفون
-        { label: "Password", path: "/register/password" }, // الصفحة الأخيرة
+        { label: "Info", path: "/register/complete" }, 
+        { label: "Password", path: "/register/password" }, 
     ];
 
     const currentStepIndex = steps.findIndex((s) => s.path === pathname);
@@ -19,17 +17,12 @@ export default function RegistrationStepper() {
     return (
         <div className="relative flex w-full flex-col items-center">
             <div className="relative flex w-full items-center justify-between px-2">
-
-                {/* الخط الرمادي المنقط الخلفي */}
                 <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 border-t-2 border-dotted border-slate-200 -z-10" />
-
                 {steps.map((step, index) => {
                     const isCompleted = index <= currentStepIndex;
                     const isActive = index === currentStepIndex;
-
                     return (
                         <div key={index} className="flex flex-col items-center gap-3 relative">
-
                             {/* الـ Diamond */}
                             <div
                                 className={cn(
@@ -39,7 +32,6 @@ export default function RegistrationStepper() {
                                         : "bg-white border-slate-300"
                                 )}
                             />
-
                             {/* الخط الأزرق الواصل */}
                             {index < steps.length -1 && (
                                 <div
