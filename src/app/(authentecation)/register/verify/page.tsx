@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { Button } from "@/components/ui/button";
-import {InputOTP,InputOTPGroup, InputOTPSlot,} from "@/components/ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot, } from "@/components/ui/input-otp";
 import { useCountdownTimer } from "../../hooks/use-countdown-timer";
 import useOTPVerification from "../../hooks/use-otp-verification";
 import useEmailVerification from "../../hooks/use-verify-email";
+import { Loader2 } from "lucide-react";
 
 export default function VerifyOTPPage() {
     const router = useRouter();
@@ -91,7 +92,7 @@ export default function VerifyOTPPage() {
                             <InputOTPGroup key={index}>
                                 <InputOTPSlot
                                     index={index}
-                                    className="w-12 h-14 text-xl font-medium border-slate-200 shadow-sm focus:ring-2 focus:ring-blue-600"
+                                    className="w-10 h-10 text-base font-medium border-gray-200 text-gray-800 focus:ring-2 focus:ring-blue-600"
                                 />
                             </InputOTPGroup>
                         ))}
@@ -123,13 +124,18 @@ export default function VerifyOTPPage() {
             </div>
 
             {/* VERIFY BUTTON */}
-            <div className="pt-6">
+            <div className="pt-6 flex justify-center">
                 <Button
-                    className="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 h-12 text-base font-semibold border border-blue-200 rounded-md shadow-sm transition-all"
-                    disabled={otp.length !== 6 || isPending}
+                    type="submit"
                     onClick={handleVerify}
+                    disabled={otp.length !== 6 || isPending}
+                    className="bg-transparent hover:bg-transparent text-gray-800 font-mono text-sm font-medium p-0 h-auto disabled:opacity-100 disabled:bg-transparent"
                 >
-                    {isPending ? "Verifying..." : "Verify Code"}
+                    {isPending ? (
+                        <Loader2 className="animate-spin size-5 text-blue-600" />
+                    ) : (
+                        "Verify Code"
+                    )}
                 </Button>
             </div>
         </div>

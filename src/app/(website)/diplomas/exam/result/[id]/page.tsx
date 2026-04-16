@@ -1,111 +1,51 @@
 "use client";
 
-import React, { useEffect, useState, use } from 'react';
-import { getSubmissionResult } from "@/lib/api/website/exam-questions.api";
-import Link from 'next/link';
+import React, { use } from "react"; // 1. استورد 'use' من react
+import { Loader2, AlertCircle } from "lucide-react";
+import { useSubmissionResult } from "@/app/(website)/_hooks/use-submissoin-result";
+import SubmissionResults from "./SubmissonResult";
 
+// 2. عدل الـ Type بتاع الـ params ليكون Promise
 export default function ResultPage({ params }: { params: Promise<{ id: string }> }) {
+
+    // 3. فك الـ Promise باستخدام use()
     const resolvedParams = use(params);
-    const id = resolvedParams.id;
 
-    const [data, setData] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+    // 4. استخدم الـ id بعد ما اتفك
+    const { data, isLoading, isError, error } = useSubmissionResult(resolvedParams.id);
 
-    useEffect(() => {
-        const fetchResult = async () => {
-            const response = await getSubmissionResult(id);
-            if (response.status) {
-                setData(response.payload.submission);
-                console.log("Fetched Result Data:", response.payload.submission);
-            }
-            setLoading(false);
-        };
-        fetchResult();
-    }, [id]);
+    // ... (باقي الكود زي ما هو بالظبط من غير أي تغيير)
 
-    if (loading) return (
-        <div className="min-h-screen flex items-center justify-center bg-white">
-            <div className="animate-pulse text-xl font-bold text-blue-600">Calculating Results...</div>
-        </div>
-    );
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono">
+                <Loader2 className="w-10 h-10 animate-spin text-blue-600 mb-4" />
+                <p className="text-slate-500 text-lg animate-pulse">Loading your exam results...</p>
+            </div>
+        );
+    }
 
-    if (!data) return <div className="p-10 text-center text-red-500 font-bold">لم يتم العثور على نتيجة لهذه المحاولة.</div>;
-
-    const isPassed = data.score >= 50;
+    if (isError || !data || !data.submission || !data.analytics) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 font-mono text-center px-4">
+                <div className="w-16 h-16 bg-red-50 text-red-500 flex items-center justify-center rounded-full mb-2">
+                    <AlertCircle className="w-8 h-8" />
+                </div>
+                <h2 className="text-xl font-bold text-slate-800">Oops! Something went wrong</h2>
+                <p className="text-slate-600 max-w-md">
+                    {error?.message || "We couldn't load the submission data. Please try again later."}
+                </p>
+            </div>
+        );
+    }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] py-12 px-4">
-            <div className="max-w-2xl mx-auto bg-white rounded-[40px] shadow-2xl shadow-blue-100/20 p-10 text-center relative overflow-hidden">
-
-                {/* شريط علوي ملون حسب النتيجة */}
-                <div className={`absolute top-0 left-0 w-full h-2 ${isPassed ? 'bg-green-500' : 'bg-red-500'}`} />
-
-                <h1 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-10">Exam Result</h1>
-
-                {/* الدائرة المركزية (Score) */}
-                <div className="relative inline-flex items-center justify-center mb-10">
-                    <svg className="w-48 h-48 transform -rotate-90">
-                        <circle
-                            cx="96" cy="96" r="80"
-                            stroke="currentColor" strokeWidth="10" fill="transparent"
-                            className="text-gray-100"
-                        />
-                        <circle
-                            cx="96" cy="96" r="80"
-                            stroke="currentColor" strokeWidth="10" fill="transparent"
-                            strokeDasharray={502}
-                            strokeDashoffset={502 - (502 * data.score) / 100}
-                            className={`${isPassed ? 'text-green-500' : 'text-red-500'} transition-all duration-1000 ease-out`}
-                            strokeLinecap="round"
-                        />
-                    </svg>
-                    <div className="absolute flex flex-col items-center">
-                        <span className="text-5xl font-black text-gray-900">{data.score}%</span>
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Total Score</span>
-                    </div>
-                </div>
-
-                <h2 className="text-3xl font-black text-gray-900 mb-3">
-                    {isPassed ? "Great Job! 🏆" : "Keep Trying! 💪"}
-                </h2>
-                <p className="text-gray-500 mb-10 px-6">
-                    {isPassed
-                        ? `Excellent performance in "${data.examTitle}". You've demonstrated a strong understanding.`
-                        : `Don't worry, every mistake is a lesson. Review the topics of "${data.examTitle}" and try again.`}
-                </p>
-
-                {/* الإحصائيات (Total / Correct / Wrong) */}
-                <div className="grid grid-cols-3 gap-4 mb-12">
-                    <div className="p-5 bg-blue-50 rounded-[24px]">
-                        <p className="text-[10px] font-bold text-blue-400 uppercase mb-1">Total</p>
-                        <p className="text-xl font-black text-blue-900">{data.totalQuestions}</p>
-                    </div>
-                    <div className="p-5 bg-green-50 rounded-[24px]">
-                        <p className="text-[10px] font-bold text-green-400 uppercase mb-1">Correct</p>
-                        <p className="text-xl font-black text-green-900">{data.correctAnswers}</p>
-                    </div>
-                    <div className="p-5 bg-red-50 rounded-[24px]">
-                        <p className="text-[10px] font-bold text-red-400 uppercase mb-1">Wrong</p>
-                        <p className="text-xl font-black text-red-900">{data.wrongAnswers}</p>
-                    </div>
-                </div>
-
-                {/* الأزرار */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                    <Link
-                        href="/diplomas"
-                        className="flex-[2] py-4 bg-[#111827] text-white rounded-[20px] font-bold hover:bg-black transition-all shadow-lg shadow-gray-200"
-                    >
-                        Back to Dashboard
-                    </Link>
-                    <button
-                        onClick={() => window.print()}
-                        className="flex-1 py-4 border-2 border-gray-100 text-gray-600 rounded-[20px] font-bold hover:bg-gray-50 transition-all"
-                    >
-                        Print Result
-                    </button>
-                </div>
-            </div>
+        <div className="container mx-auto py-10 px-4">
+            <SubmissionResults
+                data={data}
+                onRestart={() => console.log("Restart clicked")}
+                onExplore={() => console.log("Explore clicked")}
+            />
         </div>
     );
 }

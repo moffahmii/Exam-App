@@ -1,12 +1,12 @@
 'use server'
-
 import { IApiResponse } from "@/lib/types/api";
+import { getNextAuthToken } from "@/lib/utils/auth.util";
 import { cookies } from "next/headers";
 import { redirect } from 'next/navigation'
 
+
 const BASE_URL = 'https://exam-app.elevate-bootcamp.cloud/api';
 
-// --- Helpers ---
 async function handleResponse(response: Response) {
     const data = await response.json();
     if (data.status === "fail" || data.status === false || !response.ok) {
@@ -16,7 +16,6 @@ async function handleResponse(response: Response) {
 }
 
 // --- Auth Actions ---
-
 export async function signupAction(userData: {
     username: string;
     email: string;
@@ -61,6 +60,32 @@ export async function ForgorPasswordAction(email: string) {
         body: JSON.stringify({ email })
     });
     return handleResponse(response);
+}
+
+export async function ChangePasswordAction(data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}) {
+    const jwt = await getNextAuthToken();
+    const token = jwt?.token;
+    const targetUrl = `${BASE_URL}/users/change-password`;
+    console.log("Sending request to:", targetUrl);
+    try {
+        const response = await fetch(targetUrl, {
+            method: 'POST', // تأكد من الباك إند إذا كانت POST أو PUT أو PATCH
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // إضافة التوكن هنا ضروري جداً
+            },
+            body: JSON.stringify(data)
+        });
+
+        return handleResponse(response);
+    } catch (error) {
+        console.error("Fetch failed in ChangePasswordAction:", error);
+        throw error;
+    }
 }
 
 export async function logoutAction() {

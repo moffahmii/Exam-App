@@ -36,18 +36,28 @@ export async function getExamQuestions(examId: string): Promise<IApiResponse<{ q
 
 // @/lib/api/questions.ts
 
-export async function submitExam(examId: string, answers: { questionId: string, answerId: string }[]) {
+// @/lib/api/website/exam-questions.api.ts
+
+
+export async function submitExam(payload: {
+    examId: string;
+    answers: { questionId: string; answerId: string }[];
+    startedAt: string;
+}) {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/submissions`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ examId, answers }),
-    });
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/submissions`,
+        {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        }
+    );
 
     return await res.json();
 }
@@ -56,7 +66,7 @@ export async function submitExam(examId: string, answers: { questionId: string, 
 export async function getSubmissionResult(submissionId: string) {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;
-
+    
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/submissions/${submissionId}`, {
             headers: {
@@ -66,8 +76,18 @@ export async function getSubmissionResult(submissionId: string) {
             cache: 'no-store'
         });
 
-        return await res.json();
+        const data = await res.json();
+
+        // 1. لو الـ Status الكلية بتاعة الريكويست فيها مشكلة أو الـ الباك إند باعت status: false
+        if (!res.ok || data.status === false) {
+            throw new Error(data?.message || "Failed to load results");
+        }
+
+        // 2. التعديل السحري: إرجاع الـ payload فقط عشان الـ UI يفهمه مباشرة
+        return data.payload; 
+        
     } catch (error: any) {
-        return { status: false, message: error.message };
+        console.error("Fetch API Error:", error);
+        throw new Error(error.message || "Failed to fetch submission data");
     }
 }

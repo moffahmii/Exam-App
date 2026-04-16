@@ -1,52 +1,40 @@
-import { useState, useEffect } from 'react'
+'use client'
 import { useSession } from 'next-auth/react'
-import { useUpdateProfile } from './use-update-drofile'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { updateProfileAction } from "@/lib/api/website/update-profile.api"
+import { UserInfoValues } from '@/lib/schemas/auth-schema'
 
 export function useProfileForm() {
     const { data: session, update } = useSession()
-    const { mutate, isLoading } = useUpdateProfile()
+    const queryClient = useQueryClient()
 
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        phone: ''
-    })
-
-    useEffect(() => {
-        if (session?.user) {
-            setFormData({
-                firstName: session.user.firstName ?? '',
-                lastName: session.user.lastName ?? '',
-                username: session.user.username ?? '',
-                email: session.user.email ?? '',
-                phone: session.user.phone ?? ''
-            })
-        }
-    }, [session?.user?.email])
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }))
-    }
-
-    const saveProfile = async (e: React.FormEvent) => {
-        e.preventDefault()
-        const result = await mutate({
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            phone: formData.phone,
-            profilePhoto: ''
-        })
-
-        if (result?.success) {
+    // استخدام React Query Mutation
+    const { mutateAsync, isPending } = useMutation({
+        mutationFn: (data: UserInfoValues) => updateProfileAction({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+            profilePhoto: '' // لو حابب تضيفها لاحقاً
+        }),
+        onSuccess: async (res, variables) => {
+            // 1. تحديث الـ Session في NextAuth
             await update({
                 ...session,
-                user: { ...session?.user, ...formData }
+                user: { ...session?.user, ...variables }
             })
+            queryClient.invalidateQueries({ queryKey: ['user-profile'] })
+
+        },
+        onError: (error: any) => {
         }
-        return result
+    })
+
+    const saveProfile = async (data: UserInfoValues) => {
+        return await mutateAsync(data)
     }
 
-    return { formData, handleChange, saveProfile, isLoading }
+    return {
+        saveProfile,
+        isLoading: isPending 
+    }
 }

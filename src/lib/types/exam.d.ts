@@ -1,26 +1,21 @@
-export interface IExam {
-    id: string; 
-    title: string;
-    description: string;
-    image: string;
-    duration: number;
-    createdAt: string;
-}
-
-export interface IDiplomaDetail {
+export interface IAnswer {
     id: string;
-    title: string;
-    description: string;
-    image: string;
-    exams: IExam[];
-    createdAt: string;
-    updatedAt: string;
+    text: string;
 }
 
-export interface DiplomaDetailResponse {
+export interface IQuestion {
+    id: string;
+    text: string;
+    examId: string;
+    answers: IAnswer[];
+}
+
+export interface IExamQuestionsResponse {
+    questions: IQuestion[];
+}
+
+export interface IApiResponse<T> {
     status: boolean;
-    code: number;
-    payload: {
-        diploma: IDiplomaDetail;
-    };
+    message?: string;
+    payload: T;
 }

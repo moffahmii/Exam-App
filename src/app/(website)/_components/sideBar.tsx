@@ -2,20 +2,25 @@ import React from "react";
 import LogoSection from "./logo-section";
 import UserDropdown from "./user-details";
 import SidebarnavLinks from "./sidebar-nav-links";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+} from "@/components/ui/sidebar";
 
-
-export default function SideBar() {
-
+export default function AppSideBar() {
     return (
-        <div className="flex flex-col justify-between h-full bg-blue-50">
-            {/* Logo */}
-            <div>
+        <Sidebar className="bg-red-500!important">
+            <SidebarHeader className="p-0">
                 <LogoSection />
-                {/* Navigation */}
+            </SidebarHeader>
+            <SidebarContent>
                 <SidebarnavLinks />
-            </div>
-            {/* User */}
-            <UserDropdown />
-        </div>
+            </SidebarContent>
+            <SidebarFooter className="p-0">
+                <UserDropdown />
+            </SidebarFooter>
+        </Sidebar>
     );
 }

@@ -1,56 +1,86 @@
 'use client'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { EmailFormValues, emailSchema } from '@/lib/schemas/auth-schema'
 import useEmailVerification from '../hooks/use-verify-email'
-import { Label } from '@/components/ui/label'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation' // ✅ التعديل الصح للـ App Router
+import { Loader2 } from 'lucide-react'
 
 export default function EmailInputForm() {
-
     const router = useRouter()
-    
-    const { mutate, isPending, error } = useEmailVerification()
+    const { mutate, isPending, error: serverError } = useEmailVerification()
     const form = useForm<EmailFormValues>({
         resolver: zodResolver(emailSchema),
         defaultValues: { email: "" },
     })
-
     const onSubmit = (values: EmailFormValues) => {
-        mutate(values.email)
-        router.push("/register/verify")
+        mutate(values.email, {
+            onSuccess: () => {
+                router.push("/register/verify")
+            }
+        })
     }
-
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 font-mono">
-            <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Email Address
-                </Label>
-                <Input
-                    {...form.register("email")} 
-                    id="email"
-                    placeholder="user@example.com"
-                    type="email"
-                    disabled={isPending}
-                    className={form.formState.errors.email ? "border-red-500 focus-visible:ring-red-500 h-11" : " h-11"}
-                />
-                {form.formState.errors.email && (
-                    <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+            <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <div className="space-y-2" data-invalid={fieldState.invalid}>
+                        <Label
+                            htmlFor={field.name}
+                            className={`text-sm font-medium ${fieldState.invalid ? 'text-red-500' : 'text-gray-700'}`}
+                        >
+                            Email Address
+                        </Label>
+
+                        <Input
+                            {...field}
+                            id={field.name}
+                            placeholder="user@example.com"
+                            type="email"
+                            disabled={isPending}
+                            aria-invalid={fieldState.invalid}
+                            className={`h-11 border-slate-200 transition-all ${fieldState.invalid
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : "focus-visible:ring-blue-600"
+                                }`}
+                        />
+
+                        {/* عرض خطأ الـ Validation (Zod) */}
+                        {fieldState.error && (
+                            <p className="text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1">
+                                {fieldState.error.message}
+                            </p>
+                        )}
+
+                        {/* عرض خطأ السيرفر (React Query) */}
+                        {serverError && !fieldState.error && (
+                            <p className="text-xs text-red-500 font-medium">
+                                {(serverError as Error).message}
+                            </p>
+                        )}
+                    </div>
                 )}
-                {error && (
-                    <p className="text-xs text-red-500">{(error as Error).message}</p>
-                )}
-            </div>
+            />
+
             <Button
                 type="submit"
-                className="w-full h-11 "
+                className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
                 disabled={isPending}
             >
-                {isPending ? "Sending code..." : "Continue"}
+                {isPending ? (
+                    <div className="flex items-center gap-2">
+                        <Loader2 className="animate-spin size-4" />
+                        Sending code...
+                    </div>
+                ) : (
+                    "Continue"
+                )}
             </Button>
         </form>
     )

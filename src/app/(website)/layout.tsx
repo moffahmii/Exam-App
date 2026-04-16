@@ -1,24 +1,32 @@
 import Providers from "@/lib/providers/queryProvider";
 import SideBar from "./_components/sideBar";
-import { Breadcrumb } from "./_components/breadcrumb";
-
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import SmartBreadcrumb from "./_components/CustomBreadcrumb";
 
 interface Props {
     children: React.ReactNode;
 }
 
-export default function layout({ children }: Props) {
+export default function Layout({ children }: Props) {
     return (
-        <div className="flex min-h-screen bg-gray-50">
-            <aside className="w-90.5 h-screen sticky top-0 overflow-y-auto shrink-0">
-                <SideBar />
-            </aside>
-            <main className="flex-1 flex flex-col bg-gray-50 p-6">
-                {/* <Breadcrumb /> */}
-                <Providers>
-                    {children}
-                </Providers>
+        <SidebarProvider style={{ "--sidebar-width": "346px" } as React.CSSProperties}>
+            <SideBar />
+
+            {/* 1. شلنا p-4 من هنا عشان مفيش حاجة تزق المحتوى من فوق */}
+            <main className="flex-1 flex flex-col bg-gray-50 min-h-screen w-full overflow-hidden">
+
+                <div className="flex items-center gap-2 ">
+                    <div className="md:hidden">
+                        <SidebarTrigger className="-ml-2" />
+                    </div>
+                    <SmartBreadcrumb />
+                </div>
+                <div className="flex-1 p-6">
+                    <Providers>
+                        {children}
+                    </Providers>
+                </div>
             </main>
-        </div>
+        </SidebarProvider>
     );
 }

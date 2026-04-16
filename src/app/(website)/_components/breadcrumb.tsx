@@ -8,7 +8,7 @@ type BreadcrumbItem = {
 export function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
     const breadcrumbs = useBreadcrumbs(items)
     return (
-        <div className="flex gap-2 text-sm">
+        <div className="flex gap-2 text-sm bg-white">
             {breadcrumbs.map((item, i) => (
                 <span key={i}>
                     {i > 0 && ' / '}

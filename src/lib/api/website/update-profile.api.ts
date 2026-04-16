@@ -1,25 +1,34 @@
 'use server'
 import { IApiResponse } from "@/lib/types/api";
-import { IUpdateProfileFields, IUpdateProfileResponse } from "@/lib/types/auth";
 import { getNextAuthToken } from "@/lib/utils/auth.util";
 
+// lib/api/website/update-profile.api.ts
+export interface IUpdateProfileFields {
+    firstName: string
+    lastName: string
+    profilePhoto?: string
+    phone?: string
+}
 export async function updateProfileAction(fields: IUpdateProfileFields) {
-    const jwt = await getNextAuthToken();
-    const token = jwt?.token;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile`, {
-        method: 'PATCH',
-        cache: 'no-store',
-        body: JSON.stringify(fields),
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        },
-    })
-    const payload: IApiResponse<IUpdateProfileResponse> = await response.json();
-    if (payload.status !== true) {
-        throw new Error(payload.message);
+    const jwt = await getNextAuthToken()
+    const token = jwt?.token
+    console.log("API PAYLOAD:", fields)
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/profile`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(fields),
+        }
+    )
+    const payload = await response.json()
+    if (!payload.status) {
+        throw new Error(payload.message || "Update failed")
     }
-    return payload;
+    return payload.payload
 }
 
 export async function requestEmailUpdateOTP(newEmail: string) {

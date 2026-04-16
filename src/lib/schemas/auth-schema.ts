@@ -50,6 +50,14 @@ export const passwordSchema = z.object({
     confirmPassword: z.string().min(1, "Please confirm your password"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["confirmPassword"], 
+    path: ["confirmPassword"],
 });
 export type PasswordFormValues = z.infer<typeof passwordSchema>;
+
+
+export const ChangeEmailSchema = z.object({
+    email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
+    otp: z.string().min(6, "OTP must be 6 digits").max(6).optional(),
+});
+
+export type ChangeEmailFormData = z.infer<typeof ChangeEmailSchema>;

@@ -1,32 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateProfileAction } from "@/lib/api/website/update-profile.api"
 import { IUpdateProfileFields } from "@/lib/types/auth"
 
 export function useUpdateProfile() {
-  const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
-  const mutate = async (formData: IUpdateProfileFields) => {
-    setIsLoading(true)
-    try {
-      // 1️⃣ طباعة البيانات قبل الإرسال
-      console.log('Submitting formData:', formData)
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (formData: IUpdateProfileFields) => updateProfileAction(formData),
 
-      const res = await updateProfileAction(formData)
-
-      // 3️⃣ طباعة response من الباك
+    // 2️⃣ لما العملية تنجح
+    onSuccess: (res) => {
       console.log('Update success:', res)
-      return { success: true, data: res.payload }
 
-    } catch (error: any) {
-      // 4️⃣ طباعة أي خطأ يحصل
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+
+    // 3️⃣ لما يحصل خطأ
+    onError: (error: any) => {
       console.error('Update failed:', error)
-      return { success: false, error: error.message }
-    } finally {
-      setIsLoading(false)
-    }
-  }
+    },
 
-  return { mutate, isLoading }
+    onMutate: (variables) => {
+      console.log('Submitting formData:', variables)
+    }
+  })
+
+  return {
+    mutate: mutateAsync,
+    isLoading: isPending
+  }
 }

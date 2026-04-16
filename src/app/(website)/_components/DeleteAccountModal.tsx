@@ -1,14 +1,7 @@
 'use client'
 import React from 'react'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { AlertTriangle, X } from 'lucide-react'
+import { AlertTriangle, X, Loader2 } from 'lucide-react'
 
 interface DeleteAccountModalProps {
     isOpen: boolean;
@@ -18,56 +11,55 @@ interface DeleteAccountModalProps {
 }
 
 export default function DeleteAccountModal({ isOpen, onClose, onConfirm, isLoading }: DeleteAccountModalProps) {
-    return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-[600px] p-0 border-none rounded-none font-mono overflow-hidden">
+    if (!isOpen) return null;
 
-                {/* زر الإغلاق المخصص */}
+    return (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-200">
+            {/* العرض هنا 549px زي مودال التعديل بالضبط */}
+            <div className="relative bg-white w-139.5 h-103 flex flex-col animate-in  duration-200 font-mono">
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-4 top-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
                 >
-                    <X size={20} />
+                    <X size={24} />
                 </button>
+                <div className="flex-1 p-9 flex flex-col items-center text-center justify-center">
 
-                <div className="p-12 flex flex-col items-center text-center space-y-6">
-                    {/* أيقونة التحذير مع الدوائر الخلفية */}
-                    <div className="relative flex items-center justify-center">
-                        <div className="absolute w-24 h-24 bg-red-50 rounded-full animate-pulse" />
-                        <div className="absolute w-16 h-16 bg-red-100/50 rounded-full" />
-                        <div className="relative w-12 h-12 flex items-center justify-center text-red-500">
-                            <AlertTriangle size={48} strokeWidth={1.5} />
+                    <div className="mb-6 relative flex items-center justify-center bg-red-50 rounded-full w-27.5 h-27.5">
+
+                        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center">
+                            <AlertTriangle size={50} className="text-red-500" strokeWidth={1.5} />
                         </div>
                     </div>
-
-                    <DialogHeader className="space-y-3">
-                        <DialogTitle className="text-2xl font-bold text-red-600">
-                            Are you sure you want to delete your account?
-                        </DialogTitle>
-                        <DialogDescription className="text-lg text-slate-500 max-w-[400px] mx-auto leading-relaxed">
-                            This action is permanent and cannot be undone.
-                        </DialogDescription>
-                    </DialogHeader>
+                    <p className="text-sm text-gray-500 ">
+                        <span className="text-red-600 text-lg font-medium mb-2">Are you sure you want to delete your account?</span>
+                        This action is permanent and cannot be undone.
+                    </p>
                 </div>
-
-                {/* منطقة الأزرار (الـ Footer) */}
-                <div className="p-8 pt-0 flex gap-4">
+                {/* منطقة الأزرار (الـ Footer) بنفس تنسيق الـ 50/50 */}
+                <div className="border-t border-gray-200 bg-gray-50 flex items-center justify-center gap-4 py-4 px-13.5">
                     <Button
-                        variant="secondary"
+                        variant="ghost"
                         onClick={onClose}
-                        className="flex-1 h-14 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-none text-lg font-medium"
+                        className="flex-1 h-12 w-54.25 text-gray-800 bg-gray-200 hover:bg-gray-400 text-sm font-medium border border-gray-200 "
                     >
                         Cancel
                     </Button>
+
                     <Button
                         disabled={isLoading}
                         onClick={onConfirm}
-                        className="flex-1 h-14 bg-red-600 hover:bg-red-700 text-white rounded-none text-lg font-medium"
+                        className="flex-1 h-12 w-54.25 bg-red-600 hover:bg-red-700 text-white text-sm font-medium "
                     >
-                        {isLoading ? "Deleting..." : "Yes, delete"}
+                        {isLoading ? (
+                            <Loader2 className="animate-spin size-4" />
+                        ) : (
+                            "Yes, delete"
+                        )}
                     </Button>
                 </div>
-            </DialogContent>
-        </Dialog>
+
+            </div>
+        </div>
     )
 }
