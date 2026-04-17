@@ -1,30 +1,19 @@
 "use client";
 
-import React, { use } from "react"; // 1. استورد 'use' من react
+import React, { use } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
 import { useSubmissionResult } from "@/app/(website)/_hooks/use-submissoin-result";
 import SubmissionResults from "./SubmissonResult";
+import { ResultsSkeleton } from "../ResultSekelton";
 
 // 2. عدل الـ Type بتاع الـ params ليكون Promise
 export default function ResultPage({ params }: { params: Promise<{ id: string }> }) {
-
-    // 3. فك الـ Promise باستخدام use()
     const resolvedParams = use(params);
-
-    // 4. استخدم الـ id بعد ما اتفك
     const { data, isLoading, isError, error } = useSubmissionResult(resolvedParams.id);
 
-    // ... (باقي الكود زي ما هو بالظبط من غير أي تغيير)
-
     if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono">
-                <Loader2 className="w-10 h-10 animate-spin text-blue-600 mb-4" />
-                <p className="text-slate-500 text-lg animate-pulse">Loading your exam results...</p>
-            </div>
-        );
+        return <ResultsSkeleton />;
     }
-
     if (isError || !data || !data.submission || !data.analytics) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 font-mono text-center px-4">
@@ -40,12 +29,10 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
     }
 
     return (
-        <div className="container mx-auto py-10 px-4">
-            <SubmissionResults
-                data={data}
-                onRestart={() => console.log("Restart clicked")}
-                onExplore={() => console.log("Explore clicked")}
-            />
-        </div>
+        <SubmissionResults
+            data={data}
+            onRestart={() => console.log("Restart clicked")}
+            onExplore={() => console.log("Explore clicked")}
+        />
     );
 }

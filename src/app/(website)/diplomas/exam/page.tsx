@@ -21,7 +21,6 @@ export default async function ExamPage({ searchParams }: { searchParams: Promise
         {/* Exam List */}
         <div className="bg-white p-6 space-y-4">
           {exams.map((exam: IExam) => (
-
             <div key={exam.id}
               className="group flex flex-col md:flex-row items-start h-29 md:items-center bg-blue-50 gap-4 p-4 relative overflow-hidden">
               {/* Exam Image */}

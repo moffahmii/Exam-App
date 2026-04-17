@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { LogOut, User, ChevronUp, Settings } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { User, LayoutDashboard, LogOut, MoreVertical } from "lucide-react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 export default function UserDropdown() {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // إغلاق القائمة عند الضغط خارجها
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -23,84 +22,80 @@ export default function UserDropdown() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // لو لسه بيعمل Load أو مفيش يوزر، ميعرضش حاجة
-    if (status === "loading" || !session?.user) return null;
-
+    if (!session?.user) return null;
     const user = session.user;
+    const isAdmin = user?.role == "ADMIN"
 
     return (
-        <div className="relative w-full px-4" ref={dropdownRef}>
+        <div className="relative w-70.5 h-13.5 mx-auto my-4 px-4 font-mono" ref={dropdownRef}>
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute bottom-full left-4 right-4 mb-3 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden z-50"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute bottom-full left-4  right-4 mb-2 bg-white border border-gray-100 z-50 overflow-hidden"
                     >
-                        <div className="py-2">
+                        <div className="flex flex-col">
+                            {/* Account Link */}
                             <Link
                                 href="/account-setting"
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all group"
+                                className="flex items-center gap-4 h-12.5 p-2 border-b border-gray-100"
                             >
-                                <div className="p-2 rounded-lg bg-gray-50 group-hover:bg-blue-100 transition-colors">
-                                    <User size={18} />
-                                </div>
-                                <span className="font-medium text-sm">Account Settings</span>
+                                <User size={18} className="text-gray-400" />
+                                <span className="text-sm">Account</span>
                             </Link>
-
-                            <div className="h-px bg-gray-100 mx-4 my-1" />
-
-                            <button
-                                onClick={async () => {
-                                    setIsOpen(false);
-                                    await signOut({ callbackUrl: "/login" });
-                                }}
-                                className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 transition-all group"
+                            {/* Dashboard Link */}
+                            {isAdmin && <Link
+                                href="/dashboard"
+                                onClick={() => setIsOpen(false)}
+                                className="flex items-center gap-4 h-12.5 p-2 border-b border-gray-100 "
                             >
-                                <div className="p-2 rounded-lg bg-red-50 group-hover:bg-red-100 transition-colors">
-                                    <LogOut size={18} />
-                                </div>
-                                <span className="font-medium text-sm">Logout</span>
+                                <LayoutDashboard size={18} className="text-gray-400" />
+                                <span className="text-sm">Dashboard</span>
+                            </Link>}
+                            {/* Logout Button */}
+                            <button
+                                onClick={() => signOut({ callbackUrl: "/login" })}
+                                className="flex items-center gap-4 h-12.5 p-2 text-sm hover:bg-red-50 text-[#ef4444] transition-colors text-left"
+                            >
+                                <LogOut size={18} className="rotate-180" />
+                                <span className="text-sm">Logout</span>
                             </button>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            {/* الزر الرئيسي */}
-            <button
+            <div
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-full p-2.5 flex items-center gap-3 rounded-xl transition-all duration-200 border ${isOpen
-                        ? "border-blue-200 bg-blue-50/50 shadow-sm"
-                        : "border-transparent hover:bg-gray-100"
-                    }`}
+                className="flex items-center gap-3 p-2 cursor-pointer group"
             >
-                <div className="relative h-10 w-10 shrink-0">
-                    <Image
-                        src={user.profilePhoto || "/default-profile.png"}
-                        alt="Profile"
-                        fill
-                        className="rounded-lg object-cover border border-gray-200"
-                    />
-                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                {/* Profile Image with Blue Border */}
+                <div className="relative w-12 h-12 border-2 border-blue-600 p-0.5">
+                    <div className="relative w-full h-full">
+                        <Image
+                            src={user.profilePhoto || "/default-profile.png"}
+                            alt="Profile"
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
                 </div>
 
-                <div className="flex-1 text-left overflow-hidden">
-                    <p className="font-bold text-gray-900 text-sm truncate uppercase tracking-tight">
-                        {user.firstName || "Student"}
-                    </p>
-                    <p className="text-gray-500 text-xs truncate font-medium">
-                        {user.email}
+                {/* User Info */}
+                <div className="flex-1 overflow-hidden">
+                    <h3 className="text-base font-medium text-blue-600">
+                        {user.firstName || "Firstname"}
+                    </h3>
+                    <p className="text-gray-500 text-sm truncate font-mono">
+                        {user.email || "user-email@example.com"}
                     </p>
                 </div>
 
-                <ChevronUp
-                    size={16}
-                    className={`text-gray-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-                />
-            </button>
+                {/* Three Dots Icon */}
+                <MoreVertical className="text-gray-400 group-hover:text-gray-600" size={20} />
+            </div>
         </div>
     );
 }

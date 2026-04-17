@@ -1,16 +1,13 @@
 import { ForgorPasswordAction } from '@/lib/api/auth/auth-api'
 import { useMutation } from '@tanstack/react-query'
-import React, { use } from 'react'
-
-
-export default function useForgotPassword(onSuccessCallback?: () => void) {
+export default function useForgotPassword(onSuccessCallback?: (email: string) => void) {
     const { mutate, isPending, error } = useMutation({
         mutationKey: ['forgot-password'],
         mutationFn: ForgorPasswordAction,
-        onSuccess: (data) => {
+        onSuccess: (data, variables) => {
             console.log(data);
             if (onSuccessCallback) {
-                onSuccessCallback();
+                onSuccessCallback(variables as string);
             }
         },
         onError: (error) => {

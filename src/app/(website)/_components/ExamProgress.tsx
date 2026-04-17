@@ -1,16 +1,23 @@
-export function ExamProgress({ currentIndex, total }) {
+import React from "react";
+
+interface ExamProgressProps {
+    currentIndex: number;
+    total: number;
+}
+
+export function ExamProgress({ currentIndex, total }: ExamProgressProps) {
     return (
-        <div className="p-6">
-            <div className="flex justify-between mb-2">
-                <span>Quiz Session</span>
-                <p>
-                    Question {currentIndex + 1} of {total}
+        <div className="w-full">
+            <div className="flex justify-between items-center mb-2 text-gray-800">
+
+                <span className="text-base font-normal text-gray-800">Quiz Session</span>
+                <p className="text-sm font-bold text-gray-500">
+                    Question <span className="text-blue-600">{currentIndex + 1}</span> of {total}
                 </p>
             </div>
-
-            <div className="w-full h-2 bg-gray-100 rounded-full">
+            <div className="w-full h-4 bg-gray-100  overflow-hidden">
                 <div
-                    className="h-full bg-blue-600"
+                    className="h-full bg-blue-600 transition-all duration-300 ease-in-out "
                     style={{ width: `${((currentIndex + 1) / total) * 100}%` }}
                 />
             </div>

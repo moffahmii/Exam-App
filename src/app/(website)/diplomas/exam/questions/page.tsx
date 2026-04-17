@@ -5,8 +5,7 @@ import React, { Suspense } from "react";
 
 export default function ExamPage() {
   return (
-    // تم التغليف هنا، ولكن الـ title ثابت
-    <PageWrapper title="Quiz Session" icon={<FileText className="w-5 h-5" />}>
+    <PageWrapper title="Q" icon={<FileText className="w-5 h-5" />}>
       <Suspense
         fallback={
           <div className="flex py-20 items-center justify-center font-mono">

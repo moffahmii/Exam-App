@@ -1,9 +1,19 @@
 import { useMemo, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-
-export const useExamForm = (questions, examId) => {
+export interface Question {
+    id: string; 
+}
+export interface ExamFormValues {
+    examId: string;
+    startedAt: string;
+    answers: {
+        questionId: string;
+        answerId: string;
+    }[];
+}
+export const useExamForm = (questions: Question[], examId: string) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const defaultValues = useMemo(() => {
+    const defaultValues = useMemo((): ExamFormValues | undefined => {
         if (!questions?.length) return undefined;
         return {
             examId,
@@ -14,14 +24,9 @@ export const useExamForm = (questions, examId) => {
             })),
         };
     }, [questions, examId]);
-    const form = useForm({
-        values: defaultValues,
-    });
+    const form = useForm<ExamFormValues>({values: defaultValues,});
     const { control } = form;
-    const { fields, update } = useFieldArray({
-        control,
-        name: "answers",
-    });
+    const { fields, update } = useFieldArray({control,name: "answers",});
     const selectAnswer = (answerId: string) => {
         update(currentIndex, {
             questionId: questions[currentIndex].id,
@@ -29,12 +34,5 @@ export const useExamForm = (questions, examId) => {
         });
     };
     const isCurrentAnswered = !!fields[currentIndex]?.answerId;
-    return {
-        form,
-        fields,
-        currentIndex,
-        setCurrentIndex,
-        selectAnswer,
-        isCurrentAnswered,
-    };
+    return { form, fields,currentIndex, setCurrentIndex, selectAnswer, isCurrentAnswered, };
 };
