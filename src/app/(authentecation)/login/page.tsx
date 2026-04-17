@@ -1,10 +1,9 @@
+import LoginForm from "@/features/auth/components/login-form"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import LoginForm from "./login-form"
 
 export default function Login() {
     return (
-        <div className="w-full max-w-lg space-y-8 px-4">
+        <main className="w-full max-w-lg space-y-8 px-4">
             {/* Heading */}
             <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-gray-800 font-inter">
@@ -22,6 +21,6 @@ export default function Login() {
                     Create yours
                 </Link>
             </p>
-        </div>
+        </main>
     )
 }

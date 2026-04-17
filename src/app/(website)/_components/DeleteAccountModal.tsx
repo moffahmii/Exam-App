@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 import { AlertTriangle, X, Loader2 } from 'lucide-react'
 
 interface DeleteAccountModalProps {

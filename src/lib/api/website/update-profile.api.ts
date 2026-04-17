@@ -1,5 +1,5 @@
 'use server'
-import { IApiResponse } from "@/lib/types/api";
+import { IApiResponse } from "@/shared/types/api";
 import { getNextAuthToken } from "@/lib/utils/auth.util";
 
 // lib/api/website/update-profile.api.ts

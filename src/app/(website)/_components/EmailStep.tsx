@@ -1,8 +1,9 @@
 import React from 'react';
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+;
 import { UseFormReturn } from "react-hook-form";
-import { ChangeEmailFormData } from '@/lib/schemas/auth-schema';
+import { ChangeEmailFormData } from '@/shared/schemas/auth-schema';
+import { Label } from '@/shared/components/ui/label';
+import { Input } from '@/shared/components/ui/input';
 
 interface EmailStepProps {
     form: UseFormReturn<ChangeEmailFormData>;

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { CircleDot, Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnalyticsRecord } from "./[id]/SubmissonResult";

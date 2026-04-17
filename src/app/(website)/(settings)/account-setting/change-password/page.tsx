@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
-import PasswordInput from '@/app/(authentecation)/_components/password-Input'
+import PasswordInput from '@/features/auth/components/password-Input'
 import { useChangePassword } from '../../../_hooks/use-change-password'
 
 const changePasswordSchema = z.object({

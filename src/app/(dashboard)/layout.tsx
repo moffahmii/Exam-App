@@ -1,5 +1,5 @@
 import React from 'react'
-import Providers from '@/lib/providers/queryProvider';
+import Providers from '@/shared/providers/sub-providers/queryProvider';
 import DashboardSidebar from './_components/DashboardSideBar';
 
 interface Props {

@@ -1,4 +1,4 @@
-import { IUser } from "./user";
+import { IUser } from "../../features/auth/types/user";
 
 export interface IloginResponse {
     token: string;

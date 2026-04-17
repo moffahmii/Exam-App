@@ -1,5 +1,5 @@
 'use server'
-import { ErrorResponse, IApiResponse, SuccessResponse } from "@/lib/types/api";
+import { ErrorResponse, IApiResponse, SuccessResponse } from "@/shared/types/api";
 import { IQuestion } from "@/lib/types/questions";
 import { getNextAuthToken } from "@/lib/utils/auth.util";
 

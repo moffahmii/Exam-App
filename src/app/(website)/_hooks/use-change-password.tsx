@@ -1,4 +1,4 @@
-import { ChangePasswordAction } from "@/lib/api/auth/auth-api";
+import { ChangePasswordAction } from "@/features/auth/apis/auth-api";
 import { useMutation } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
 

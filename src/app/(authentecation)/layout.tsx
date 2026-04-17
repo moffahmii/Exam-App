@@ -1,11 +1,7 @@
 import React from 'react'
-import SideContent from './_components/sideContent'
+import SideContent from '../../shared/components/custom/sideContent'
 
-interface Props {
-    children: React.ReactNode
-}
-
-export default function layout({ children }: Props) {
+export default function layout({ children }: { children: React.ReactNode }) {
     return (
         <div className="grid lg:grid-cols-12 min-h-screen">
             

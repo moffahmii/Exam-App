@@ -2,7 +2,7 @@ declare interface IDiplomas {
     id: string;
     title: string;
     description: string;
-    image: string | null;
+    image: string;
     createdAt: string;
     updatedAt: string;
 }

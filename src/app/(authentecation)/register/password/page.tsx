@@ -1,5 +1,5 @@
+import PasswordStepForm from '@/features/auth/components/PasswordStepForm'
 import React from 'react'
-import PasswordStepForm from '../../_components/PasswordStepForm'
 
 export default function PasswordPage() {
     return (

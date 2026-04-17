@@ -3,11 +3,11 @@ import React, { useEffect } from 'react'
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSession } from 'next-auth/react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
+import { Input } from "@/shared/components/ui/input"
+import { Label } from "@/shared/components/ui/label"
+import { Button } from "@/shared/components/ui/button"
 import { Pencil, Loader2 } from 'lucide-react'
-import { userInfoSchema, type UserInfoValues } from '@/lib/schemas/auth-schema'
+import { userInfoSchema, type UserInfoValues } from '@/shared/schemas/auth-schema'
 interface ProfileFormProps {
     onOpenEmailModal: () => void;
     onOpenDeleteModal: () => void;

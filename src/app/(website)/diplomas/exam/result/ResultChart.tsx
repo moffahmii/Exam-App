@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Pie, PieChart, Cell } from "recharts";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/components/ui/chart";
 
 interface ResultsChartProps {
     correctAnswers: number;

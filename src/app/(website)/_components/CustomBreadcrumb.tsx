@@ -9,7 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from "@/shared/components/ui/breadcrumb";
 
 export default function SmartBreadcrumb() {
   const pathname = usePathname();

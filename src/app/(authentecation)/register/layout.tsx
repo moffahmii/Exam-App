@@ -1,6 +1,5 @@
+import { Stepper } from "@/features/auth/components/stepper";
 import React from "react";
-import { Stepper } from "../_components/stepper";
-
 interface RegisterLayoutProps {
     children: React.ReactNode;
 }

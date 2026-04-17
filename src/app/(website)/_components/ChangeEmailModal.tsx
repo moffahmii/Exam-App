@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import { ChevronRight, Loader2, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useChangeEmail } from '../_hooks/use-change-email';
 import { EmailStep } from "./EmailStep";
 import { OtpStep } from "./OtpStep";
-import { ChangeEmailFormData, emailSchema } from '@/lib/schemas/auth-schema';
+import { ChangeEmailFormData, emailSchema } from '@/shared/schemas/auth-schema';
 import { Stepper } from './ChnageEcmailStepper';
 
 interface ChangeEmailModalProps {

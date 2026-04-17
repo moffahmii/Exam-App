@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateProfileAction } from "@/lib/api/website/update-profile.api"
-import { UserInfoValues } from '@/lib/schemas/auth-schema'
+import { UserInfoValues } from '@/shared/schemas/auth-schema'
 
 export function useProfileForm() {
     const { data: session, update } = useSession()

@@ -1,8 +1,8 @@
 "use client" 
 import { useState } from "react"
 import Link from "next/link"
-import ForgotPasswordForm from "./forgotPasswordForm"
-import PasswordRsestSent from "../_components/password-reset-sent";
+import ForgotPasswordForm from "../../../features/auth/components/forgotPasswordForm"
+import PasswordRsestSent from "../../../features/auth/components/password-reset-sent";
 
 export default function ForgotPassword() {
     const [isSent, setIsSent] = useState(false)

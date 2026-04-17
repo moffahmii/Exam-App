@@ -1,6 +1,6 @@
-import Providers from "@/lib/providers/queryProvider";
+import Providers from "@/shared/providers/sub-providers/queryProvider";
 import SideBar from "./_components/sideBar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/shared/components/ui/sidebar";
 import SmartBreadcrumb from "./_components/CustomBreadcrumb";
 
 interface Props {

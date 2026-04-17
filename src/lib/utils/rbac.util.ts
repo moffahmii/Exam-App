@@ -1,4 +1,4 @@
-import { USER_ROLES } from "../constants/user.constant";
+import { USER_ROLES } from "../../features/auth/constants/user.constant";
 
 const POLICIES = {
     [USER_ROLES.USER]: {
