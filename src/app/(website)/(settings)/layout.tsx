@@ -1,5 +1,5 @@
 import React from 'react'
-import AccountSideBar from '../_components/accountSideBar';
+import AccountSideBar from '../../../features/account-settings/components/accountSideBar';
 
 interface Props {
     children: React.ReactNode;

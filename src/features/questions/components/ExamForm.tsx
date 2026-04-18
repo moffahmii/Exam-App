@@ -7,7 +7,7 @@ import CircularTimer from "./CircularTimer";
 import { ExamNavigation } from "./ExamNavigation";
 import { ExamProgress } from "./ExamProgress";
 import { useSubmitExam } from "../hooks/use-submit-exam";
-import { AnswersList } from "../../../app/(website)/_components/ExamAnswersList";
+import { AnswersList } from "./ExamAnswersList";
 
 interface AnswersForm {
     examId: string;

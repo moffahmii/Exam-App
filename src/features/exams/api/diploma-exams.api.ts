@@ -1,4 +1,4 @@
-import { getNextAuthToken } from "@/lib/utils/auth.util";
+import { getNextAuthToken } from "@/shared/utils/auth.util";
 
 export async function getDiplomaExams(id: string) {
     const jwt = await getNextAuthToken();

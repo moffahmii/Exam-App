@@ -1,7 +1,7 @@
 'use server'
 import { ErrorResponse, IApiResponse, SuccessResponse } from "@/shared/types/api";
 import { IQuestion } from "@/features/questions/types/questions";
-import { getNextAuthToken } from "@/lib/utils/auth.util";
+import { getNextAuthToken } from "@/shared/utils/auth.util";
 
 export async function getExamQuestions(examId: string): Promise<IApiResponse<{ questions: IQuestion[] }>> {
     const jwt = await getNextAuthToken();

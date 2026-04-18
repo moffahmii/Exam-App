@@ -1,7 +1,7 @@
 import React from "react";
 import LogoSection from "./logo-section";
 import UserDropdown from "./user-details";
-import SidebarnavLinks from "./sidebar-nav-links";
+import SidebarnavLinks from "../../account-settings/components/sidebar-nav-links";
 import {
     Sidebar,
     SidebarContent,
@@ -11,7 +11,7 @@ import {
 
 export default function AppSideBar() {
     return (
-        <Sidebar className="bg-red-500!important">
+        <Sidebar className="">
             <SidebarHeader className="p-0">
                 <LogoSection />
             </SidebarHeader>

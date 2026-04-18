@@ -4,7 +4,6 @@ export default function LoadingExams() {
     const skeletonItems = [1, 2, 3];
 
     return (
-        // تم إضافة py-8 عشان يطابق الصفحة الأصلية
         <main className="min-h-screen  py-8">
             <div className="container mx-auto ">
                 <div className="bg-white p-4 space-y-4 ">
@@ -13,8 +12,7 @@ export default function LoadingExams() {
                             key={item}
                             className="flex flex-col md:flex-row items-start md:items-center bg-blue-50/50 gap-4 p-4 border border-blue-100/50 rounded-md"
                         >
-                            <div className="relative w-[100px] h-[100px] bg-gray-200 animate-pulse shrink-0 border border-blue-200"></div>
-
+                            <div className="relative w-25 h-25 bg-gray-200 animate-pulse shrink-0 border border-blue-200"></div>
                             {/* Exam Details Skeleton */}
                             <div className="grow w-full">
                                 <div className="flex flex-col md:flex-row justify-between gap-2 mb-3">

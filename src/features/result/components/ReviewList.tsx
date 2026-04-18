@@ -3,8 +3,8 @@
 import React from "react";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { CircleDot, Circle } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { AnalyticsRecord } from "./SubmissonResult";
+import { cn } from "@/shared/utils/cn.util";
 
 interface ReviewListProps {
     analytics: AnalyticsRecord[];

@@ -1,12 +1,11 @@
 "use client";
 import React from 'react';
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn } from '@/shared/utils/cn.util';
 
 export function Stepper() {
     const pathname = usePathname();
 
-    // تحديد رقم الخطوة بناءً على المسار الحالي
     const getStep = () => {
         if (pathname === "/register") return 1;
         if (pathname === "/register/verify") return 2;

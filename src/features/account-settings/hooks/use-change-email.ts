@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { requestEmailUpdateOTP, verifyEmailUpdateOTP } from "@/lib/api/website/update-profile.api";
+import { requestEmailUpdateOTP, verifyEmailUpdateOTP } from "@/features/account-settings/apis/update-profile.api";
 
 export function useChangeEmail() {
     const [step, setStep] = useState(1);
@@ -37,7 +37,6 @@ export function useChangeEmail() {
         verifyMutation.reset();
     };
 
-    // Safe Wrappers لضمان عدم حدوث Crash وتوافقها مع الـ UI
     const handleSafeRequest = async (newEmail: string) => {
         try {
             await requestMutation.mutateAsync(newEmail);

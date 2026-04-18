@@ -1,6 +1,6 @@
 'use server'
 import { IApiResponse } from "@/shared/types/api";
-import { getNextAuthToken } from "@/lib/utils/auth.util";
+import { getNextAuthToken } from "@/shared/utils/auth.util";
 import { LoginFields } from './../types/auth.d';
 
 async function handleResponse<T = any>(response: Response): Promise<IApiResponse<T>> {

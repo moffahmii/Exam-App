@@ -1,19 +1,14 @@
-// تعريف نوع بيانات الإجابة الواحدة
 interface Answer {
-  id: string; // (أو number إذا كانت الـ IDs في قاعدة بياناتك عبارة عن أرقام)
+  id: string;
   text: string;
 }
 interface AnswersListProps {
   answers: Answer[];
-  selected: string | null; // استخدمنا null تحسباً لأنه قد لا يكون هناك إجابة محددة في البداية
+  selected: string | null;
   onSelect: (id: string) => void;
 }
 
-export function AnswersList({
-  answers,
-  selected,
-  onSelect,
-}: AnswersListProps) {
+export function AnswersList({ answers, selected, onSelect, }: AnswersListProps) {
   return (
     <div className="space-y-4">
       {answers.map((a) => (

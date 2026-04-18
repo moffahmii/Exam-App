@@ -1,6 +1,6 @@
 import React from 'react'
 import { LogoWhite } from './LogoWhite'
-import SidebarnavLinks from '@/app/(website)/_components/sidebar-nav-links'
+import SidebarnavLinks from '@/features/account-settings/components/sidebar-nav-links'
 import SidebarNavLinksDashboard from './SideBarNavLinks'
 
 export default function DashboardSideBar() {

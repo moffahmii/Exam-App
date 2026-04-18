@@ -1,5 +1,5 @@
 'use server'
-import { getNextAuthToken } from "@/lib/utils/auth.util";
+import { getNextAuthToken } from "@/shared/utils/auth.util";
 export async function getSubmissionResult(submissionId: string) {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;

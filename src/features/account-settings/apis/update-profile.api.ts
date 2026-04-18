@@ -1,13 +1,8 @@
 'use server'
 import { IApiResponse } from "@/shared/types/api";
-import { getNextAuthToken } from "@/lib/utils/auth.util";
+import { getNextAuthToken } from "@/shared/utils/auth.util";
+import { IUpdateProfileFields } from "../types/profile-fields";
 
-export interface IUpdateProfileFields {
-    firstName: string
-    lastName: string
-    profilePhoto?: string
-    phone?: string
-}
 export async function updateProfileAction(fields: IUpdateProfileFields) {
     const jwt = await getNextAuthToken()
     const token = jwt?.token
@@ -73,7 +68,6 @@ export async function verifyEmailUpdateOTP(code: string) {
 export async function deleteUserAccountAction() {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/account`, {
         method: 'DELETE',
         headers: {
@@ -81,12 +75,9 @@ export async function deleteUserAccountAction() {
             'Content-Type': 'application/json',
         },
     });
-
     const payload = await response.json();
-
     if (!response.ok) {
         throw new Error(payload.message || "Failed to delete account");
     }
-
     return payload;
 }

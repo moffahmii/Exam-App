@@ -3,21 +3,13 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
 import PasswordInput from '@/features/auth/components/password-Input'
-import { useChangePassword } from '../../../_hooks/use-change-password'
+import { useChangePassword } from '@/features/change-password/hooks/use-change-password'
+import { ChangePasswordFormValues, changePasswordSchema } from '@/shared/schemas/auth-schema'
+import { Button } from '@/shared/components/ui/button'
 
-const changePasswordSchema = z.object({
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password")
-}).refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"], // عشان الخطأ يظهر تحت حقل التأكيد بس
-});
-type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
+
 
 export default function ChangePasswordPage() {
     const { mutate: changePassword, isPending } = useChangePassword();

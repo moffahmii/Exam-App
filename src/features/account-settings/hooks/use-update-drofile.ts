@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateProfileAction } from "@/lib/api/website/update-profile.api"
+import { updateProfileAction } from "@/features/account-settings/apis/update-profile.api"
 import { IUpdateProfileFields } from "@/lib/types/auth"
 
 export function useUpdateProfile() {

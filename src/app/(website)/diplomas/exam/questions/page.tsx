@@ -1,11 +1,9 @@
-import PageWrapper from "@/app/(website)/_components/PageWrapper";
 import ExamDataLoader from "@/features/questions/components/ExamDataLoader";
 import { FileText } from "lucide-react";
 import React, { Suspense } from "react";
 
 export default function ExamPage() {
   return (
-    <PageWrapper title="Q" icon={<FileText className="w-5 h-5" />}>
       <Suspense
         fallback={
           <div className="flex py-20 items-center justify-center font-mono">
@@ -14,6 +12,5 @@ export default function ExamPage() {
         }>
         <ExamDataLoader />
       </Suspense>
-    </PageWrapper>
   );
 }

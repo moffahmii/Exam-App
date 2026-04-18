@@ -5,10 +5,10 @@ import { ChevronRight, Loader2, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useChangeEmail } from '../_hooks/use-change-email';
-import { EmailStep } from "./EmailStep";
-import { OtpStep } from "./OtpStep";
 import { ChangeEmailFormData, emailSchema } from '@/shared/schemas/auth-schema';
+import { useChangeEmail } from '../hooks/use-change-email';
+import { EmailStep } from './EmailStep';
+import { OtpStep } from './OtpStep';
 import { Stepper } from './ChnageEcmailStepper';
 
 interface ChangeEmailModalProps {

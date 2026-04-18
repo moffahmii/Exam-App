@@ -4,7 +4,6 @@ import { getToken } from 'next-auth/jwt'
 
 export async function proxy(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
-
     const token = await getToken({
         req: request,
         secret: process.env.NEXTAUTH_SECRET
