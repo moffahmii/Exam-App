@@ -1,75 +1,87 @@
 "use client"
-import { Label } from '@/shared/components/ui/label'
-import { Input } from '@/shared/components/ui/input'
-import PasswordInput from './password-Input'
-import { Button } from '@/shared/components/ui/button'
 import Link from 'next/link'
-import useLogin from '../hooks/use-login'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { LoginFields } from '../types/auth'
+import { SubmitHandler, useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { loginSchema } from '@/shared/schemas/auth-schema'
+import { Input } from '@/shared/components/ui/input'
+import { Button } from '@/shared/components/ui/button'
+import { Field, FieldLabel, FieldError, FieldGroup } from '@/shared/components/ui/field'
+import PasswordInput from './password-Input'
 import ErrorAlert from './ErrorAlert'
+import useLogin from '../hooks/use-login'
+import { LoginFields } from '../types/auth'
+import { loginSchema } from '@/shared/schemas/auth-schema'
 
 export default function LoginForm() {
     const { mutate, isPending, error: authError } = useLogin()
-
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginFields>({
+    const form = useForm<LoginFields>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
             username: '',
             password: ''
         }
     })
-
     const onSubmit: SubmitHandler<LoginFields> = (data) => {
         mutate(data)
     }
-
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
-            <div className="space-y-2">
-                <Label
-                    htmlFor="username"
-                    className="text-sm font-medium text-slate-700 "
-                >
-                    Username
-                </Label>
-                <div className="relative">
-                    <Input
-                        id="username"
-                        placeholder="Enter your username"
-                        {...register('username')} 
-                        className={`h-11 border-slate-200 focus-visible:ring-blue-500 ${errors.username ? "border-red-500 focus-visible:ring-red-500" : ""
-                            }`}
-                    />
-                </div>
-                {errors.username && (
-                    <p className="text-sm text-red-500">{errors.username.message}</p>
-                )}
-            </div>
+            {/*Username*/}
 
-            <div className="space-y-2">
-                <PasswordInput
-                    id="password"
-                    {...register('password')}
-                    className={errors.password ? "border-red-500" : ""}
+            <FieldGroup>
+                <Controller
+                    name="username"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+                            <Input
+                                {...field}
+                                id={field.name}
+                                placeholder="User123"
+                                value={field.value ?? ""}
+                                className="h-11 border-slate-200 focus-visible:ring-blue-500"
+                                aria-invalid={fieldState.invalid}
+                                autoComplete='username'
+                            />
+                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                        </Field>
+                    )}
                 />
-                {errors.password && (
-                    <p className="text-sm text-red-500">{errors.password.message}</p>
-                )}
-            </div>
-
+            </FieldGroup>
+            {/* password */}
+            <FieldGroup>
+                <Controller
+                    name="password"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                            <PasswordInput
+                                {...field}
+                                id={field.name}
+                                value={field.value ?? ""}
+                                placeholder="********"
+                                autoComplete='current-password'
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                        </Field>
+                    )}
+                />
+            </FieldGroup>
+            {/* Forgot password link */}
             <div className="flex justify-end">
                 <Link
                     href="/forgot-password"
-                    className="text-medium text-blue-600 hover:text-blue-800 "
+                    className="text-medium text-blue-600 hover:text-blue-800"
                 >
                     Forgot your password?
                 </Link>
             </div>
-            {authError && (<ErrorAlert message={authError.message} />)}
+            {/* Server Error */}
+            {authError && <ErrorAlert message={authError.message} />}
+            {/* Login button */}
             <Button
                 type="submit"
                 className="w-full h-11"

@@ -11,10 +11,7 @@ export default function Layout({ children }: Props) {
     return (
         <SidebarProvider style={{ "--sidebar-width": "346px" } as React.CSSProperties}>
             <SideBar />
-
-            {/* 1. شلنا p-4 من هنا عشان مفيش حاجة تزق المحتوى من فوق */}
             <main className="flex-1 flex flex-col bg-gray-50 min-h-screen w-full overflow-hidden">
-
                 <div className="flex items-center gap-2 ">
                     <div className="md:hidden">
                         <SidebarTrigger className="-ml-2" />

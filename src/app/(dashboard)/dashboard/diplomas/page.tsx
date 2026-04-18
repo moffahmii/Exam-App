@@ -1,6 +1,6 @@
 'use client';
 
-import useDiplomas from '@/app/(website)/_hooks/use-diplomas';
+import useDiplomas from '@/features/diplomas/hooks/use-diplomas';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import SortDropdown, { SortType } from '../../_components/SortDropdown';
 import DiplomaActionsDropdown from '../../_components/DiplomaActionsDropdown';

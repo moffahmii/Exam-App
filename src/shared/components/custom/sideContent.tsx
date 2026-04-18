@@ -12,14 +12,12 @@ export default function SideContent() {
                     className="top-10 left-10"
                 />
                 <BackCircle
-                    size="w-[350px] h-[350px]"
+                    size="w-[-350px] h-[-350px]"
                     className="bottom-10 right-10"
                 />
             </div>
-
             {/* Content Layer */}
             <div className="relative z-10">
-
                 <div className="flex items-start gap-2 mb-16">
                     <div className="bg-blue-600 text-white px-2 py-1 rounded">
                         <FolderCode />
@@ -28,13 +26,10 @@ export default function SideContent() {
                         Exam App
                     </span>
                 </div>
-
                 <h1 className="text-3xl font-bold text-gray-800 mb-12">
                     Empower your learning journey with our smart exam platform.
                 </h1>
-
                 <div className="space-y-10">
-
                     <div className="flex gap-4">
                         <span className="border-2 border-blue-600 text-blue-600 flex items-center justify-center w-9 h-9">
                             <Brain size={24} />
@@ -49,7 +44,6 @@ export default function SideContent() {
                             </p>
                         </div>
                     </div>
-
                     <div className="flex gap-4">
                         <span className="border-2 border-blue-600 text-blue-600 flex items-center justify-center w-9 h-9">
                             <FileText size={24} />

@@ -1,6 +1,6 @@
 'use client';
 
-import useDiplomaDetails from '@/app/(website)/_hooks/use-diploma-details';
+import useDiplomaDetails from '@/features/diplomas/hooks/use-diploma-details';
 import { Ban, Pencil, Trash2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 

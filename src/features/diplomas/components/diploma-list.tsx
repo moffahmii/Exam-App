@@ -2,14 +2,13 @@
 
 import React, { useEffect, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
-import useDiplomas from '../_hooks/use-diplomas'
+import useDiplomas from '../hooks/use-diplomas'
 import { DiplomaCard } from './DiplomaCard'
 import { DiplomaSkeleton } from './DiplomaSkelteon'
 
 export default function DiplomasList() {
-    const { ref, inView } = useInView({ rootMargin: '400px' }) // زودنا الـ Margin لسرعة التحميل
+    const { ref, inView } = useInView({ rootMargin: '400px' }) 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useDiplomas()
-
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {
             fetchNextPage()
@@ -18,7 +17,6 @@ export default function DiplomasList() {
     const allDiplomas = useMemo(() =>
         data?.pages.flatMap(page => page.data) || [],
         [data])
-
     if (status === 'pending') {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center w-full">
@@ -26,7 +24,6 @@ export default function DiplomasList() {
             </div>
         )
     }
-
     if (status === 'error') {
         return (
             <div className="text-center p-20 font-mono text-red-500 bg-red-50 rounded-xl border border-red-100">
@@ -34,7 +31,6 @@ export default function DiplomasList() {
             </div>
         )
     }
-
     return (
         <section className="w-full space-y-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
@@ -42,7 +38,6 @@ export default function DiplomasList() {
                     <DiplomaCard key={diploma.id} diploma={diploma} />
                 ))}
             </div>
-
             {/* Infinite Scroll Trigger */}
             <div ref={ref} className="py-10 flex flex-col items-center gap-2">
                 {isFetchingNextPage ? (

@@ -6,7 +6,6 @@ import { getNextAuthToken } from "@/lib/utils/auth.util";
 export async function getExamQuestions(examId: string): Promise<IApiResponse<{ questions: IQuestion[] }>> {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;
-
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/questions/exam/${examId}`, {
             headers: {
@@ -15,16 +14,11 @@ export async function getExamQuestions(examId: string): Promise<IApiResponse<{ q
             },
             cache: "no-store",
         });
-
         const data = await res.json();
-
         if (!res.ok) {
             return data as ErrorResponse;
         }
-
-        // هنا بنرجع الـ SuccessResponse
         return data as SuccessResponse<{ questions: IQuestion[] }>;
-
     } catch (error: any) {
         return {
             status: false,
@@ -33,11 +27,6 @@ export async function getExamQuestions(examId: string): Promise<IApiResponse<{ q
         };
     }
 }
-
-// @/lib/api/questions.ts
-
-// @/lib/api/website/exam-questions.api.ts
-
 
 export async function submitExam(payload: {
     examId: string;
@@ -61,7 +50,6 @@ export async function submitExam(payload: {
 
     return await res.json();
 }
-// @/lib/api/questions.ts
 
 export async function getSubmissionResult(submissionId: string) {
     const jwt = await getNextAuthToken();
@@ -75,15 +63,10 @@ export async function getSubmissionResult(submissionId: string) {
             },
             cache: 'no-store'
         });
-
         const data = await res.json();
-
-        // 1. لو الـ Status الكلية بتاعة الريكويست فيها مشكلة أو الـ الباك إند باعت status: false
         if (!res.ok || data.status === false) {
             throw new Error(data?.message || "Failed to load results");
         }
-
-        // 2. التعديل السحري: إرجاع الـ payload فقط عشان الـ UI يفهمه مباشرة
         return data.payload; 
         
     } catch (error: any) {

@@ -6,9 +6,6 @@ import { IloginResponse } from "@/lib/types/auth";
 
 async function handleResponse<T = any>(response: Response): Promise<IApiResponse<T>> {
     const data: IApiResponse<T> = await response.json();
-    if (data.status === false) {
-        throw new Error(data.message);
-    }
     return data;
 }
 

@@ -4,7 +4,6 @@ import { getToken } from 'next-auth/jwt';
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get('page') || '1';
-
     const token = await getToken({
         req: request,
         secret: process.env.NEXTAUTH_SECRET,
@@ -16,7 +15,7 @@ export async function GET(request: NextRequest) {
 
     try {
         const response = await fetch(
-            `https://exam-app.elevate-bootcamp.cloud/api/diplomas?page=${page}&limit=10`,
+            `${process.env.NEXT_PUBLIC_API_URL}/diplomas?page=${page}&limit=10`,
             {
                 headers: {
                     Authorization: `Bearer ${token.token}`,
@@ -24,10 +23,18 @@ export async function GET(request: NextRequest) {
                 cache: 'no-store',
             }
         );
+        if (!response.ok) {
+            return NextResponse.json(
+                { message: 'Failed to fetch from external API' },
+                { status: response.status }
+            );
+        }
 
         const data = await response.json();
         return NextResponse.json(data);
-    } catch {
-        return NextResponse.json({ message: 'Error' }, { status: 500 });
+
+    } catch (error) {
+        console.error("Route Handler Error:", error); // مفيد ليك في الـ Debugging
+        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
     }
 }

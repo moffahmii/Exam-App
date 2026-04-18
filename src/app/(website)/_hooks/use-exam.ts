@@ -5,8 +5,8 @@ import { IApiResponse } from "@/shared/types/api";
 
 export const useExam = (examId: string | null) => {
     const query = useQuery<
-        IApiResponse<IExamQuestionsResponse>
-    >({
+        IApiResponse<IExamQuestionsResponse>>
+        ({
         queryKey: ["exam-questions", examId],
         queryFn: () => getExamQuestions(examId!),
         enabled: !!examId,

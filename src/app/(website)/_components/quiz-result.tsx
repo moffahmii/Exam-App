@@ -1,10 +1,8 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button"; // تأكد من المسار
 import { RotateCcw, FolderSymlink } from "lucide-react";
-
-// 1. تعريف واجهات البيانات بناءً على الـ API الخاص بك
+import { Button } from "@/shared/components/ui/button";
 interface Answer {
     id?: string;
     text?: string;
