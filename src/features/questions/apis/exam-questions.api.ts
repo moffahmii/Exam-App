@@ -1,9 +1,9 @@
 'use server'
 import { ErrorResponse, IApiResponse, SuccessResponse } from "@/shared/types/api";
-import { IQuestion } from "@/features/questions/types/questions";
+import { Question } from "@/features/questions/types/questions";
 import { getNextAuthToken } from "@/shared/utils/auth.util";
 
-export async function getExamQuestions(examId: string): Promise<IApiResponse<{ questions: IQuestion[] }>> {
+export async function getExamQuestions(examId: string): Promise<IApiResponse<{ questions: Question[] }>> {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;
     try {
@@ -18,7 +18,7 @@ export async function getExamQuestions(examId: string): Promise<IApiResponse<{ q
         if (!res.ok) {
             return data as ErrorResponse;
         }
-        return data as SuccessResponse<{ questions: IQuestion[] }>;
+        return data as SuccessResponse<{ questions: Question[] }>;
     } catch (error: any) {
         return {
             status: false,
@@ -27,7 +27,6 @@ export async function getExamQuestions(examId: string): Promise<IApiResponse<{ q
         };
     }
 }
-
 export async function submitExam(payload: {
     examId: string;
     answers: { questionId: string; answerId: string }[];
@@ -35,7 +34,6 @@ export async function submitExam(payload: {
 }) {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;
-
     const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/submissions`,
         {

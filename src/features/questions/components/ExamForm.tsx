@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { IQuestion } from "@/features/questions/types/questions";
+import { Question } from "@/features/questions/types/questions";
 import CircularTimer from "./CircularTimer";
 import { ExamNavigation } from "./ExamNavigation";
 import { ExamProgress } from "./ExamProgress";
@@ -17,7 +17,7 @@ interface AnswersForm {
 
 interface ExamFormProps {
     examId: string;
-    questions: IQuestion[];
+    questions: Question[];
 }
 
 export default function ExamForm({ examId, questions }: ExamFormProps) {

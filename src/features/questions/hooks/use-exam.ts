@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getExamQuestions } from "@/features/questions/apis/exam-questions.api";
-import { IExamQuestionsResponse, IQuestion } from "@/lib/types/exam";
 import { IApiResponse } from "@/shared/types/api";
+import { ExamQuestionsResponse, Question } from '../types/questions';
 
 export const useExam = (examId: string | null) => {
-    const query = useQuery<
-        IApiResponse<IExamQuestionsResponse>>
+    const query = useQuery< IApiResponse<ExamQuestionsResponse>>
         ({
         queryKey: ["exam-questions", examId],
         queryFn: () => getExamQuestions(examId!),
@@ -13,11 +12,10 @@ export const useExam = (examId: string | null) => {
         staleTime: 1000 * 60 * 5,
     });
 
-    const questions: IQuestion[] =
+    const questions: Question[] =
         query.data?.status
             ? query.data.payload.questions
             : [];
-
     return {
         questions,
         examName: query.data?.message

@@ -5,7 +5,7 @@ import { useDiplomaExams } from '../hooks/use-diploma-exams';
 import LoadingExams from './ExamSkeleton';
 import ExamCard from './ExamCard';
 
-export default function ExamPage({ searchParams }: { searchParams: Promise<{ id?: string }>; }) {
+export default function ExamPage({ searchParams }: { searchParams: Promise<{ id: string }>; }) {
     const { id } = use(searchParams);
     const { data: exams, isLoading, isError } = useDiplomaExams(id as string);
     if (isLoading) {
@@ -28,11 +28,9 @@ export default function ExamPage({ searchParams }: { searchParams: Promise<{ id?
                     {exams.map((exam) => (
                         <ExamCard key={exam.id} exam={exam} diplomaId={id} />
                     ))}
-
                     <div className="text-center py-4 mt-6 border-t border-gray-100">
                         <p className="text-gray-400 text-sm">End of list</p>
                     </div>
-
                 </div>
             </div>
         </main>

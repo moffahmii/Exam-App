@@ -1,16 +1,15 @@
-export interface IAnswer {
+export interface Answer {
     id: string;
     text: string;
 }
-export interface IQuestion {
+
+export interface Question {
     id: string;
     text: string;
     examId: string;
-    answers: IAnswer[];
-}export interface ExamApiResponse {
-    status: boolean;
-    message: string;
-    payload: {
-        questions: IQuestion[];
-    };
+    answers: Answer[];
+}
+
+export interface ExamQuestionsResponse {
+    questions: Question[];
 }
