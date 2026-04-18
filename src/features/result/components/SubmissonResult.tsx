@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { ResultsChart } from "../ResultChart";
-import { ReviewList } from "../ReviewList";
-import { ResultsActions } from "../ResultActions";
+import { ResultsChart } from "./ResultChart";
+import { ReviewList } from "./ReviewList";
+import { ResultsActions } from "./ResultActions";
 export interface Answer { id: string; text: string; }
 export interface AnalyticsRecord { questionId: string; questionText: string; selectedAnswer: Answer | null; isCorrect: boolean; correctAnswer: Answer; }
 export interface SubmissionDetails { id: string; examId: string; examTitle: string; score: number; totalQuestions: number; correctAnswers: number; wrongAnswers: number; startedAt: string; submittedAt: string; }

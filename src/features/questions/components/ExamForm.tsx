@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { IQuestion } from "@/lib/types/questions";
+import { IQuestion } from "@/features/questions/types/questions";
 import CircularTimer from "./CircularTimer";
 import { ExamNavigation } from "./ExamNavigation";
 import { ExamProgress } from "./ExamProgress";
-import { useSubmitExam } from "../_hooks/use-submit-exam";
-import { AnswersList } from "./ExamAnswersList";
+import { useSubmitExam } from "../hooks/use-submit-exam";
+import { AnswersList } from "../../../app/(website)/_components/ExamAnswersList";
 
 interface AnswersForm {
     examId: string;

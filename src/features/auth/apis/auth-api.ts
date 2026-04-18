@@ -2,7 +2,6 @@
 import { IApiResponse } from "@/shared/types/api";
 import { getNextAuthToken } from "@/lib/utils/auth.util";
 import { LoginFields } from './../types/auth.d';
-import { IloginResponse } from "@/lib/types/auth";
 
 async function handleResponse<T = any>(response: Response): Promise<IApiResponse<T>> {
     const data: IApiResponse<T> = await response.json();

@@ -12,18 +12,13 @@ export default function CircularTimer({ initialMinutes, onTimeUp }: CircularTime
     const [timeLeft, setTimeLeft] = useState(totalSeconds);
 
     useEffect(() => {
-        // لو الوقت خلص نوقف التايمر وننفذ الفانكشن (زي تسليم الامتحان تلقائي)
         if (timeLeft <= 0) {
             if (onTimeUp) onTimeUp();
             return;
         }
-
-        // تقليل الوقت كل ثانية
         const timerId = setInterval(() => {
             setTimeLeft((prev) => prev - 1);
         }, 1000);
-
-        // تنظيف الـ Interval عند إزالة المكون
         return () => clearInterval(timerId);
     }, [timeLeft, onTimeUp]);
 

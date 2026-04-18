@@ -2,9 +2,9 @@
 
 import React from "react";
 import { useSearchParams } from "next/navigation";
-import ExamForm from "./ExamForm";
+import { useExam } from "../hooks/use-exam";
 import ExamSkeleton from "./ExamSkeleton";
-import { useExam } from "../_hooks/use-exam";
+import ExamForm from "./ExamForm";
 
 export default function ExamDataLoader() {
     const searchParams = useSearchParams();

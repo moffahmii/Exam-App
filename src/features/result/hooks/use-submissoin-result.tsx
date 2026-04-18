@@ -1,11 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getSubmissionResult } from "@/lib/api/website/exam-questions.api";
+import { getSubmissionResult } from "../apis/result.api";
 
-/**
- * @param submissionId - معرف العملية المراد جلب نتائجها
- */
 export function useSubmissionResult(submissionId: string) {
     return useQuery({
         queryKey: ["submission-result", submissionId],

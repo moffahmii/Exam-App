@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { submitExam } from "@/lib/api/website/exam-questions.api";
+import { submitExam } from "@/features/questions/apis/exam-questions.api";
 
 type Answer = {
     questionId: string;

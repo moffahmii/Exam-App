@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, UseFormReturn } from "react-hook-form";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/shared/components/ui/input-otp";
 import { ChangeEmailFormData } from '@/shared/schemas/auth-schema';
 
 interface OtpStepProps {

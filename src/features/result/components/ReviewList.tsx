@@ -4,7 +4,7 @@ import React from "react";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { CircleDot, Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AnalyticsRecord } from "./[id]/SubmissonResult";
+import { AnalyticsRecord } from "./SubmissonResult";
 
 interface ReviewListProps {
     analytics: AnalyticsRecord[];

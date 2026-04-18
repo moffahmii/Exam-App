@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getExamQuestions } from "@/lib/api/website/exam-questions.api";
+import { getExamQuestions } from "@/features/questions/apis/exam-questions.api";
 import { IExamQuestionsResponse, IQuestion } from "@/lib/types/exam";
 import { IApiResponse } from "@/shared/types/api";
 

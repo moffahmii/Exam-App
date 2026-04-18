@@ -1,19 +1,14 @@
 "use client";
-
 import React from "react";
 import { useRouter } from "next/navigation";
 import { RotateCcw, FolderSearch } from "lucide-react";
 
 export function ResultsActions() {
     const router = useRouter();
-
     const handleRestart = () => {
-        // بيرجع المستخدم خطوة للوراء في الهيستوري (لصفحة الامتحان)
         router.back();
     };
-
     const handleExplore = () => {
-        // بيوجه المستخدم لصفحة الدبلومات
         router.push('/diplomas');
     };
 

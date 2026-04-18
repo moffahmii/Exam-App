@@ -2,11 +2,10 @@
 
 import React, { use } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
-import { useSubmissionResult } from "@/app/(website)/_hooks/use-submissoin-result";
-import SubmissionResults from "./SubmissonResult";
-import { ResultsSkeleton } from "../ResultSekelton";
+import { useSubmissionResult } from "@/features/result/hooks/use-submissoin-result";
+import SubmissionResults from "@/features/result/components/SubmissonResult";
+import { ResultsSkeleton } from "@/features/result/components/ResultSekelton";
 
-// 2. عدل الـ Type بتاع الـ params ليكون Promise
 export default function ResultPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = use(params);
     const { data, isLoading, isError, error } = useSubmissionResult(resolvedParams.id);

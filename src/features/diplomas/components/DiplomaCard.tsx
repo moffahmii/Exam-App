@@ -7,7 +7,7 @@ export function DiplomaCard({ diploma }: { diploma: IDiplomas }) {
     return (
         <Link
             href={`/diplomas/exam?id=${diploma.id}`}
-            className="group block relative w-full max-w-84 h-111.5 "
+            className="group block relative w-full min-w-84 h-111.5 "
         >
             <div className="relative w-full h-full overflow-hidden">
                 <Image

@@ -2,7 +2,6 @@
 import { IApiResponse } from "@/shared/types/api";
 import { getNextAuthToken } from "@/lib/utils/auth.util";
 
-// lib/api/website/update-profile.api.ts
 export interface IUpdateProfileFields {
     firstName: string
     lastName: string
@@ -86,7 +85,6 @@ export async function deleteUserAccountAction() {
     const payload = await response.json();
 
     if (!response.ok) {
-        // التعامل مع خطأ 403 (Super Admin) أو أي خطأ آخر
         throw new Error(payload.message || "Failed to delete account");
     }
 
