@@ -5,7 +5,7 @@ export function useDiplomaExams(diplomaId: string) {
     return useQuery({
         queryKey: ['diploma-exams', diplomaId],
         queryFn: () => fetchDiplomaExamsClient(diplomaId),
-        enabled: !!diplomaId, // الهوك مش هيشتغل إلا لو في ID
+        enabled: !!diplomaId, 
     });
 }
 

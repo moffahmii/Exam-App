@@ -1,5 +1,5 @@
+'use server'
 import { getNextAuthToken } from "@/shared/utils/auth.util";
-
 export async function getDiplomaExams(id: string) {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;

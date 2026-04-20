@@ -20,7 +20,7 @@ export default function AccountSideBar() {
     ];
     const getLinkClass = (path: string) => {
         const isActive = pathname === path;
-        const baseClass = "flex items-center font-normal text-base gap-3 px-4 py-3 font-mono";
+        const baseClass = "flex items-center font-normal text-base gap-3 px-4 py-3";
 
         if (isActive) {
             return `${baseClass} text-blue-600 bg-blue-50`;

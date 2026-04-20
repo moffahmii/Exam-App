@@ -12,10 +12,9 @@ export async function GET(request: NextRequest) {
     if (!token?.token) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/diplomas?page=${page}&limit=10`,
+            `${process.env.NEXT_PUBLIC_API_URL}/diplomas?page=${page}&limit=20`,
             {
                 headers: {
                     Authorization: `Bearer ${token.token}`,
@@ -29,12 +28,10 @@ export async function GET(request: NextRequest) {
                 { status: response.status }
             );
         }
-
         const data = await response.json();
         return NextResponse.json(data);
 
     } catch (error) {
-        console.error("Route Handler Error:", error); // مفيد ليك في الـ Debugging
         return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
     }
 }

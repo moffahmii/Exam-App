@@ -82,7 +82,6 @@ export default function UserDropdown() {
                         />
                     </div>
                 </div>
-
                 {/* User Info */}
                 <div className="flex-1 overflow-hidden">
                     <h3 className="text-base font-medium text-blue-600">
@@ -92,7 +91,6 @@ export default function UserDropdown() {
                         {user.email || "user-email@example.com"}
                     </p>
                 </div>
-
                 {/* Three Dots Icon */}
                 <MoreVertical className="text-gray-400 group-hover:text-gray-600" size={20} />
             </div>

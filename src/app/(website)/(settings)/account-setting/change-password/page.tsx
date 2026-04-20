@@ -32,18 +32,23 @@ export default function ChangePasswordPage() {
                 <PasswordInput
                     label="Current Password"
                     id="currentPassword"
+                    placeholder='*********'
+
                     error={errors.currentPassword?.message}
                     {...register('currentPassword')}
                 />
                 <PasswordInput
                     label="New Password"
                     id="newPassword"
+                    placeholder='*********'
+
                     error={errors.newPassword?.message}
                     {...register('newPassword')}
                 />
                 <PasswordInput
                     label="Confirm New Password"
                     id="confirmPassword"
+                    placeholder='*********'
                     error={errors.confirmPassword?.message}
                     {...register('confirmPassword')}
                 />
@@ -58,7 +63,7 @@ export default function ChangePasswordPage() {
                         </span>
                     ) : "Update Password"}
                 </Button>
-                
+
             </form>
         </div>
     );

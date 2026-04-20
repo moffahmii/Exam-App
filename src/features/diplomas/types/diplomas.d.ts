@@ -3,6 +3,7 @@ declare interface IDiplomas {
     title: string;
     description: string;
     image: string;
+    immutable:boolean;
     createdAt: string;
     updatedAt: string;
 }
