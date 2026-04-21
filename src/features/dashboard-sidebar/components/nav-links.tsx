@@ -2,56 +2,60 @@
 import React from 'react'
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GraduationCap, Settings } from "lucide-react";
+import { GraduationCap, Settings, ClipboardList, History } from "lucide-react";
 
 export default function DashboardSidebarnavLinks() {
     const pathname = usePathname();
-    const isDiplomasActive = pathname === "/" || pathname.startsWith("/dashboard");
-    const isSettingsActive = pathname.startsWith("/account-setting");
+
+    const isActive = (path: string) => pathname.startsWith(path);
 
     return (
         <nav className="p-6 space-y-2 bg-gray-800">
-            {/* Diplomas */}
+
             <Link
                 href="/dashboard/diplomas"
                 className={`flex items-center font-normal text-base gap-3 p-4 transition-colors
-                    ${isDiplomasActive
-                        ? "border border-gray-400 text-white bg-gray-400"
-                        : "text-white"
+                    ${isActive("/dashboard/diplomas")
+                        ? "border border-gray-400 text-white bg-green-700"
+                        : "text-white hover:bg-gray-700"
                     }`}>
                 <GraduationCap size={24} />
                 Diplomas
             </Link>
-            {/* Settings */}
+
             <Link
                 href="/dashboard/exams"
                 className={`flex items-center font-normal text-base gap-3 p-4 transition-colors
-                    ${isSettingsActive
+                    ${isActive("/dashboard/exams")
                         ? "border border-gray-400 text-white bg-gray-700"
-                        : "text-white"
+                        : "text-white hover:bg-gray-700"
                     }`}>
-                <Settings size={24} />
+                <ClipboardList size={24} />
                 Exams
             </Link>
+
+            {/* Account Settings */}
             <Link
                 href="/dashboard/account-setting"
                 className={`flex items-center font-normal text-base gap-3 p-4 transition-colors
-                    ${isSettingsActive
+                    ${isActive("/dashboard/account-setting")
                         ? "border border-gray-400 text-white bg-gray-700"
-                        : "text-white"
+                        : "text-white hover:bg-gray-700"
                     }`}>
                 <Settings size={24} />
                 Account Settings
             </Link>
+
+            {/* Audit Log */}
             <Link
                 href="/dashboard/audit-log"
                 className={`flex items-center font-normal text-base gap-3 p-4 transition-colors
-                    ${isSettingsActive
+                    ${isActive("/dashboard/audit-log")
                         ? "border border-gray-400 text-white bg-gray-700"
-                        : "text-white"
+                        : "text-white hover:bg-gray-700"
                     }`}>
-                <Settings size={24} />
-                AUdit Log
+                <History size={24} />
+                Audit Log
             </Link>
         </nav>
     )

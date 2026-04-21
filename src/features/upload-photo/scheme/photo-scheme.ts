@@ -19,9 +19,7 @@ export const ImageScheme = z.object({
         ),
 });
 
-// 2. سكيمة الفورم النهائية (خاصة بإرسال البيانات للسيرفر)
 export const DiplomaScheme = z.object({
-    // السطر ده هو اللي بيحل مشكلة الزرار المقفول (بنستقبل الـ URL كنص مش كملف)
     image: z.string().min(1, "Please upload an image first."), 
     title: z.string().min(3, "Title must be at least 3 characters."),
     description: z.string().min(10, "Description must be at least 10 characters."),

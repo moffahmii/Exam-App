@@ -37,7 +37,7 @@ export function DiplomaActions({ diplomaId }: DiplomaActionsProps) {
 
                 {/* 2. Edit */}
                 <DropdownMenuItem  className="cursor-pointer py-2">
-                    <Link href={`/dashboard/diplomas/${diplomaId}`} className="flex items-center w-full">
+                    <Link href={`/dashboard/diplomas/view-diploma/${diplomaId}`} className="flex items-center w-full">
                         <Pencil className="mr-2 h-4 w-4 text-[#3b82f6]" />
                         <span className="font-medium text-gray-700">Edit</span>
                     </Link>

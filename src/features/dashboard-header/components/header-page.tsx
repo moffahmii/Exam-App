@@ -1,22 +1,16 @@
 "use client";
-
-import { ReactNode } from "react";
-
+import { Children, ReactNode } from "react";
 interface PageHeaderProps {
-    title: string;
     actions?: ReactNode;
+    Children?: ReactNode;
     breadcrumbs?: ReactNode;
 }
 
-export function PageHeader({
-    title,
-    actions,
-    breadcrumbs,
-}: PageHeaderProps) {
+export function PageHeader({ actions, breadcrumbs, Children }: PageHeaderProps) {
     return (
-        <div className="w-full">
+        <div className="w-full bg-white">
             {/* Bottom Section */}
-            <div className="bg-white border-t border-gray-200">
+            <div className="bg-red-700 border-t border-gray-200">
                 {/* Breadcrumbs */}
                 {breadcrumbs && (
                     <div className="px-6 py-2 text-sm text-gray-500 border-b">
@@ -25,9 +19,7 @@ export function PageHeader({
                 )}
                 {/* Title + Actions */}
                 <div className="px-6 py-3 flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-gray-900">
-                        {title}
-                    </h2>
+                    {Children}
                     {actions && <div className="flex items-center gap-2">{actions}</div>}
                 </div>
             </div>

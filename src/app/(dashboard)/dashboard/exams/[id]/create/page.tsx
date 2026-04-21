@@ -1,6 +1,6 @@
 // src/app/dashboard/exams/[id]/create/page.tsx
 
-import ExamForm from "@/features/create-diploma/components/add-exam-form";
+import ExamForm from "@/features/create/edit-diploma/components/add-exam-form";
 
 
 export default async function CreateExamPage({ params }: { params: { id: string } }) {
