@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { MoreHorizontal } from 'lucide-react';
+
 import {
     Table,
     TableBody,
@@ -10,88 +12,72 @@ import {
     TableHeader,
     TableRow,
 } from "@/shared/components/ui/table";
+
 import { useExams } from "../hooks/use-exams";
-import { IExam } from "../types/exam";
-import { Button } from "@/shared/components/ui/button";
+import { IExam } from '../types/exam';
 
-type SortOption = "title-asc" | "title-desc" | "duration-asc" | "duration-desc";
+export default function ExamsTable() {
+    const [page, setPage] = useState(1);
 
-export function ExamsTable({
-    id,
-    searchQuery,
-    durationFilter,
-}: {
-    id: string;
-    searchQuery: string;
-    durationFilter: string;
-}) {
-    const { data, isLoading, isError } = useExams(id);
-    const [sort, setSort] = useState<SortOption>("title-asc");
-
-    if (isLoading) return <p className="p-4">Loading...</p>;
-    if (isError) return <p className="p-4 text-red-500">Error</p>;
-
-    let exams: IExam[] = data?.payload?.data || [];
-
-    // 🔍 Search
-    if (searchQuery) {
-        exams = exams.filter((e) =>
-            e.title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    }
-
-    // ⏱ Duration Filter
-    if (durationFilter !== "all") {
-        exams = exams.filter((e) => {
-            if (durationFilter === "short") return e.duration < 30;
-            if (durationFilter === "medium") return e.duration >= 30 && e.duration <= 60;
-            if (durationFilter === "long") return e.duration > 60;
-            return true;
-        });
-    }
-
-    // 🔃 Sort
-    const sorted = [...exams].sort((a, b) => {
-        switch (sort) {
-            case "title-asc": return a.title.localeCompare(b.title);
-            case "title-desc": return b.title.localeCompare(a.title);
-            case "duration-asc": return a.duration - b.duration;
-            case "duration-desc": return b.duration - a.duration;
-            default: return 0;
-        }
+    const { data, isLoading } = useExams({
+        page,
+        limit: 12,
     });
 
+    const exams = data?.data || [];
+    const meta = data?.metadata;
+
+    if (isLoading) {
+        return <p className="p-4">Loading...</p>;
+    }
+
     return (
-        <div className="border overflow-hidden">
-            <Table>
+        <div className="w-full bg-white border rounded-lg overflow-hidden p-6">
+
+            {/* TABLE */}
+            <Table className="table-fixed w-full">
+
+                {/* HEADER */}
                 <TableHeader className="bg-blue-600">
-                    <TableRow className="hover:bg-blue-600">
-                        <TableHead className="text-white">Image</TableHead>
-                        <TableHead className="text-white">Title</TableHead>
-                        <TableHead className="text-white">Description</TableHead>
-                        <TableHead className="text-white">Duration</TableHead>
-                        <TableHead className="text-white text-right">
-                            <select
-                                value={sort}
-                                onChange={(e) => setSort(e.target.value as SortOption)}
-                                className="bg-white text-black px-2 py-1 rounded"
-                            >
-                                <option value="title-asc">Title ↑</option>
-                                <option value="title-desc">Title ↓</option>
-                                <option value="duration-asc">Duration ↑</option>
-                                <option value="duration-desc">Duration ↓</option>
-                            </select>
+                    <TableRow className="border-b border-blue-700 hover:bg-blue-600">
+
+                        <TableHead className="w-[100px] text-white text-xs uppercase">
+                            Image
                         </TableHead>
+
+                        <TableHead className="w-[250px] text-white text-xs uppercase">
+                            Title
+                        </TableHead>
+
+                        <TableHead className="w-[200px] text-white text-xs uppercase">
+                            Diploma
+                        </TableHead>
+
+                        <TableHead className="w-[120px] text-white text-xs uppercase">
+                            Questions
+                        </TableHead>
+
+
+                        <TableHead className="w-[80px] text-white text-xs uppercase text-right">
+                            Actions
+                        </TableHead>
+
                     </TableRow>
                 </TableHeader>
 
+                {/* BODY */}
                 <TableBody>
-                    {sorted.map((exam) => (
-                        <TableRow key={exam.id} className="hover:bg-gray-50">
-                            <TableCell>
-                                <div className="relative w-20 h-20">
+                    {exams.map((exam: IExam) => (
+                        <TableRow
+                            key={exam.id}
+                            className="border-b border-gray-100 hover:bg-gray-50"
+                        >
+
+                            {/* IMAGE */}
+                            <TableCell className="w-[100px]">
+                                <div className="relative w-16 h-16 rounded overflow-hidden">
                                     <Image
-                                        src={exam.image || "/placeholder.png"}
+                                        src={exam.image}
                                         alt={exam.title}
                                         fill
                                         className="object-cover"
@@ -99,21 +85,79 @@ export function ExamsTable({
                                 </div>
                             </TableCell>
 
-                            <TableCell>{exam.title}</TableCell>
-
-                            <TableCell className="text-gray-500">
-                                {exam.description}
+                            {/* TITLE */}
+                            <TableCell className="w-[250px]">
+                                <div className="font-medium text-sm truncate">
+                                    {exam.title}
+                                </div>
+                                <div className="text-xs text-gray-500 line-clamp-2">
+                                    {exam.description}
+                                </div>
                             </TableCell>
 
-                            <TableCell>{exam.duration} min</TableCell>
-
-                            <TableCell className="text-right">
-                                <Button size="sm">Edit</Button>
+                            {/* DIPLOMA */}
+                            <TableCell className="w-[300px]">
+                                <div className="text-sm font-medium">
+                                    {exam.diploma?.title}
+                                </div>
                             </TableCell>
+
+                            {/* QUESTIONS */}
+                            <TableCell className="w-[120px]">
+                                <span className="text-sm font-semibold">
+                                    {exam.questionsCount}
+                                </span>
+                            </TableCell>
+
+
+                            {/* ACTIONS */}
+                            <TableCell className="w-[80px] text-right">
+                                <button className="p-1 rounded hover:bg-gray-200">
+                                    <MoreHorizontal className="w-4 h-4 text-gray-500" />
+                                </button>
+                            </TableCell>
+
                         </TableRow>
                     ))}
                 </TableBody>
+
             </Table>
+
+            {/* PAGINATION */}
+            <div className="flex items-center justify-between p-4">
+
+                {/* RANGE */}
+                <span className="text-sm text-gray-500">
+                    {((meta?.page - 1) * meta?.limit) + 1} -{" "}
+                    {Math.min(meta?.page * meta?.limit, meta?.total)} of {meta?.total}
+                </span>
+
+                {/* CONTROLS */}
+                <div className="flex items-center gap-2">
+
+                    <button
+                        disabled={page === 1}
+                        onClick={() => setPage(p => p - 1)}
+                        className="px-3 py-1 border rounded disabled:opacity-50"
+                    >
+                        Prev
+                    </button>
+
+                    <span className="text-sm">
+                        Page {meta?.page} of {meta?.totalPages}
+                    </span>
+
+                    <button
+                        disabled={page === meta?.totalPages}
+                        onClick={() => setPage(p => p + 1)}
+                        className="px-3 py-1 border rounded disabled:opacity-50"
+                    >
+                        Next
+                    </button>
+
+                </div>
+            </div>
+
         </div>
     );
 }

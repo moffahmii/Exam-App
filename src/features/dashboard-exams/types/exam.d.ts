@@ -4,7 +4,7 @@ export interface IExam {
     title: string;
     description: string;
     image: string;
-    duration: number; // بالدقائق
+    duration: number; 
     diplomaId: string;
     immutable: boolean;
     questionsCount: number;
