@@ -1,10 +1,9 @@
-// الواجهة الأساسية لكل امتحان (Exam)
 export interface IExam {
     id: string;
     title: string;
-    description: string;
-    image: string;
-    duration: number; 
+    description?: string;
+    image: string | null;
+    duration: number;
     diplomaId: string;
     immutable: boolean;
     questionsCount: number;
@@ -15,12 +14,14 @@ export interface IExam {
         title: string;
     };
 }
+
 export interface IPaginationMetadata {
     page: number;
     limit: number;
     total: number;
     totalPages: number;
 }
+
 export interface IExamsResponse {
     status: boolean;
     code: number;

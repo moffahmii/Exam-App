@@ -1,8 +1,5 @@
 'use server'
-
-import { IApiResponse } from "@/shared/types/api";
 import { getNextAuthToken } from "@/shared/utils/auth.util";
-
 export async function deleteDiplomaApi(id: string) {
     const jwt = await getNextAuthToken();
     const token = jwt?.token;

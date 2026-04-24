@@ -1,28 +1,17 @@
 "use client";
-import { Children, ReactNode } from "react";
+import { ReactNode } from "react";
+
 interface PageHeaderProps {
-    actions?: ReactNode;
-    Children?: ReactNode;
+    children?: ReactNode;
     breadcrumbs?: ReactNode;
 }
 
-export function PageHeader({ actions, breadcrumbs, Children }: PageHeaderProps) {
+export function PageHeader({ children, breadcrumbs }: PageHeaderProps) {
     return (
-        <div className="w-full bg-white">
-            {/* Bottom Section */}
-            <div className="bg-red-700 border-t border-gray-200">
-                {/* Breadcrumbs */}
-                {breadcrumbs && (
-                    <div className="px-6 py-2 text-sm text-gray-500 border-b">
-                        {breadcrumbs}
-                    </div>
-                )}
-                {/* Title + Actions */}
-                <div className="px-6 py-3 flex items-center justify-between">
-                    {Children}
-                    {actions && <div className="flex items-center gap-2">{actions}</div>}
-                </div>
+        <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-30">
+            <div className="px-6 h-18 flex items-center justify-between">
+                {children} {/* تأكد إن السطر ده موجود هنا */}
             </div>
-        </div>
+        </header>
     );
 }

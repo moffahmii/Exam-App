@@ -52,7 +52,7 @@ export default function AuditLogsTable({ logs }: AuditLogsTableProps) {
 
             <Table className="table-fixed w-full p-4">
                 {/* HEADER */}
-                <TableHeader className="bg-blue-600 hover:none">
+                <TableHeader className="bg-blue-600 ">
                     <TableRow className="">
                         <TableHead className="w-30 text-white text-sm font-medium uppercase">
                             Action
@@ -85,7 +85,7 @@ export default function AuditLogsTable({ logs }: AuditLogsTableProps) {
                             return (
                                 <TableRow
                                     key={log.id}
-                                    className="border-b border-gray-100 hover:bg-gray-50 transition" >
+                                    className="border-b border-gray-100" >
                                     {/* ACTION */}
                                     <TableCell className="w-30">
                                         <div

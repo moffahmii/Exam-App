@@ -50,7 +50,7 @@ export default function DashboardSidebarnavLinks() {
             <Link
                 href="/dashboard/audit-log"
                 className={`flex items-center font-normal text-base gap-3 p-4 transition-colors
-                    ${isActive("/dashboard/audit-log")
+                    ${isActive("/dashboard/audit-logs")
                         ? "border border-gray-400 text-white bg-gray-700"
                         : "text-white hover:bg-gray-700"
                     }`}>

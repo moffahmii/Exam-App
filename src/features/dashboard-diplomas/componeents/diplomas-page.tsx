@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { DiplomasFilters } from "./diplomas-filter";
 import { DiplomasTable } from "./diplomas-table";

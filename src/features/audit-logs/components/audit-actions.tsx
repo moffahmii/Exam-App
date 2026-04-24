@@ -18,11 +18,13 @@ export function AuditActions() {
             onMouseLeave={() => setOpen(false)}
         >
             <DropdownMenu open={open} onOpenChange={setOpen}>
-                <DropdownMenuTrigger asChild>
-                    <button className="p-1 rounded hover:bg-gray-200 transition opacity-0 group-hover:opacity-100 outline-none">
-                        <MoreHorizontal className="w-4 h-4 text-gray-500" />
-                    </button>
+                {/* الحل هنا: شيلنا الـ asChild وشيلنا الـ <button> الداخلي، 
+                  ونقلنا الـ classes للـ Trigger مباشرة 
+                */}
+                <DropdownMenuTrigger className="p-1 rounded hover:bg-gray-200 transition opacity-0 group-hover:opacity-100 outline-none cursor-pointer">
+                    <MoreHorizontal className="w-4 h-4 text-gray-500" />
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent
                     align="end"
                     className="w-40 bg-white p-1 shadow-lg border border-gray-100 rounded-md">
