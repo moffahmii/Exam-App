@@ -12,18 +12,15 @@ import { ImageUploadField } from '@/features/upload-photo/components/upload-phot
 import { DiplomaField, DiplomaScheme } from '@/features/upload-photo/scheme/photo-scheme';
 import { PageHeader } from '@/features/dashboard-header/components/header-page'
 import { useRouter } from 'next/navigation'
-import { createDiploma } from '../apis/add-diploma-api'
 import { useEditDiploma } from '../hooks/use-updata-diploma'
 import { useCreateDiploma } from '../hooks/use-add-diploma'
-
 
 interface DiplomaFormProps { initialData?: DiplomaField; diplomaId?: string; }
 
 export function DiplomaForm({ initialData, diplomaId }: DiplomaFormProps) {
-
-    // consts
     const router = useRouter();
     const isEditMode = !!initialData;
+
     // Form
     const form = useForm<DiplomaField>({
         resolver: zodResolver(DiplomaScheme),
@@ -37,62 +34,69 @@ export function DiplomaForm({ initialData, diplomaId }: DiplomaFormProps) {
 
     const createDiploma = useCreateDiploma();
     const editDiploma = useEditDiploma(diplomaId!);
+
     const onSubmit = (data: DiplomaField) => {
         if (isEditMode) {
             editDiploma.mutate(data);
             return;
         }
-
         createDiploma.mutate(data);
     };
-    // Actions
-// Actions
-const headerActions = (
-    <div className="flex gap-3 items-center justify-end w-full">
-        <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-                form.reset();
-                router.back();
-            }}
-            className="flex items-center gap-2 px-4 py-2 h-10 border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm"
-        >
-            <CloseIcon size={18} /> Cancel
-        </Button>
-        <Button
-            type="submit"
-            form="diploma-form"
-            disabled={form.formState.isSubmitting || editDiploma.isPending || createDiploma.isPending}
-            className="bg-emerald-500 hover:bg-emerald-600 h-10 text-white flex items-center gap-2 px-4 py-2 transition-all shadow-sm"
-        >
-            <Save size={18} />
-            {form.formState.isSubmitting || editDiploma.isPending || createDiploma.isPending 
-                ? 'Saving...' 
-                : 'Save'}
-        </Button>
-    </div>
-);
 
     return (
         <div className="w-full min-h-screen bg-gray-100 relative">
-            <PageHeader Children={' '} actions={headerActions} />
+            {/* --- تعديل الـ PageHeader الجديد --- */}
+            <PageHeader>
+                <div className="flex justify-between items-center w-full">
+                    {/* الجزء اللي على الشمال (العنوان) */}
+                    <div className="flex flex-col justify-center">
+                        <h2 className="text-black font-semibold font-inter text-lg">
+                            {isEditMode ? "Edit Diploma" : "Add New Diploma"}
+                        </h2>
+                    </div>
+
+                    {/* الجزء اللي على اليمين (الزراير) */}
+                    <div className="flex gap-3 items-center justify-end">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => {
+                                form.reset();
+                                router.back();
+                            }}
+                            className="flex items-center gap-2 px-4 py-2 h-10 border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm"
+                        >
+                            <CloseIcon size={18} /> Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            form="diploma-form"
+                            disabled={form.formState.isSubmitting || editDiploma.isPending || createDiploma.isPending}
+                            className="bg-emerald-500 hover:bg-emerald-600 h-10 text-white flex items-center gap-2 px-4 py-2 transition-all"
+                        >
+                            <Save size={18} />
+                            {form.formState.isSubmitting || editDiploma.isPending || createDiploma.isPending
+                                ? 'Saving...'
+                                : 'Save'}
+                        </Button>
+                    </div>
+                </div>
+            </PageHeader>
 
             <div className="p-4 mx-auto ">
-                <form id="diploma-form" onSubmit={form.handleSubmit(onSubmit)} className="bg-white overflow-hidden shadow-sm">
-                    {/* Header */}
+                <form id="diploma-form" onSubmit={form.handleSubmit(onSubmit)} className="bg-white overflow-hidden shadow-sm border border-gray-200">
+                    {/* Header الداخلي للفورم */}
                     <div className="bg-blue-600 text-white font-semibold p-3 text-base tracking-wide">
                         {isEditMode ? "Edit Diploma Information" : "Add Diploma Information"}
                     </div>
 
                     <div className="p-6 space-y-6">
-
                         {/* 1. Image Field */}
                         <ImageUploadField control={form.control} name="image" />
 
                         {/* 2. Title Field */}
                         <Field data-invalid={!!form.formState.errors.title} className="w-full">
-                            <FieldLabel className="text-gray-800 font-medium text-base">
+                            <FieldLabel className="text-gray-800 font-medium text-base mb-2 block">
                                 Title
                             </FieldLabel>
                             <Input
@@ -101,7 +105,7 @@ const headerActions = (
                                 className={`p-3 h-auto ${form.formState.errors.title ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200 focus-visible:ring-blue-500"}`}
                             />
                             {form.formState.errors.title && (
-                                <p className="text-red-500 text-xs font-medium">
+                                <p className="text-red-500 text-xs font-medium mt-1">
                                     {form.formState.errors.title.message}
                                 </p>
                             )}
@@ -109,7 +113,7 @@ const headerActions = (
 
                         {/* 3. Description Field */}
                         <Field data-invalid={!!form.formState.errors.description} className="w-full">
-                            <FieldLabel className="text-gray-800 font-medium text-base">
+                            <FieldLabel className="text-gray-800 font-medium text-base mb-2 block">
                                 Description
                             </FieldLabel>
                             <Textarea
@@ -119,7 +123,7 @@ const headerActions = (
                                 className={`p-3 resize-none ${form.formState.errors.description ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200 focus-visible:ring-blue-500"}`}
                             />
                             {form.formState.errors.description && (
-                                <p className="text-red-500 text-xs font-medium">
+                                <p className="text-red-500 text-xs font-medium mt-1">
                                     {form.formState.errors.description.message}
                                 </p>
                             )}

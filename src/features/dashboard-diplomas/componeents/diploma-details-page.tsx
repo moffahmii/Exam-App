@@ -28,20 +28,24 @@ export default function DiplomaDetailsPage({ params }: { params: { id: string } 
 
     return (
         <div className="h-auto">
-            <PageHeader
-                Children={<>
-                    <h2 className=" text-black font-semibold font-inter text-lg">{diplomaData.title}</h2>
-                </>}
-                actions={
-                    <>
-                        {/* بادج الـ Immutable (يظهر فقط إذا كانت الدبلومة غير قابلة للتعديل) */}
+            <PageHeader>
+                {/* التوزيع يتم هنا في الصفحة نفسها */}
+                <div className="flex items-center justify-between w-full">
+
+                    {/* جهة اليسار: العنوان */}
+                    <h2 className="text-black font-semibold font-inter text-lg">
+                        {diplomaData.title}
+                    </h2>
+
+                    {/* جهة اليمين: الأزرار */}
+                    <div className="flex items-center gap-3">
                         {diplomaData.immutable && (
                             <div className="flex items-center gap-2 px-4 py-2 text-gray-800 text-sm font-medium bg-gray-200 h-10">
                                 <Ban size={16} />
                                 Immutable
                             </div>
                         )}
-                        {/* زر التعديل (Edit) */}
+
                         {diplomaData.immutable ? (
                             <Button
                                 disabled
@@ -61,7 +65,7 @@ export default function DiplomaDetailsPage({ params }: { params: { id: string } 
                                 </Link>
                             </Button>
                         )}
-                        {/* delete button */}
+
                         <Button
                             disabled={diplomaData.immutable}
                             onClick={() => setShowDeleteModal(true)}
@@ -70,9 +74,9 @@ export default function DiplomaDetailsPage({ params }: { params: { id: string } 
                             <Trash2 size={18} />
                             Delete
                         </Button>
-                    </>
-                }
-            />
+                    </div>
+                </div>
+            </PageHeader>
             <div className="max-w-7xl mx-auto p-6">
                 <div className="bg-white p-4">
                     <div className="flex flex-col gap-8">

@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { Controller, Control } from 'react-hook-form'
-import { FileText, CloudUpload, Trash2, Download } from 'lucide-react'
+import React, { useEffect, useState } from 'react';
+import { Controller, Control } from 'react-hook-form';
+import { FileText, CloudUpload, Trash2, Download } from 'lucide-react';
 
-import { Field, FieldLabel } from '@/shared/components/ui/field'
-import useUploadImage from '@/features/upload-photo/hooks/use-upload-images'
+import { Field, FieldLabel } from '@/shared/components/ui/field';
+import useUploadImage from '@/features/upload-photo/hooks/use-upload-images';
 
 interface ImageUploadFieldProps {
     name: string;
@@ -25,11 +25,12 @@ export function ImageUploadField({
         uploadProgress,
         isSuccess,
         reset
-    } = useUploadImage()
+    } = useUploadImage();
 
-    const [localFile, setLocalFile] = useState<File | null>(null)
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+    const [localFile, setLocalFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
+    // preview only for local file
     useEffect(() => {
         if (!localFile) {
             setPreviewUrl(null);
@@ -59,8 +60,8 @@ export function ImageUploadField({
             control={control}
             render={({ field: { onChange, value }, fieldState }) => {
 
-                // 🧠 source of truth fix (edit + create)
-                const imageSrc = previewUrl || value;
+                // 🔥 source of truth = RHF ONLY
+                const imageSrc = value || previewUrl;
 
                 const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files?.[0];
@@ -72,11 +73,13 @@ export function ImageUploadField({
                         { image: file },
                         {
                             onSuccess: (uploadedUrl: string) => {
-                                onChange(uploadedUrl); // RHF value
+                                onChange(uploadedUrl); // RHF update
+                                setPreviewUrl(uploadedUrl);
                                 reset();
                             },
                             onError: () => {
                                 setLocalFile(null);
+                                setPreviewUrl(null);
                                 onChange('');
                             }
                         }
@@ -85,6 +88,7 @@ export function ImageUploadField({
 
                 const handleRemove = (e: React.MouseEvent) => {
                     e.preventDefault();
+
                     setLocalFile(null);
                     setPreviewUrl(null);
                     onChange('');
@@ -114,33 +118,25 @@ export function ImageUploadField({
 
                         <div className="w-full h-22">
 
-                            {/* EMPTY STATE */}
                             {!imageSrc ? (
-                                <div className={`
-                                    relative w-full border bg-white overflow-hidden
-                                    ${fieldState.invalid ? 'border-red-400' : 'border-gray-200 hover:border-blue-400'}
-                                `}>
+                                <div className="relative w-full border bg-white overflow-hidden border-gray-200 hover:border-blue-400">
+
                                     <input
                                         type='file'
                                         disabled={isPending}
-                                        accept="image/jpeg, image/png, image/webp"
-                                        className='absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed'
+                                        accept="image/jpeg,image/png,image/webp"
+                                        className='absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10'
                                         onChange={handleFileSelect}
                                     />
 
-                                    <div className="flex w-full items-center justify-between py-6 px-6 pointer-events-none">
+                                    <div className="flex items-center justify-between py-6 px-6 pointer-events-none">
 
-                                        <div className="text-gray-200">
-                                            <FileText size={48} strokeWidth={1} />
-                                        </div>
+                                        <FileText size={48} className="text-gray-200" />
 
                                         <div className="flex items-center gap-2 text-sm text-gray-500">
                                             <CloudUpload size={20} />
                                             <span>
-                                                Drop an image here or{' '}
-                                                <span className="text-blue-500 font-medium">
-                                                    select from your computer
-                                                </span>
+                                                Drop image or select from device
                                             </span>
                                         </div>
 
@@ -148,83 +144,54 @@ export function ImageUploadField({
                                     </div>
                                 </div>
                             ) : (
-                                <div className={`
-                                    relative w-full border bg-white flex items-center justify-between p-2
-                                    ${fieldState.invalid ? 'border-red-400' : 'border-gray-200'}
-                                `}>
+                                <div className="relative w-full border bg-white flex items-center justify-between p-2">
 
-                                    {/* LEFT */}
                                     <div className="flex items-center gap-4 overflow-hidden">
 
-                                        <div className="w-16 h-16 shrink-0 bg-gray-100 border border-gray-100 overflow-hidden">
+                                        <div className="w-16 h-16 bg-gray-100 overflow-hidden">
                                             <img
                                                 src={imageSrc}
-                                                alt="Preview"
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
 
-                                        <span className="text-sm font-medium text-gray-700 truncate max-w-50 sm:max-w-75">
+                                        <span className="text-sm font-medium truncate max-w-50">
                                             {localFile?.name || value?.split('/').pop()}
                                         </span>
+
                                     </div>
 
-                                    {/* RIGHT */}
-                                    <div className="flex items-center gap-5 pr-2">
+                                    <div className="flex items-center gap-3">
 
-                                        <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-                                            {localFile ? formatFileSize(localFile.size) : ''}
-                                        </span>
+                                        <button type="button" onClick={handleDownload}>
+                                            <Download size={18} />
+                                        </button>
 
-                                        <div className="flex items-center gap-3">
+                                        <button type="button" onClick={handleRemove}>
+                                            <Trash2 size={18} />
+                                        </button>
 
-                                            <button
-                                                type="button"
-                                                onClick={handleDownload}
-                                                className="text-blue-500 hover:text-blue-700 transition-colors"
-                                            >
-                                                <Download size={18} />
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                onClick={handleRemove}
-                                                className="text-red-500 hover:text-red-700 transition-colors"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
-
-                                        </div>
                                     </div>
 
-                                    {/* PROGRESS */}
                                     {isPending && (
-                                        <div className="absolute top-10 left-0 h-1 bg-blue-600 w-full z-20">
+                                        <div className="absolute top-0 left-0 h-1 bg-blue-600 w-full">
                                             <div
-                                                className="h-full bg-blue-500 transition-all duration-300"
+                                                className="h-full bg-blue-500"
                                                 style={{ width: `${uploadProgress}%` }}
                                             />
                                         </div>
                                     )}
+
                                 </div>
                             )}
+
                         </div>
 
-                        {/* MESSAGES */}
-                        <div className="min-h-2.5">
-
-                            {isSuccess && !fieldState.error && (
-                                <p className="text-emerald-600 text-xs font-medium">
-                                    Image uploaded successfully
-                                </p>
-                            )}
-
-                            {fieldState.error && (
-                                <p className="text-red-500 text-xs font-medium">
-                                    {fieldState.error.message}
-                                </p>
-                            )}
-                        </div>
+                        {isSuccess && (
+                            <p className="text-green-600 text-xs">
+                                Image uploaded successfully
+                            </p>
+                        )}
 
                     </Field>
                 );
