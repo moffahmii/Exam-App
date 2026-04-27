@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useExamDetails } from "@/features/dashboard-exams/hooks/use-exam-details";
 import { IExam } from "../types/exam";
 import { DeleteExamModal } from "@/features/exams-CRUD/components/delete-exam-modal";
+import { ExamQuestionsList } from "@/features/dashboard-questions/components/exam-question-list";
 
 export default function ExamDetailsPage({
     params,
@@ -190,41 +191,9 @@ export default function ExamDetailsPage({
                 </div>
 
                 {/* QUESTIONS */}
-                <div className="bg-white border">
-
-                    <div className="bg-blue-600 h-10 px-2 flex justify-between items-center text-white">
-                        <h2 className="font-semibold text-base">
-                            Exam Questions
-                        </h2>
-
-                        <Button className="bg-transparent text-white hover:bg-white hover:text-blue-600 text-sm flex items-center">
-                            <Plus size={16} className="mr-1" />
-                            Add Questions
-                        </Button>
-                    </div>
-
-                    <table className="w-full text-left table-fixed">
-
-                        <thead className="bg-gray-100 border-b">
-                            <tr>
-                                <th className="p-3 text-sm text-gray-600 w-[650px]">
-                                    Title
-                                </th>
-                                <th className="p-3 w-[100px]"></th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td colSpan={2} className="p-8 text-center text-sm text-gray-500">
-                                    No questions fetched yet. Please connect the questions API.
-                                </td>
-                            </tr>
-                        </tbody>
-
-                    </table>
-                </div>
+                <ExamQuestionsList examId={id} isImmutable={examData.immutable} />
             </div>
+
 
             {/* DELETE MODAL */}
             <DeleteExamModal

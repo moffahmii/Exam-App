@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Save, X as CloseIcon, Plus } from 'lucide-react';
@@ -16,11 +16,13 @@ import { useCreateExam } from '../hooks/use-add-exam';
 import { useEditExam } from '../hooks/use-update-exam';
 import { IDiploma } from '@/features/dashboard-exams/components/exams-filter';
 import useDiplomas from '@/features/dashboard-diplomas/hooks/use-diplomas-details';
+import * as z from 'zod'; 
 
 interface ExamFormProps {
     initialData?: ExamField;
     examId?: string;
 }
+type FormValues = z.infer<typeof ExamSchema>;
 
 export function ExamForm({ initialData, examId }: ExamFormProps) {
     const router = useRouter();
@@ -32,7 +34,7 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
     const editExam = useEditExam(examId!);
 
     // ✅ RHF source of truth
-    const form = useForm<ExamField>({
+    const form = useForm<FormValues>({
         resolver: zodResolver(ExamSchema),
         mode: 'onChange',
         defaultValues: {
@@ -42,33 +44,29 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
             duration: 0,
             diplomaId: '',
         },
+        // 🔥 استخدام values بدلاً من useEffect لمزامنة بيانات التعديل بأمان
+        values: initialData ? {
+            title: initialData.title ?? '',
+            description: initialData.description ?? '',
+            image: initialData.image ?? '',
+            duration: initialData.duration ?? 0,
+            diplomaId: initialData.diplomaId ?? '',
+        } : undefined,
     });
 
-    // 🔥 sync edit data properly
-    useEffect(() => {
-        if (initialData) {
-            form.reset({
-                title: initialData.title ?? '',
-                description: initialData.description ?? '',
-                image: initialData.image ?? '',
-                duration: initialData.duration ?? 0,
-                diplomaId: initialData.diplomaId ?? '',
-            });
-        }
-    }, [initialData, form]);
-
-    const onSubmit = (data: ExamField) => {
+    // ✅ تم حل مشكلة handleSubmit هنا لأن الأنواع تطابقت
+    const onSubmit = (data: FormValues) => {
         console.log("SUBMIT DATA:", data);
 
+        // نقوم بعمل cast بسيط هنا إذا كان الـ Hook الخاص بك يقبل ExamField فقط
         if (isEditMode) {
-            editExam.mutate(data);
+            editExam.mutate(data as ExamField);
         } else {
-            createExam.mutate(data);
+            createExam.mutate(data as ExamField);
         }
     };
 
-    const isSubmitting =
-        createExam.isPending || editExam.isPending;
+    const isSubmitting = createExam.isPending || editExam.isPending;
 
     return (
         <div className="w-full min-h-screen bg-[#f8f9fa] pb-10">
@@ -149,7 +147,7 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
                         </Field>
 
                         <ImageUploadField
-                            control={form.control}
+                            control={form.control as any}
                             name="image"
                         />
 

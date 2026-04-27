@@ -1,43 +1,40 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import React from 'react';
+import { MoreHorizontal, Eye, Trash2 } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { Eye, Trash2, MoreHorizontal } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { AuditLog } from '../types/audit-logs';
+import Link from 'next/link';
 
-export function AuditActions() {
-    const [open, setOpen] = useState(false);
-
+export function AuditActions({ log }: { log: AuditLog }) {
     return (
-        <div
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-        >
-            <DropdownMenu open={open} onOpenChange={setOpen}>
-                {/* الحل هنا: شيلنا الـ asChild وشيلنا الـ <button> الداخلي، 
-                  ونقلنا الـ classes للـ Trigger مباشرة 
-                */}
-                <DropdownMenuTrigger className="p-1 rounded hover:bg-gray-200 transition opacity-0 group-hover:opacity-100 outline-none cursor-pointer">
-                    <MoreHorizontal className="w-4 h-4 text-gray-500" />
-                </DropdownMenuTrigger>
+        <DropdownMenu>
+            <DropdownMenuTrigger >
+                {/* الزرار الرمادي اللي فيه التلات نقط */}
+                <Button variant="ghost" className="h-8 w-8 p-0 bg-gray-100 hover:bg-gray-200">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4 text-gray-600" />
+                </Button>
+            </DropdownMenuTrigger>
 
-                <DropdownMenuContent
-                    align="end"
-                    className="w-40 bg-white p-1 shadow-lg border border-gray-100 rounded-md">
-                    <DropdownMenuItem className="flex items-center gap-3 px-3 py-2 cursor-pointer focus:bg-emerald-50 focus:text-emerald-600">
-                        <Eye className="h-4 w-4 text-emerald-500" />
-                        <span className="text-sm font-medium">View</span>
+            <DropdownMenuContent align="end" className="w-36">
+                <Link href={`/dashboard/audit-logs/${log.id}`}>
+                    <DropdownMenuItem className="cursor-pointer font-medium text-emerald-600 gap-2">
+                        <Eye className="w-4 h-4" />
+                        View
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center gap-3 px-3 py-2 cursor-pointer focus:bg-red-50 focus:text-red-600">
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                        <span className="text-sm font-medium">Delete</span>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
+                </Link>
+                <DropdownMenuItem className="cursor-pointer font-medium text-red-600 gap-2">
+                    <Trash2 className="w-4 h-4" />
+                    Delete
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 }

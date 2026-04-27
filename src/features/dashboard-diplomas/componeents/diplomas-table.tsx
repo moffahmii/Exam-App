@@ -65,17 +65,24 @@ export function DiplomasTable({ searchQuery, immutabilityFilter }: { searchQuery
                         <TableRow key={item.id} className="hover:bg-gray-50 h-25">
                             <TableCell className="p-2.5">
                                 <div className="relative w-25 h-25">
-                                    <Image src={item.image} alt={item.title} fill className="object-cover" />
-                                </div>
+                                    {item.image ? (
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    ) : (
+                                        <span className="text-[10px] text-gray-400 font-medium">No Image</span>
+                                    )}                                
+                                    </div>
                             </TableCell>
                             <TableCell className="font-medium">{item.title}</TableCell>
                             <TableCell className="text-gray-500 max-w-[500px]">
                                 <p className="line-clamp-2">{item.description}</p>
                             </TableCell>
                             <TableCell className="text-right">
-                                <Button variant="ghost" size="icon">
-                                    <DiplomaActions diplomaId={item.id} />
-                                </Button>
+                                <DiplomaActions diplomaId={item.id} />
                             </TableCell>
                         </TableRow>
                     ))}

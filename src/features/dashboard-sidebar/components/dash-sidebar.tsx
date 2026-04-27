@@ -11,12 +11,11 @@ import DashboardSidebarnavLinks from "./nav-links";
 
 export default function DashboardSideBar() {
     return (
-        <aside className="bg-gray-800 w-90.5 min-h-screen flex flex-col justify-between">
+        <aside className="bg-gray-800 w-90.5 h-screen sticky top-0 flex flex-col justify-between">
             <div>
                 <DashLogoSection />
                 <DashboardSidebarnavLinks />
             </div>
-
             <UserDropdown />
         </aside>
 

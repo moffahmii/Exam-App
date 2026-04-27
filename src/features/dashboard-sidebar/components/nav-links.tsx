@@ -17,7 +17,7 @@ export default function DashboardSidebarnavLinks() {
                 className={`flex items-center font-normal text-base gap-3 p-4 transition-colors
                     ${isActive("/dashboard/diplomas")
                         ? "border border-gray-400 text-white bg-green-700"
-                        : "text-white hover:bg-gray-700"
+                        : "text-white hover:bg-gray-700 bg-amber-300"
                     }`}>
                 <GraduationCap size={24} />
                 Diplomas
@@ -48,7 +48,7 @@ export default function DashboardSidebarnavLinks() {
 
             {/* Audit Log */}
             <Link
-                href="/dashboard/audit-log"
+                href="/dashboard/audit-logs"
                 className={`flex items-center font-normal text-base gap-3 p-4 transition-colors
                     ${isActive("/dashboard/audit-logs")
                         ? "border border-gray-400 text-white bg-gray-700"

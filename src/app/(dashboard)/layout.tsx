@@ -7,16 +7,17 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
+    
     return (
         <SidebarProvider style={{ "--sidebar-width": "346px" } as React.CSSProperties}>
             <DashboardSideBar />
-            <main className="flex-1 flex flex-col bg-gray-100 min-h-screen w-full overflow-hidden">
+            <main className="flex-1 flex flex-col bg-gray-100 w-full overflow-hidden">
                 <div className="flex items-center gap-2 ">
                     <div className="md:hidden">
                         <SidebarTrigger className="-ml-2" />
                     </div>
                 </div>
-                <div className="flex-1 bg-gray-100">
+                <div className="flex-1 bg-gray-100 items-center justify-center">
                     {children}
                 </div>
             </main>

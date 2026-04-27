@@ -3,6 +3,7 @@
 import { getNextAuthToken } from "@/shared/utils/auth.util";
 import { AuditLogsParams, AuditLogsResponse } from "../types/audit-logs";
 
+// 1. الدالة بتاعتك اللي بتجيب اللوجز كلها (زي ما هي مفيهاش تغيير)
 export async function getAuditLogs(params: AuditLogsParams): Promise<AuditLogsResponse> {
     try {
         const jwt = await getNextAuthToken();
@@ -18,7 +19,6 @@ export async function getAuditLogs(params: AuditLogsParams): Promise<AuditLogsRe
         if (params.actorUserId) queryParams.append('actorUserId', params.actorUserId);
         if (params.sortBy && params.sortBy !== '--') queryParams.append('sortBy', params.sortBy);
 
-        // تم حل مشكلة الـ TypeScript هنا (شيلنا المقارنة بـ '--')
         if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder);
 
         const queryString = queryParams.toString();
@@ -30,10 +30,9 @@ export async function getAuditLogs(params: AuditLogsParams): Promise<AuditLogsRe
                 'Content-Type': 'application/json',
                 ...(token && { 'Authorization': `Bearer ${token}` })
             },
-            cache: 'no-store' 
+            cache: 'no-store'
         });
 
-        // 4. معالجة الرد
         if (!response.ok) {
             console.error(`API Error with status: ${response.status}`);
             return {
@@ -52,6 +51,46 @@ export async function getAuditLogs(params: AuditLogsParams): Promise<AuditLogsRe
             status: false,
             code: 500,
             payload: { data: [] }
+        };
+    }
+}
+
+export async function getAuditLogById(id: string) {
+    try {
+        const jwt = await getNextAuthToken();
+        const token = jwt?.token;
+
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/admin/audit-logs/${id}`;
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            },
+            cache: 'no-store' 
+        });
+
+        // ✅ التعديل هنا: بدل throw error، هنرجع object فيه حالة الفشل
+        if (!response.ok) {
+            console.error(`API Error fetching log ${id} with status: ${response.status}`);
+            return {
+                status: false,
+                code: response.status,
+                payload: null
+            };
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("getAuditLogById Action Error:", error);
+        // ✅ التعديل هنا بردو
+        return {
+            status: false,
+            code: 500,
+            payload: null
         };
     }
 }
