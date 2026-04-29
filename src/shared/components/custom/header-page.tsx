@@ -23,7 +23,6 @@ interface PageHeaderProps {
 export function PageHeader({ children, breadcrumbs }: PageHeaderProps) {
     return (
         <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-30">
-            {/* شلنا الـ gap-4 والـ padding من هنا عشان نتحكم في كل صف لوحده */}
             <div className="flex flex-col w-full">
 
                 {/* 1. صف الـ Breadcrumbs */}

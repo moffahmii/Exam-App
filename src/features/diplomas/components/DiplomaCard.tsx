@@ -1,5 +1,6 @@
 'use client'
 
+import { IDiplomas } from '@/shared/types/diplomas'
 import Image from 'next/image'
 import Link from 'next/link'
 

@@ -1,5 +1,4 @@
 import React from 'react';
-;
 import { UseFormReturn } from "react-hook-form";
 import { ChangeEmailFormData } from '@/shared/schemas/auth-schema';
 import { Label } from '@/shared/components/ui/label';

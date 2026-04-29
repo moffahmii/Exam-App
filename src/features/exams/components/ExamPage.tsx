@@ -1,35 +1,80 @@
 'use client';
 
-import { use } from 'react';
-import { useDiplomaExams } from '../hooks/use-diploma-exams';
-import LoadingExams from './ExamSkeleton';
-import ExamCard from './ExamCard';
+import { useDiplomaExams } from '@/features/exams/hooks/use-diploma-exams';
+import ExamCard from '@/features/exams/components/ExamCard';
+import LoadingExams from '@/features/exams/components/ExamSkeleton';
+import { BookOpenCheck } from 'lucide-react';
+import { WebsiteHeader } from '@/shared/components/custom/website-header';
+import { IExam } from '@/shared/types/exam';
 
-export default function ExamPage({ searchParams }: { searchParams: Promise<{ id: string }>; }) {
-    const { id } = use(searchParams);
-    const { data: exams, isLoading, isError } = useDiplomaExams(id as string);
+interface ExamPageContentProps {
+    id: string;
+}
+
+export default function ExamPageContent({ id }: ExamPageContentProps) {
+    const { data: exams, isLoading, isError } = useDiplomaExams(id);
+
+    const diplomaTitle = exams?.[0]?.diploma?.title;
+
+    const breadcrumbs = [
+        { label: 'Diplomas', href: '/' },
+        { label: diplomaTitle ?? 'Loading...' }
+    ];
+
     if (isLoading) {
-        return <LoadingExams />;
+        return (
+            <main className="min-h-screen bg-gray-50">
+                <WebsiteHeader
+                    title="Loading..."
+                    icon={<BookOpenCheck size={32} />}
+                    breadcrumbs={breadcrumbs}
+                />
+                <div className="py-8">
+                    <LoadingExams />
+                </div>
+            </main>
+        );
     }
 
-    if (isError || !exams || exams.length === 0) {
+    if (isError || !exams) {
         return (
-            <div className="min-h-screen bg-gray-900 flex justify-center items-center text-white">
-                No exams found for this diploma.
-            </div>
+            <main className="min-h-screen bg-gray-50">
+                <WebsiteHeader
+                    title="Error"
+                    icon={<BookOpenCheck size={32} />}
+                    breadcrumbs={breadcrumbs}
+                />
+                <div className="flex justify-center items-center py-20 text-red-500 font-mono">
+                    Failed to load exams.
+                </div>
+            </main>
         );
     }
 
     return (
-        <main className="min-h-screen bg-gray-900 py-8">
-            <div className="container mx-auto max-w-5xl px-4">
-                <div className="bg-white p-6 space-y-4">
+        <main className="min-h-screen bg-gray-50">
+            <WebsiteHeader
+                title={diplomaTitle ?? 'Diploma Exams'}
+                icon={<BookOpenCheck size={32} />}
+                breadcrumbs={breadcrumbs}
+            />
 
-                    {exams.map((exam) => (
-                        <ExamCard key={exam.id} exam={exam} diplomaId={id} />
-                    ))}
-                    <div className="text-center py-4 mt-6 border-t border-gray-100">
-                        <p className="text-gray-400 text-sm">End of list</p>
+            <div className="container mx-auto max-w-7xl p-4">
+                <div className="bg-white p-6 space-y-4  ">
+                    {exams.length > 0 ? (
+                        exams.map((exam: IExam) => (
+                            <ExamCard key={exam.id} exam={exam} diplomaId={id} />
+                        ))
+                    ) : (
+                        <div className="text-center py-10 text-gray-500">
+                            No exams available.
+                        </div>
+                    )}
+
+                    <div className="text-center py-4 border-t border-gray-100">
+                        <p className="text-gray-400 font-mono text-sm">
+                            End of list
+                        </p>
                     </div>
                 </div>
             </div>

@@ -28,7 +28,7 @@ export default function AccountSideBar() {
         return `${baseClass} text-gray-600 `;
     };
     return (
-        <nav className="flex flex-col h-full p-6 bg-white">
+        <nav className="flex flex-col h-screen p-4 bg-white">
             <div className="grow space-y-2">
                 {navLinks.map((link) => {
                     const Icon = link.icon;

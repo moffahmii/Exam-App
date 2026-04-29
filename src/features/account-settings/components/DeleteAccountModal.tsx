@@ -15,7 +15,6 @@ export default function DeleteAccountModal({ isOpen, onClose, onConfirm, isLoadi
 
     return (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-200">
-            {/* العرض هنا 549px زي مودال التعديل بالضبط */}
             <div className="relative bg-white w-139.5 h-103 flex flex-col animate-in  duration-200 font-mono">
                 <button
                     onClick={onClose}
@@ -36,7 +35,6 @@ export default function DeleteAccountModal({ isOpen, onClose, onConfirm, isLoadi
                         This action is permanent and cannot be undone.
                     </p>
                 </div>
-                {/* منطقة الأزرار (الـ Footer) بنفس تنسيق الـ 50/50 */}
                 <div className="border-t border-gray-200 bg-gray-50 flex items-center justify-center gap-4 py-4 px-13.5">
                     <Button
                         variant="ghost"

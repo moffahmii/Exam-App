@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { requestEmailUpdateOTP, verifyEmailUpdateOTP } from "@/features/account-settings/apis/update-profile.api";
+import { requestEmailUpdateOTP } from '../apis/request-otp.api';
+import { verifyEmailUpdateOTP } from '../apis/verify-otp.api';
 
 export function useChangeEmail() {
     const [step, setStep] = useState(1);
@@ -60,7 +61,7 @@ export function useChangeEmail() {
         setStep, // أضفناها عشان زرار الـ Edit في الكومبوننت يشتغل
         email,
         timeLeft,
-        // دمجنا حالات التحميل في متغير واحد عشان الكومبوننت
+        // دمجنا  التحميل في متغير واحد عشان الكومبوننت
         isLoading: requestMutation.isPending || verifyMutation.isPending,
         handleRequest: handleSafeRequest, // استخدام الـ Safe Wrapper
         handleVerify: handleSafeVerify,   // استخدام الـ Safe Wrapper

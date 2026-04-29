@@ -22,8 +22,8 @@ export default function CircularTimer({ initialMinutes, onTimeUp }: CircularTime
         return () => clearInterval(timerId);
     }, [timeLeft, onTimeUp]);
 
-    const radius = 38; // نصف قطر الدائرة
-    const circumference = 2 * Math.PI * radius; // محيط الدائرة بالكامل
+    const radius = 38;
+    const circumference = 2 * Math.PI * radius;
     const percentage = timeLeft / totalSeconds;
     const strokeDashoffset = circumference - percentage * circumference;
     const minutes = Math.floor(timeLeft / 60);
@@ -32,12 +32,10 @@ export default function CircularTimer({ initialMinutes, onTimeUp }: CircularTime
 
     return (
         <div className="relative flex items-center justify-center w-20 h-20 font-mono">
-            {/* SVG Container */}
             <svg
                 className="w-full h-full transform -rotate-90"
                 viewBox="0 0 100 100"
             >
-                {/* الدائرة الخلفية الرمادية الفاتحة */}
                 <circle
                     cx="50"
                     cy="50"
@@ -47,7 +45,6 @@ export default function CircularTimer({ initialMinutes, onTimeUp }: CircularTime
                     stroke="currentColor"
                     fill="transparent"
                 />
-                {/* الدائرة الزرقاء (Progress) */}
                 <circle
                     cx="50"
                     cy="50"
@@ -62,7 +59,6 @@ export default function CircularTimer({ initialMinutes, onTimeUp }: CircularTime
                 />
             </svg>
 
-            {/* النص في المنتصف */}
             <div className="absolute flex flex-col items-center justify-center text-sm font-bold font-mono text-gray-800">
                 {formattedTime}
             </div>

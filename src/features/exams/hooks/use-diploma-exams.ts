@@ -1,5 +1,5 @@
+import { IExam } from '@/shared/types/exam';
 import { useQuery } from '@tanstack/react-query';
-import { IExam } from '../types/exam';
 
 export function useDiplomaExams(diplomaId: string) {
     return useQuery({

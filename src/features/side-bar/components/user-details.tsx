@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { User, LayoutDashboard, LogOut, MoreVertical } from "lucide-react";
+import { User, LayoutDashboard, LogOut, MoreVertical, Home } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -11,6 +12,7 @@ export default function UserDropdown() {
     const { data: session } = useSession();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -24,7 +26,8 @@ export default function UserDropdown() {
 
     if (!session?.user) return null;
     const user = session.user;
-    const isAdmin = user?.role == "ADMIN"
+    const isAdmin = user?.role === "ADMIN" || user?.role === "SUPERADMIN";
+    const isDashboard = pathname?.startsWith("/dashboard");
 
     return (
         <div className="relative w-70.5 h-13.5 mx-auto my-4 px-4 " ref={dropdownRef}>
@@ -46,15 +49,30 @@ export default function UserDropdown() {
                                 <User size={18} className="text-gray-400" />
                                 <span className="text-sm">Account</span>
                             </Link>
-                            {/* Dashboard Link */}
-                            {isAdmin && <Link
-                                href="/dashboard"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-4 h-12.5 p-2 border-b border-gray-100 "
-                            >
-                                <LayoutDashboard size={18} className="text-gray-400" />
-                                <span className="text-sm">Dashboard</span>
-                            </Link>}
+
+                            {/* Dashboard / Application Toggle Link */}
+                            {isAdmin && (
+                                isDashboard ? (
+                                    <Link
+                                        href="/"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center gap-4 h-12.5 p-2 border-b border-gray-100"
+                                    >
+                                        <Home size={18} className="text-gray-400" />
+                                        <span className="text-sm">Application</span>
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        href="/dashboard/diplomas"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center gap-4 h-12.5 p-2 border-b border-gray-100 "
+                                    >
+                                        <LayoutDashboard size={18} className="text-gray-400" />
+                                        <span className="text-sm">Dashboard</span>
+                                    </Link>
+                                )
+                            )}
+
                             {/* Logout Button */}
                             <button
                                 onClick={() => signOut({ callbackUrl: "/login" })}

@@ -31,7 +31,7 @@ export default function DiplomasList() {
         <main className="w-full min-h-screen">
             <WebsiteHeader
                 title="Diplomas"
-                icon={<GraduationCap size={32} />}
+                icon={<GraduationCap size={45} />}
                 breadcrumbs={breadcrumbs}
             />
 

@@ -1,25 +1,22 @@
 'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { updateProfileAction } from "@/features/account-settings/apis/update-profile.api"
 import { IUpdateProfileFields } from '../types/profile-fields'
+import { signOut } from "next-auth/react"
 
 export function useUpdateProfile() {
-  const queryClient = useQueryClient()
-
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (formData: IUpdateProfileFields) => updateProfileAction(formData),
-    onSuccess: (res) => {
-      console.log('Update success:', res)
-      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    mutationFn: (data: IUpdateProfileFields) => updateProfileAction(data),
+
+    onSuccess: async (res) => {
+      if (!res.status) return
+
+      // ✅ logout + redirect
+      await signOut({ callbackUrl: "/login" })
     },
-    onError: (error: any) => {
-      console.error('Update failed:', error)
-    },
-    onMutate: (variables) => {
-      console.log('Submitting formData:', variables)
-    }
   })
+
   return {
     mutate: mutateAsync,
     isLoading: isPending

@@ -1,39 +1,44 @@
-'use server'
+'use server';
 
 import { IApiResponse } from "@/shared/types/api";
 import { getNextAuthToken } from "@/shared/utils/auth.util";
+import { withPermission } from "@/shared/utils/auth-action";
+import { PERMISSIONS } from "@/shared/utils/permissions.util";
 
-export async function deleteAuditLogAction(id: string): Promise<IApiResponse<null>> {
-    try {
-        const jwt = await getNextAuthToken();
-        const token = jwt?.token;
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/admin/audit-logs/${id}`;
+export const deleteAuditLogAction = withPermission(
+    PERMISSIONS.AUDIT_LOG.DELETE,
+    async (id: string): Promise<IApiResponse<null>> => {
+        try {
+            const jwt = await getNextAuthToken();
+            const token = jwt?.token;
+            const url = `${process.env.NEXT_PUBLIC_API_URL}/admin/audit-logs/${id}`;
 
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            cache: 'no-store'
-        });
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                cache: 'no-store'
+            });
 
-        const result = await response.json();
+            const result = await response.json();
 
-        if (!response.ok) {
+            if (!response.ok) {
+                return {
+                    status: false,
+                    code: response.status,
+                    message: result.message || "Server Error"
+                };
+            }
+
+            return result;
+        } catch (error) {
             return {
                 status: false,
-                code: response.status,
-                message: result.message || "Server Error"
+                code: 500,
+                message: "Network Error"
             };
         }
-
-        return result;
-    } catch (error) {
-        return {
-            status: false,
-            code: 500,
-            message: "Network Error"
-        };
     }
-}
+);

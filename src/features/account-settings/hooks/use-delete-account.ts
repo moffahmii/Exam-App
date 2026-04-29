@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
-import { deleteUserAccountAction } from "@/features/account-settings/apis/update-profile.api"
 import { signOut } from 'next-auth/react'
+import { deleteUserAccountAction } from '../apis/delete-account.api';
 
 export function useDeleteAccount() {
     const [isDeleting, setIsDeleting] = useState(false);

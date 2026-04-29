@@ -1,13 +1,18 @@
-'use client'
-import React, { useEffect } from 'react'
-import { useForm, Controller } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useSession } from 'next-auth/react'
-import { Input } from "@/shared/components/ui/input"
-import { Label } from "@/shared/components/ui/label"
-import { Button } from "@/shared/components/ui/button"
-import { Pencil, Loader2 } from 'lucide-react'
-import { userInfoSchema, type UserInfoValues } from '@/shared/schemas/auth-schema'
+"use client";
+
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
+import { Button } from "@/shared/components/ui/button";
+import { Pencil, Loader2 } from "lucide-react";
+import {
+    userInfoSchema,
+    type UserInfoValues,
+} from "@/shared/schemas/auth-schema";
+
 interface ProfileFormProps {
     onOpenEmailModal: () => void;
     onOpenDeleteModal: () => void;
@@ -15,53 +20,59 @@ interface ProfileFormProps {
     isLoading: boolean;
 }
 
-export default function ProfileForm({ onOpenEmailModal, onOpenDeleteModal, saveProfile, isLoading }: ProfileFormProps) {
+export default function ProfileForm({
+    onOpenEmailModal,
+    onOpenDeleteModal,
+    saveProfile,
+    isLoading,
+}: ProfileFormProps) {
     const { data: session } = useSession();
 
     const form = useForm<UserInfoValues>({
         resolver: zodResolver(userInfoSchema),
-        defaultValues: {
-            firstName: '',
-            lastName: '',
-            username: '',
-            phone: ''
-        }
-    });
 
-    useEffect(() => {
-        if (session?.user) {
-            form.reset({
-                firstName: session.user.firstName || '',
-                lastName: session.user.lastName || '',
-                username: session.user.username || '',
-                phone: session.user.phone || ''
-            });
-        }
-    }, [session, form]);
+        // ✅ بدل useEffect
+        values: session?.user
+            ? {
+                firstName: session.user.firstName || "",
+                lastName: session.user.lastName || "",
+                username: session.user.username || "",
+                phone: session.user.phone || "",
+            }
+            : undefined,
+
+        mode: "onChange", // تحسين UX
+    });
 
     const onSubmit = async (data: UserInfoValues) => {
         await saveProfile(data);
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 font-mono">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
+            {/* Names */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                 {/* First Name */}
                 <Controller
                     name="firstName"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <div className="space-y-2" data-invalid={fieldState.invalid}>
-                            <Label htmlFor={field.name}>First name</Label>
+                        <div className="space-y-2">
+                            <Label>First name</Label>
                             <Input
                                 {...field}
-                                id={field.name}
-                                aria-invalid={fieldState.invalid}
-                                className={`h-12 border-slate-200 ${fieldState.invalid ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                                className={`h-12 border-slate-200 ${fieldState.invalid
+                                        ? "border-red-500 focus-visible:ring-red-500"
+                                        : ""
+                                    }`}
                                 placeholder="Mohamed"
                             />
                             {fieldState.error && (
-                                <p className="text-sm font-medium text-red-500">{fieldState.error.message}</p>
+                                <p className="text-sm text-red-500">
+                                    {fieldState.error.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -72,17 +83,20 @@ export default function ProfileForm({ onOpenEmailModal, onOpenDeleteModal, saveP
                     name="lastName"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <div className="space-y-2" data-invalid={fieldState.invalid}>
-                            <Label htmlFor={field.name}>Last name</Label>
+                        <div className="space-y-2">
+                            <Label>Last name</Label>
                             <Input
                                 {...field}
-                                id={field.name}
-                                aria-invalid={fieldState.invalid}
-                                className={`h-12 border-gray-200 ${fieldState.invalid ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                                className={`h-12 border-slate-200 ${fieldState.invalid
+                                        ? "border-red-500 focus-visible:ring-red-500"
+                                        : ""
+                                    }`}
                                 placeholder="Fahmy"
                             />
                             {fieldState.error && (
-                                <p className="text-sm font-medium text-red-500">{fieldState.error.message}</p>
+                                <p className="text-sm text-red-500">
+                                    {fieldState.error.message}
+                                </p>
                             )}
                         </div>
                     )}
@@ -93,23 +107,19 @@ export default function ProfileForm({ onOpenEmailModal, onOpenDeleteModal, saveP
             <Controller
                 name="username"
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <div className="space-y-2" data-invalid={fieldState.invalid}>
-                        <Label htmlFor={field.name}>Username</Label>
+                render={({ field }) => (
+                    <div className="space-y-2">
+                        <Label>Username</Label>
                         <Input
                             {...field}
-                            id={field.name}
                             disabled
                             className="h-12 bg-slate-50 text-slate-500 cursor-not-allowed border-slate-200"
                         />
-                        {fieldState.error && (
-                            <p className="text-sm font-medium text-red-500">{fieldState.error.message}</p>
-                        )}
                     </div>
                 )}
             />
 
-            {/* Email - Display Only */}
+            {/* Email */}
             <div className="space-y-2">
                 <div className="flex justify-between items-center">
                     <Label>Email</Label>
@@ -122,7 +132,7 @@ export default function ProfileForm({ onOpenEmailModal, onOpenDeleteModal, saveP
                     </button>
                 </div>
                 <Input
-                    value={session?.user?.email || ''}
+                    value={session?.user?.email || ""}
                     disabled
                     className="h-12 bg-gray-200 text-gray-800 border-gray-100"
                 />
@@ -133,24 +143,28 @@ export default function ProfileForm({ onOpenEmailModal, onOpenDeleteModal, saveP
                 name="phone"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                    <div className="space-y-2" data-invalid={fieldState.invalid}>
-                        <Label htmlFor={field.name}>Phone</Label>
+                    <div className="space-y-2">
+                        <Label>Phone</Label>
                         <Input
                             {...field}
-                            id={field.name}
-                            aria-invalid={fieldState.invalid}
-                            className={`h-12 border-slate-200 ${fieldState.invalid ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            className={`h-12 border-slate-200 ${fieldState.invalid
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : ""
+                                }`}
                             placeholder="010XXXXXXXX"
                         />
                         {fieldState.error && (
-                            <p className="text-sm font-medium text-red-500">{fieldState.error.message}</p>
+                            <p className="text-sm text-red-500">
+                                {fieldState.error.message}
+                            </p>
                         )}
                     </div>
                 )}
             />
 
-            {/* Buttons Section */}
+            {/* Actions */}
             <div className="flex flex-col md:flex-row gap-4 pt-6 border-t border-slate-100">
+
                 <Button
                     type="button"
                     variant="ghost"
@@ -159,6 +173,7 @@ export default function ProfileForm({ onOpenEmailModal, onOpenDeleteModal, saveP
                 >
                     Delete My Account
                 </Button>
+
                 <Button
                     type="submit"
                     disabled={isLoading || !form.formState.isDirty}
@@ -170,6 +185,7 @@ export default function ProfileForm({ onOpenEmailModal, onOpenDeleteModal, saveP
                         "Save Changes"
                     )}
                 </Button>
+
             </div>
         </form>
     );

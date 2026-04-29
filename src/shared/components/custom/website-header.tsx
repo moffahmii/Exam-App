@@ -1,6 +1,8 @@
 "use client";
 
 import React, { ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -22,12 +24,16 @@ interface WebsiteHeaderProps {
 }
 
 export function WebsiteHeader({ title, icon, breadcrumbs }: WebsiteHeaderProps) {
-    return (
-        <header className="w-full flex flex-col sticky top-0 z-30 bg-white">
+    const pathname = usePathname();
+    const router = useRouter();
 
-            {/* 1. صف الـ Breadcrumbs - لازق فوق تماماً */}
+    const isHomePage = pathname === '/';
+
+    return (
+        <header className="w-full flex flex-col">
+            {/* 1. صف الـ Breadcrumbs - بارتفاع 50px كما طلبنا سابقاً */}
             {breadcrumbs && breadcrumbs.length > 0 && (
-                <div className="w-full px-6 py-2 border-b h-12.5 border-gray-100">
+                <div className="w-full px-6 flex items-center bg-white h-12.5 border-b border-gray-100">
                     <Breadcrumb>
                         <BreadcrumbList>
                             {breadcrumbs.map((item, index) => {
@@ -36,13 +42,13 @@ export function WebsiteHeader({ title, icon, breadcrumbs }: WebsiteHeaderProps) 
                                     <React.Fragment key={index}>
                                         <BreadcrumbItem>
                                             {isLast || !item.href ? (
-                                                <BreadcrumbPage className="text-[10px] uppercase tracking-widest text-gray-400 font-medium">
+                                                <BreadcrumbPage className="text-sm font-medium tracking-widest text-gray-400">
                                                     {item.label}
                                                 </BreadcrumbPage>
                                             ) : (
                                                 <BreadcrumbLink
                                                     href={item.href}
-                                                    className="text-[10px] uppercase tracking-widest text-gray-400 hover:text-blue-600 transition-colors"
+                                                    className="text-sm font-normal tracking-widest text-gray-400 hover:text-blue-600 transition-colors"
                                                 >
                                                     {item.label}
                                                 </BreadcrumbLink>
@@ -57,21 +63,32 @@ export function WebsiteHeader({ title, icon, breadcrumbs }: WebsiteHeaderProps) 
                 </div>
             )}
 
-            <div className="p-4"> 
-                <div className="w-full bg-blue-600 h-[77px] flex items-center px-8 ">
-                    <div className="flex items-center gap-4">
-                        {icon && (
-                            <div className="text-white">
-                                {icon}
-                            </div>
-                        )}
-                        <h1 className="text-3xl font-bold text-white tracking-tight">
-                            {title}
-                        </h1>
+            <div className="p-6">
+                {/* استخدام items-stretch ليأخذ الزرار والبانر نفس الارتفاع تلقائياً */}
+                <div className="flex items-stretch gap-2">
+                    {!isHomePage && (
+                        <button
+                            onClick={() => router.back()}
+                            // تم ضبط العرض ليكون 36px (w-[36px]) والارتفاع ليطابق البانر 77px (h-[77px])
+                            className="flex-shrink-0 w-[36px] h-[77px] flex items-center justify-center border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition-colors"
+                        >
+                            <ChevronLeft size={24} />
+                        </button>
+                    )}
+                    <div className="w-full bg-blue-600 h-[77px] flex items-center px-4">
+                        <div className="flex items-center gap-4">
+                            {icon && (
+                                <div className="text-white">
+                                    {icon}
+                                </div>
+                            )}
+                            <h1 className="text-3xl font-bold text-white tracking-tight">
+                                {title}
+                            </h1>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </header>
     );
 }
