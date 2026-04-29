@@ -1,5 +1,5 @@
 import { Table, TableBody, TableHeader, TableRow, TableHead, TableCell } from "@/shared/components/ui/table";
-import { TableSkeleton } from './table-skeleton';
+import { TableSkeleton } from '../skeleton/table-skeleton';
 import Image from "next/image";
 import { ExamActions } from "./exam-actions";
 import { ExamSort } from "./exam-sort";
@@ -17,12 +17,12 @@ export function ExamsTable({ exams, isLoading, isFetching, currentSort, onSortCh
         <div className="bg-white relative overflow-hidden">
             <Table className="w-full border-collapse table-fixed">
                 <TableHeader className="bg-blue-600">
-                    <TableRow className="border-none h-12">
-                        <TableHead className="w-[100px] text-white text-sm font-medium pl-6">Image</TableHead>
-                        <TableHead className="w-[40%] text-white text-sm font-medium">Title</TableHead>
-                        <TableHead className="w-[25%] text-white text-sm font-medium">Diploma</TableHead>
-                        <TableHead className="w-[150px] text-white text-sm font-medium text-center">Questions</TableHead>
-                        <TableHead className="w-[120px] text-white text-sm font-medium text-center pointer-events-auto">
+                    <TableRow className="border-none h-9 ">
+                        <TableHead className="w-25 text-white text-sm font-medium ">Image</TableHead>
+                        <TableHead className="w-112.25 text-white text-sm font-medium">Title</TableHead>
+                        <TableHead className="w-50 text-white text-sm font-medium">Diploma</TableHead>
+                        <TableHead className="w-50 text-white text-sm font-medium ">Questions</TableHead>
+                        <TableHead className="w-20 text-white text-sm font-medium  pointer-events-auto">
                             <ExamSort currentSort={currentSort} onSort={onSortChange} />
                         </TableHead>
                     </TableRow>
@@ -33,7 +33,7 @@ export function ExamsTable({ exams, isLoading, isFetching, currentSort, onSortCh
                         <TableSkeleton />
                     ) : (
                         exams.map((exam) => (
-                            <TableRow key={exam.id} className="h-[100px]">
+                            <TableRow key={exam.id} className="h-25">
                                 <TableCell className="pl-6">
                                     <div className="w-23 h-25  bg-white shrink-0">
                                         <Image
@@ -41,17 +41,17 @@ export function ExamsTable({ exams, isLoading, isFetching, currentSort, onSortCh
                                             alt={exam.title}
                                             width={70}
                                             height={80}
-                                            className="w-full h-full object-contain p-1"
+                                            className="w-full h-full object-contain p-2"
                                         />
                                     </div>
                                 </TableCell>
-                                <TableCell className="font-medium text-gray-800">
+                                <TableCell className="font-medium text-sm text-gray-800">
                                     <div className="line-clamp-2">{exam.title}</div>
                                 </TableCell>
-                                <TableCell className="text-gray-500 truncate">
+                                <TableCell className="font-medium text-sm text-gray-800">
                                     {exam.diploma?.title || 'N/A'}
                                 </TableCell>
-                                <TableCell className="text-center font-mono text-gray-700">
+                                <TableCell className=" font-medium text-sm text-gray-800">
                                     {exam.questionsCount}
                                 </TableCell>
                                 <TableCell className="text-center">

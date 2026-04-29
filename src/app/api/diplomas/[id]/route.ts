@@ -8,7 +8,6 @@ export async function GET(
     // 1. استخراج الـ ID
     const { id } = await params;
 
-    // 2. استخراج التوكن عشان الأمان
     const token = await getToken({
         req: request,
         secret: process.env.NEXTAUTH_SECRET,

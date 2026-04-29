@@ -10,12 +10,12 @@ import { Button } from '@/shared/components/ui/button';
 import { ImageUploadField } from '@/features/upload-photo/components/upload-photo';
 import { PageHeader } from '@/shared/components/custom/header-page';
 import { useRouter } from 'next/navigation';
-import { ExamField, ExamSchema } from '../shceme/exam-schem';
+import { ExamField, ExamSchema } from '../../exams-CRUD/shceme/exam-schem';
 import { useCreateExam } from '../hooks/use-add-exam';
 import { useEditExam } from '../hooks/use-update-exam';
-import { IDiploma } from '@/features/dashboard-exams/components/exams-filter';
 import useDiplomas from '@/features/dashboard-diplomas/hooks/use-diplomas-details';
 import * as z from 'zod';
+import { IDiplomas } from '@/shared/types/diplomas';
 
 interface ExamFormProps {
     initialData?: ExamField;
@@ -134,7 +134,7 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
                                 </option>
 
                                 {/* ✅ حل المشكلة هنا */}
-                                {(Array.isArray(diplomas) ? diplomas : (diplomas as any)?.data || [])?.map((dip: IDiploma) => (
+                                {(Array.isArray(diplomas) ? diplomas : (diplomas as any)?.data || [])?.map((dip: IDiplomas) => (
                                     <option key={dip.id} value={dip.id}>
                                         {dip.title}
                                     </option>

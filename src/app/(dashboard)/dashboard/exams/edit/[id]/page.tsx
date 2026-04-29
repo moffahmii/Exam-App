@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import { useExamDetails } from "@/features/dashboard-exams/hooks/use-exam-details";
-import { ExamForm } from "@/features/exams-CRUD/components/exam-from";
+import { ExamForm } from "@/features/dashboard-exams/components/exam-from";
 
 export default function EditExamPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params); // ✅ فكينا الـ Promise

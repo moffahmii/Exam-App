@@ -25,6 +25,5 @@ export const DiplomaScheme = z.object({
     description: z.string().min(10, "Description must be at least 10 characters."),
 });
 
-// تصدير الأنواع (Types) عشان نستخدمها في الـ useForm
 export type ImageField = z.infer<typeof ImageScheme>;
 export type DiplomaField = z.infer<typeof DiplomaScheme>;

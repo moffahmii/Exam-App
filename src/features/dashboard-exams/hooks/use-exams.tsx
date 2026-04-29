@@ -1,7 +1,7 @@
 'use client';
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { IExamsResponse } from "../types/exam";
+import { IExamsResponse } from "../../../shared/types/exam";
 
 type ExamsParams = {
     page: number;
