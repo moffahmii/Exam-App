@@ -9,11 +9,12 @@ import { DiplomasTable } from "./diplomas-table";
 import useDiplomas from "../hooks/use-diplomas-details";
 import { AppPagination } from "@/shared/components/custom/app-pagination";
 import { GlobalFilters } from "@/shared/components/custom/search-filters";
+import { IDiplomas } from "@/shared/types/diplomas";
+// ✅ استيراد التايب بتاعك
 
 export default function DiplomasPage() {
     const router = useRouter();
 
-    // 1. حل مشكلة الهيدريشن (Hydration Fix)
     const [isMounted, setIsMounted] = useState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -28,18 +29,20 @@ export default function DiplomasPage() {
     }, []);
 
     const { paginatedData, paginationMeta } = useMemo(() => {
-        let allItems = data?.data || data || [];
+        // ✅ استخدام IDiplomas[] بدل any[]
+        let allItems: IDiplomas[] = Array.isArray(data) ? data : (data?.data || []);
 
         if (searchQuery) {
-            allItems = allItems.filter((item: any) =>
+            // ✅ استخدام IDiplomas بدل any
+            allItems = allItems.filter((item: IDiplomas) =>
                 item.title?.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
 
         if (immutabilityFilter !== "all") {
-            // ✅ تم تصحيح اسم الخاصية لـ immutable بدلاً من isImmutable
             const checkValue = immutabilityFilter === "immutable"; // true لو immutable، false لو mutable
-            allItems = allItems.filter((item: any) => item.immutable === checkValue);
+            // ✅ استخدام IDiplomas بدل any
+            allItems = allItems.filter((item: IDiplomas) => item.immutable === checkValue);
         }
 
         const total = allItems.length;
@@ -79,7 +82,6 @@ export default function DiplomasPage() {
         { label: "Diplomas" }
     ];
 
-    // ✅ منع الرندر قبل ما المتصفح يكون جاهز (بيمنع أي Hydration Error)
     if (!isMounted) return null;
 
     return (
@@ -95,7 +97,6 @@ export default function DiplomasPage() {
                 <div className="flex items-center gap-2">
                     <Button
                         onClick={() => router.push('/dashboard/diplomas/new')}
-                        // ✅ تم إضافة rounded-none للحفاظ على التصميم الشارب
                         className="bg-emerald-500 hover:bg-emerald-600 h-10 text-sm font-medium text-white px-4 py-2 rounded-none"
                     >
                         + Add New Diploma

@@ -23,10 +23,10 @@ export function GlobalActionsMenu({
 }: GlobalActionsMenuProps) {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger >
+            <DropdownMenuTrigger className="bg-gray-400" >
                 <Button
                     variant="ghost"
-                    className="h-8 w-8 p-0 rounded-none hover:bg-gray-100"
+                    className="h-8 w-8 p-0 bg-gray-400 hover:bg-gray-100"
                 >
                     <MoreHorizontal className="h-4 w-4 text-gray-600" />
                 </Button>

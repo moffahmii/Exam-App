@@ -1,5 +1,4 @@
 'use server'
-
 import { ISingleQuestionResponse } from "@/shared/types/questions";
 import { getNextAuthToken } from "@/shared/utils/auth.util";
 

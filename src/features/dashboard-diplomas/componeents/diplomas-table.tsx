@@ -4,7 +4,8 @@ import Image from "next/image";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/shared/components/ui/table";
 import { SortDropdown } from "./sort-dropdown";
 import { DiplomaActions } from "./diploma-actions";
-import { TableSkeleton } from "./diploma-table-skeleton";
+import { TableSkeleton } from "../skeletons/diploma-table-skeleton";
+import { IDiplomas } from "@/shared/types/diplomas";
 
 type SortOption =
     | "title-asc"
@@ -13,15 +14,14 @@ type SortOption =
     | "newest-desc";
 
 interface DiplomasTableProps {
-    data: any[];
+    data: IDiplomas[]; 
     isLoading: boolean;
 }
 
 export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
     const [sort, setSort] = useState<SortOption>("title-asc");
 
-    // الترتيب (Sorting) بيفضل شغال على البيانات اللي جاية من الصفحة
-    const sortedData = [...(data || [])].sort((a: any, b: any) => {
+    const sortedData = [...(data || [])].sort((a: IDiplomas, b: IDiplomas) => { 
         switch (sort) {
             case "title-asc": return a.title?.localeCompare(b.title);
             case "title-desc": return b.title?.localeCompare(a.title);
@@ -34,13 +34,12 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
     return (
         <div className=" overflow-hidden bg-white">
             <Table>
-                {/* Header (ثابت ويظهر دائماً) */}
                 <TableHeader className="bg-blue-600">
-                    <TableRow className="hover:bg-blue-600">
+                    <TableRow>
                         <TableHead className="text-white w-25">Image</TableHead>
                         <TableHead className="text-white w-50">Title</TableHead>
                         <TableHead className="text-white">Description</TableHead>
-                        <TableHead className="text-right w-25">
+                        <TableHead className="text-right w-20">
                             <SortDropdown value={sort} onChange={setSort} />
                         </TableHead>
                     </TableRow>
@@ -59,7 +58,7 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
                     </TableBody>
                 ) : (
                     <TableBody>
-                        {sortedData.map((item: any) => (
+                        {sortedData.map((item: IDiplomas) => ( // ✅ استخدام IDiplomas بدل any
                             <TableRow key={item.id} className="h-25">
                                 <TableCell className="p-2.5">
                                     <div className="relative w-25 h-25">
@@ -77,8 +76,8 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
                                         )}
                                     </div>
                                 </TableCell>
-                                <TableCell className="font-medium text-gray-900">{item.title}</TableCell>
-                                <TableCell className="text-gray-500 max-w-125">
+                                <TableCell className="font-normal text-sm text-gray-800">{item.title}</TableCell>
+                                <TableCell className="text-gray-500 text-sm font-normal max-w-125">
                                     <p className="line-clamp-2">{item.description}</p>
                                 </TableCell>
                                 <TableCell className="text-right">

@@ -5,42 +5,45 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Trash2, Check, Plus } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
-import { QuestionsBulkFormValue } from '@/features/dashboard-questions/types/question';
 
 interface Props {
-    ActiveQuestionIndex: number;
+    isSingleMode?: boolean;
+    ActiveQuestionIndex?: number;
 }
 
-export default function QuestionsAnswers({ ActiveQuestionIndex }: Props) {
-    const form = useFormContext<QuestionsBulkFormValue>();
-    const [newAnswerText, setNewAnswerText] = useState("");
+export default function QuestionsAnswers({ isSingleMode = false, ActiveQuestionIndex = 0 }: Props) {
+    // استخدمنا any هنا عشان الـ FormContext ممكن يكون SingleQuestionFormValue أو QuestionsBulkFormValue
+    const form = useFormContext<any>();
+
+    // 💡 تحديد المسار الأساسي (basePath) بناءً على المود
+    const basePath = isSingleMode
+        ? "answers"
+        : `questions.${ActiveQuestionIndex}.answers`;
 
     const watchedAnswers = useWatch({
         control: form.control,
-        name: `questions.${ActiveQuestionIndex}.answers`,
+        name: basePath,
     });
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
-        name: `questions.${ActiveQuestionIndex}.answers`
+        name: basePath
     });
 
     const handleMarkCorrect = (clickedIndex: number) => {
-        const currentAnswers = form.getValues(`questions.${ActiveQuestionIndex}.answers`);
+        const currentAnswers = form.getValues(basePath) || [];
 
-        currentAnswers.forEach((_, i) => {
+        currentAnswers.forEach((_: any, i: number) => {
             form.setValue(
-                `questions.${ActiveQuestionIndex}.answers.${i}.isCorrect`,
+                `${basePath}.${i}.isCorrect`,
                 i === clickedIndex,
                 { shouldValidate: true, shouldDirty: true }
             );
         });
     };
 
-
     return (
         <div className="flex flex-col">
-
             {/* Header */}
             <div className="flex h-11 bg-gray-300">
                 <div className="flex-1 flex items-center px-4">
@@ -63,7 +66,7 @@ export default function QuestionsAnswers({ ActiveQuestionIndex }: Props) {
                     return (
                         <div
                             key={field.id}
-                            className="flex border-b last:border-b-0 h-12.5 "
+                            className="flex border-b last:border-b-0 h-12.5"
                         >
                             <div className="w-12.5 h-12.5 shrink-0 flex items-center justify-center border-r bg-red-100">
                                 <Button
@@ -79,7 +82,8 @@ export default function QuestionsAnswers({ ActiveQuestionIndex }: Props) {
                             {/* Text Input */}
                             <div className="flex-1 flex items-center">
                                 <Input
-                                    {...form.register(`questions.${ActiveQuestionIndex}.answers.${index}.text`)}
+                                    // 💡 استخدام المسار الديناميكي
+                                    {...form.register(`${basePath}.${index}.text`)}
                                     placeholder="Enter answer body"
                                     className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none h-full text-sm"
                                 />
@@ -91,8 +95,8 @@ export default function QuestionsAnswers({ ActiveQuestionIndex }: Props) {
                                     type="button"
                                     variant={isCorrect ? "ghost" : "secondary"}
                                     onClick={() => handleMarkCorrect(index)}
-                                    className={`w-full justify-center gap-2${isCorrect
-                                            ? "text-emerald-600 bg-white "
+                                    className={`w-full justify-center gap-2 ${isCorrect
+                                            ? "text-emerald-600 bg-white"
                                             : "text-gray-800 bg-gray-200 hover:bg-gray-100"
                                         }`}
                                 >
@@ -104,8 +108,6 @@ export default function QuestionsAnswers({ ActiveQuestionIndex }: Props) {
                     );
                 })}
             </div>
-
-
         </div>
     );
 }

@@ -1,78 +1,79 @@
 "use client";
 
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/shared/components/ui/button";
-import { Pencil, Trash2, Ban } from "lucide-react";
-import useDiplomaDetails from "../hooks/use-single-diploma-details";
-import { PageHeader } from "@/shared/components/custom/header-page";
-import { useState } from "react";
-import { DeleteDiplomaModal } from "./diploma-deletion-moadal";
 import { useRouter } from "next/navigation";
+import { Pencil, Trash2, Ban } from "lucide-react";
+
+import { Button } from "@/shared/components/ui/button";
+import { PageHeader } from "@/shared/components/custom/header-page";
+import { GlobalDeleteModal } from "@/shared/components/custom/delete-modal";
+import { IDiplomas } from "@/shared/types/diplomas";
+
+import useDiplomaDetails from "../hooks/use-single-diploma-details";
+import useDeleteDiploma from "../hooks/use-delete-diploma";
+import { DiplomaDetailsSkeleton } from "../skeletons/diploma-details-skeleton";
 
 export default function DiplomaDetailsPage({ params }: { params: { id: string } }) {
     const router = useRouter();
     const id = params.id;
+
     const { data: diploma, isLoading, isError } = useDiplomaDetails(id);
+    const { mutate: deleteDiploma, isPending: isDeleting } = useDeleteDiploma();
+
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    if (isLoading) {
-        return <div className="p-6 text-gray-500">Loading diploma details...</div>;
-    }
+    if (isLoading) return <DiplomaDetailsSkeleton />;
 
     const diplomaData = diploma as IDiplomas;
 
     if (isError || !diplomaData) {
         return (
-            <div className="p-6 text-red-500">
+            <div className="p-6 text-red-500 font-medium text-center">
                 Error loading diploma details or not found.
             </div>
         );
     }
 
-    // ✅ تجهيز مسار الصفحة (Breadcrumbs)
     const pageBreadcrumbs = [
-        { label: "Diplomas", href: "/dashboard/diplomas" }, // لينك يرجعك لصفحة الدبلومات
-        { label: diplomaData.title } // اسم الدبلومة الحالية (بدون لينك لأنه واقف عليها)
+        { label: "Diplomas", href: "/dashboard/diplomas" },
+        { label: diplomaData.title }
     ];
 
-    return (
-        <div className="h-auto">
-            {/* ✅ تمرير البريد كرامب للهيدر */}
-            <PageHeader breadcrumbs={pageBreadcrumbs}>
-                {/* التوزيع يتم هنا في السطر الثاني للهيدر */}
-                <div className="flex items-center justify-between w-full">
+    const handleConfirmDelete = () => {
+        deleteDiploma(id, {
+            onSuccess: () => {
+                setShowDeleteModal(false);
+                router.push("/dashboard/diplomas");
+            }
+        });
+    };
 
-                    {/* جهة اليسار: العنوان الأساسي */}
+    return (
+        <div className="h-auto bg-gray-100 min-h-screen">
+            <PageHeader breadcrumbs={pageBreadcrumbs}>
+                <div className="flex items-center justify-between w-full">
                     <h2 className="text-black font-semibold font-inter text-xl">
                         {diplomaData.title}
                     </h2>
 
-                    {/* جهة اليمين: الأزرار */}
                     <div className="flex items-center gap-3">
                         {diplomaData.immutable && (
-                            <div className="flex items-center gap-2 px-4 py-2 text-gray-800 text-sm font-medium bg-gray-200 h-10 ">
+                            <div className="flex items-center gap-2 px-4 py-2 text-gray-800 text-sm font-medium bg-gray-200 h-10">
                                 <Ban size={16} />
                                 Immutable
                             </div>
                         )}
 
                         {diplomaData.immutable ? (
-                            <Button
-                                disabled
-                                className="flex items-center bg-blue-600 gap-2 px-4 py-2 text-sm font-medium h-10 "
-                            >
-                                <Pencil size={18} />
-                                Edit
+                            <Button disabled className="bg-blue-600 h-10 text-sm font-medium flex items-center gap-2 px-4 py-2">
+                                <Pencil size={18} /> Edit
                             </Button>
                         ) : (
-                            <Button
-                                asChild
-                                className="bg-blue-600 hover:bg-blue-700 h-10 text-sm font-medium text-white flex items-center gap-2 px-4 py-2 "
-                            >
+                            <Button asChild className="bg-blue-600 hover:bg-blue-700 h-10 text-sm font-medium text-white flex items-center gap-2 px-4 py-2">
                                 <Link href={`/dashboard/diplomas/edit/${id}`}>
-                                    <Pencil size={18} />
-                                    Edit
+                                    <Pencil size={18} /> Edit
                                 </Link>
                             </Button>
                         )}
@@ -80,22 +81,20 @@ export default function DiplomaDetailsPage({ params }: { params: { id: string } 
                         <Button
                             disabled={diplomaData.immutable}
                             onClick={() => setShowDeleteModal(true)}
-                            className="bg-red-600 hover:bg-red-700 text-sm font-medium text-white flex items-center gap-2 px-4 py-2 h-10 "
+                            className="bg-red-600 hover:bg-red-700 text-sm font-medium text-white flex items-center gap-2 px-4 py-2 h-10"
                         >
-                            <Trash2 size={18} />
-                            Delete
+                            <Trash2 size={18} /> Delete
                         </Button>
                     </div>
                 </div>
             </PageHeader>
 
-            {/* باقي محتوى الصفحة */}
             <div className="max-w-7xl mx-auto p-6">
-                <div className="bg-white p-4  border border-gray-200">
+                <div className="bg-white p-4 border border-gray-200">
                     <div className="flex flex-col gap-8">
                         <div>
                             <h3 className="text-sm font-normal text-gray-400 mb-3">Image</h3>
-                            <div className="relative overflow-hidden ">
+                            <div className="relative overflow-hidden">
                                 <Image
                                     width={400}
                                     height={300}
@@ -106,16 +105,14 @@ export default function DiplomaDetailsPage({ params }: { params: { id: string } 
                                 />
                             </div>
                         </div>
+
                         <div>
                             <h3 className="text-sm font-normal text-gray-400 mb-3">Title</h3>
-                            <p className="text-base font-medium text-black">
-                                {diplomaData.title}
-                            </p>
+                            <p className="text-base font-medium text-black">{diplomaData.title}</p>
                         </div>
+
                         <div>
-                            <h3 className="text-sm font-normal text-gray-400 mb-3">
-                                Description
-                            </h3>
+                            <h3 className="text-sm font-normal text-gray-400 mb-3">Description</h3>
                             <p className="text-sm font-normal text-gray-800 leading-relaxed">
                                 {diplomaData.description}
                             </p>
@@ -124,12 +121,14 @@ export default function DiplomaDetailsPage({ params }: { params: { id: string } 
                 </div>
             </div>
 
-            <DeleteDiplomaModal
+            <GlobalDeleteModal
                 isOpen={showDeleteModal}
                 onClose={() => setShowDeleteModal(false)}
-                diplomaId={id}
-                diplomaTitle={diplomaData.title}
+                onConfirm={handleConfirmDelete}
+                title="Delete Diploma"
+                description={`Are you sure you want to delete "${diplomaData.title}"?`}
+                isLoading={isDeleting}
             />
         </div>
-    );3
+    );
 }

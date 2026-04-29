@@ -1,36 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { DiplomasApiResponse } from '@/shared/types/diplomas';
 
 export async function GET(request: NextRequest) {
-    // 1. استخراج كل الـ Parameters من طلب الـ Frontend
-    const { searchParams } = new URL(request.url);
-    const page = searchParams.get('page') || '1';
-    const limit = searchParams.get('limit') || '12'; // خليت الديفولت 12 زي ما موجود في الـ Swagger
-    const search = searchParams.get('search');
-    const sortBy = searchParams.get('sortBy');
-    const sortOrder = searchParams.get('sortOrder');
-
-    const token = await getToken({
-        req: request,
-        secret: process.env.NEXTAUTH_SECRET,
-    });
-
-    if (!token?.token) {
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
     try {
-        // 2. بناء رابط الباك إند بشكل ديناميكي
+        const token = await getToken({
+            req: request,
+            secret: process.env.NEXTAUTH_SECRET,
+        });
+        if (!token?.token) {
+            return NextResponse.json({ status: false, message: 'Unauthorized' }, { status: 401 });
+        }
+        const { searchParams } = new URL(request.url);
         const backendUrl = new URL(`${process.env.NEXT_PUBLIC_API_URL}/diplomas`);
-        backendUrl.searchParams.append('page', page);
-        backendUrl.searchParams.append('limit', limit);
+        backendUrl.searchParams.set('page', searchParams.get('page') || '1');
+        backendUrl.searchParams.set('limit', searchParams.get('limit') || '12');
+        const search = searchParams.get('search');
+        const sortBy = searchParams.get('sortBy');
+        const sortOrder = searchParams.get('sortOrder');
 
-        // إضافة البحث والترتيب فقط في حالة وجودهم
-        if (search) backendUrl.searchParams.append('search', search);
-        if (sortBy) backendUrl.searchParams.append('sortBy', sortBy);
-        if (sortOrder) backendUrl.searchParams.append('sortOrder', sortOrder);
+        if (search) backendUrl.searchParams.set('search', search);
+        if (sortBy) backendUrl.searchParams.set('sortBy', sortBy);
+        if (sortOrder) backendUrl.searchParams.set('sortOrder', sortOrder);
 
-        // 3. إرسال الطلب للباك إند
         const response = await fetch(backendUrl.toString(), {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -38,17 +30,21 @@ export async function GET(request: NextRequest) {
             cache: 'no-store',
         });
 
+        const data: DiplomasApiResponse = await response.json();
+
         if (!response.ok) {
             return NextResponse.json(
-                { message: 'Failed to fetch from external API' },
+                { status: false, message: data.message || 'Failed to fetch from external API' },
                 { status: response.status }
             );
         }
 
-        const data = await response.json();
-        return NextResponse.json(data);
+        return NextResponse.json(data, { status: 200 });
 
     } catch (error) {
-        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json(
+            { status: false, message: 'Internal Server Error' },
+            { status: 500 }
+        );
     }
 }

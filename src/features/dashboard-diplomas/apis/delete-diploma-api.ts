@@ -11,6 +11,5 @@ export async function deleteDiplomaApi(id: string) {
         },
     });
     const payload = await response.json();
-    if (!response.ok) throw new Error(payload.message || "Error deleting diploma");
     return payload;
 };

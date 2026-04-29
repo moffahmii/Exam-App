@@ -51,7 +51,12 @@ export default function ExamDetailsPage({
         <div className="h-auto bg-gray-100 min-h-screen">
 
             {/* HEADER */}
-            <PageHeader>
+            <PageHeader
+                breadcrumbs={[
+                    { label: "Exams", href: "/dashboard/exams" },
+                    { label: examData.title }
+                ]}
+            >
                 <div className="flex justify-between items-center w-full">
 
                     <div className="flex flex-col justify-center">

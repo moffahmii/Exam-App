@@ -1,23 +1,23 @@
-import { ISaveQuestionPayload } from "@/shared/types/questions";
+// hooks/use-edit-question.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateQuestionApi } from "../apis/edit-quetioms";
-import { addQuestion } from "../apis/add-question.api";
+import { updateQuestionApi } from "../apis/edit-quetioms"; // تأكد من اسم الملف عندك
+import { ISaveQuestionPayload } from "@/shared/types/questions";
 
-
-export function useUpsertQuestion(isEditMode: boolean) {
+export function useEditQuestion() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async ({ id, payload }: { id?: string; payload: ISaveQuestionPayload }) => {
-            if (isEditMode && id) {
-                return updateQuestionApi(id, payload);
-            }
-            return addQuestion(payload);
+        // هنا بنستقبل الـ questionId والـ payload
+        mutationFn: ({ id, payload }: { id: string; payload: ISaveQuestionPayload }) => {
+            return updateQuestionApi(id, payload);
         },
         onSuccess: (res) => {
             if (res.status) {
                 queryClient.invalidateQueries({ queryKey: ['exam-questions'] });
             }
+        },
+        onError: (error: any) => {
+            console.error(error);
         }
     });
 }
