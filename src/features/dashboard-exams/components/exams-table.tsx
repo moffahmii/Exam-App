@@ -14,10 +14,10 @@ interface ExamsTableProps {
 
 export function ExamsTable({ exams, isLoading, isFetching, currentSort, onSortChange }: ExamsTableProps) {
     return (
-        <div className="bg-white border border-gray-200 rounded-none shadow-none relative overflow-hidden">
+        <div className="bg-white relative overflow-hidden">
             <Table className="w-full border-collapse table-fixed">
-                <TableHeader className="bg-[#2563eb]">
-                    <TableRow className="border-none h-12 hover:bg-[#2563eb]">
+                <TableHeader className="bg-blue-600">
+                    <TableRow className="border-none h-12">
                         <TableHead className="w-[100px] text-white text-sm font-medium pl-6">Image</TableHead>
                         <TableHead className="w-[40%] text-white text-sm font-medium">Title</TableHead>
                         <TableHead className="w-[25%] text-white text-sm font-medium">Diploma</TableHead>
@@ -33,14 +33,14 @@ export function ExamsTable({ exams, isLoading, isFetching, currentSort, onSortCh
                         <TableSkeleton />
                     ) : (
                         exams.map((exam) => (
-                            <TableRow key={exam.id} className="h-[100px] border-b border-gray-100 hover:bg-transparent rounded-none">
+                            <TableRow key={exam.id} className="h-[100px]">
                                 <TableCell className="pl-6">
-                                    <div className="w-16 h-16 border border-gray-100 bg-white flex-shrink-0">
+                                    <div className="w-23 h-25  bg-white shrink-0">
                                         <Image
                                             src={exam.image || '/placeholder.png'}
                                             alt={exam.title}
-                                            width={64}
-                                            height={64}
+                                            width={70}
+                                            height={80}
                                             className="w-full h-full object-contain p-1"
                                         />
                                     </div>

@@ -22,7 +22,7 @@ export function DiplomaCard({ diploma }: { diploma: IDiplomas }) {
                 <h3 className="text-2xl font-bold text-white mb-1 truncate">
                     {diploma.title}
                 </h3>
-                <p className="text-sm font-normal text-white/90 line-clamp-2 leading-relaxed">
+                <p className="text-sm font-normal text-white line-clamp-2 leading-relaxed">
                     {diploma.description}
                 </p>
             </div>

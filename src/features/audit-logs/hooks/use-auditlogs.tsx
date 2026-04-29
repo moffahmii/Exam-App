@@ -1,6 +1,6 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { AuditLogsParams } from '../types/audit-logs';
 import { getAuditLogs } from '../apis/audit-log.api';
+import { AuditLogsParams, AuditLogsResponse } from '@/shared/types/audit-logs';
 
 export const useAuditLogs = (params: AuditLogsParams) => {
     const {
@@ -10,10 +10,10 @@ export const useAuditLogs = (params: AuditLogsParams) => {
         action,
         search,
         sortOrder,
-        sortBy // ضفناها هنا عشان الترتيب يشتغل صح
+        sortBy
     } = params;
 
-    return useQuery({
+    return useQuery<AuditLogsResponse>({
         queryKey: [
             'audit-logs',
             page,
@@ -22,14 +22,10 @@ export const useAuditLogs = (params: AuditLogsParams) => {
             action,
             search,
             sortOrder,
-            sortBy // لازم تكون في الـ queryKey عشان لما تتغير يعمل Fetch جديد
+            sortBy
         ],
-
         queryFn: () => getAuditLogs(params),
-
-        // ✅ التعديل الجديد الخاص بـ React Query v5
         placeholderData: keepPreviousData,
-
         staleTime: 1000 * 30,
     });
 };

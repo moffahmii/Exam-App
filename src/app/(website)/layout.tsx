@@ -9,13 +9,13 @@ export default function Layout({ children }: Props) {
     return (
         <SidebarProvider style={{ "--sidebar-width": "346px" } as React.CSSProperties}>
             <AppSideBar />
-            <main className="flex-1 flex flex-col bg-gray-50 min-h-screen w-full overflow-hidden">
+            <main className="flex-1 flex flex-col min-h-screen w-full overflow-hidden">
                 <div className="flex items-center gap-2 ">
                     <div className="md:hidden">
                         <SidebarTrigger className="-ml-2" />
                     </div>
                 </div>
-                <div className="flex-1 p-6">
+                <div className="flex-1 ">
                     {children}
                 </div>
             </main>

@@ -10,7 +10,7 @@ import { Textarea } from "@/shared/components/ui/textarea"
 import { Button } from '@/shared/components/ui/button'
 import { ImageUploadField } from '@/features/upload-photo/components/upload-photo';
 import { DiplomaField, DiplomaScheme } from '@/features/upload-photo/scheme/photo-scheme';
-import { PageHeader } from '@/features/dashboard-header/components/header-page'
+import { PageHeader } from '@/shared/components/custom/header-page'
 import { useRouter } from 'next/navigation'
 import { useEditDiploma } from '../hooks/use-updata-diploma'
 import { useCreateDiploma } from '../hooks/use-add-diploma'

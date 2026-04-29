@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2, Ban, ExternalLink, Plus } from "lucide-react";
-import { PageHeader } from "@/features/dashboard-header/components/header-page";
+import { PageHeader } from "@/shared/components/custom/header-page";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useExamDetails } from "@/features/dashboard-exams/hooks/use-exam-details";

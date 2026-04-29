@@ -4,8 +4,8 @@ import { QuestionsBulkFormValue } from '@/features/dashboard-questions/types/que
 import { Input } from '@/shared/components/ui/input';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import QuestionsAnswers from './questions-answers';
 import { Label } from '@/shared/components/ui/label';
+import QuestionsAnswers from './questions-answers';
 
 interface Props {
     ActiveQuestionIndex: number;

@@ -2,16 +2,17 @@ import React from "react";
 
 interface BackgroundCircleProps {
     className?: string;
-    size?: string;
+    size?: number | string; // يقبل رقم أو نص
 }
 
 export function BackCircle({
     className = "",
-    size = "w-[300px] h-[300px]",
+    size = 300, // المقاس الافتراضي
 }: BackgroundCircleProps) {
     return (
         <div
-            className={`absolute rounded-full bg-blue-400 blur-3xl opacity-40 ${size} ${className}`}
+            style={{ width: size, height: size }} // الحل القاطع هنا
+            className={`absolute rounded-full bg-blue-400 blur-3xl opacity-40 shrink-0 ${className}`}
         />
     );
 }

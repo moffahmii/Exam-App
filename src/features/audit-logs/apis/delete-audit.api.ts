@@ -1,18 +1,19 @@
 'use server'
 
-import { ISingleQuestionResponse } from "@/shared/types/questions";
+import { IApiResponse } from "@/shared/types/api";
 import { getNextAuthToken } from "@/shared/utils/auth.util";
 
-export async function getQuestionDetails(questionId: string): Promise<ISingleQuestionResponse> {
+export async function deleteAuditLogAction(id: string): Promise<IApiResponse<null>> {
     try {
         const jwt = await getNextAuthToken();
         const token = jwt?.token;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/admin/audit-logs/${id}`;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/questions/${questionId}`, {
-            method: "GET",
+        const response = await fetch(url, {
+            method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
             cache: 'no-store'
         });
@@ -23,7 +24,7 @@ export async function getQuestionDetails(questionId: string): Promise<ISingleQue
             return {
                 status: false,
                 code: response.status,
-                message: result.message || "Failed to fetch question details"
+                message: result.message || "Server Error"
             };
         }
 
@@ -32,7 +33,7 @@ export async function getQuestionDetails(questionId: string): Promise<ISingleQue
         return {
             status: false,
             code: 500,
-            message: "Internal server error occurred while fetching question details"
+            message: "Network Error"
         };
     }
 }

@@ -1,24 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Trash2, ExternalLink } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import { AuditLog } from '../types/audit-logs'; // مسار الـ Types بتاعك
-import { PageHeader } from '@/features/dashboard-header/components/header-page';
+import { AuditLog } from '@/shared/types/audit-logs';
+import { PageHeader } from '@/shared/components/custom/header-page';
+import { GlobalDeleteModal } from '@/shared/components/custom/delete-modal';
+import { useDeleteAuditLog } from '../hooks/use-delete-audit';
 
-interface AuditLogDetailsProps {
+interface AuditLogDetailsClientProps {
     log: AuditLog;
-    onDelete?: (id: string) => void;
 }
 
-// ==========================================
-// الدوال المساعدة للألوان والتنسيق
-// ==========================================
 const getActionColor = (action: string) => {
-    switch (action.toUpperCase()) {
-        case 'CREATE': return 'text-[#009966]';
-        case 'UPDATE': return 'text-[#CA8A04]';
-        case 'DELETE': return 'text-[#DC2626]';
+    switch (action?.toUpperCase()) {
+        case 'CREATE': return 'text-green-600';
+        case 'UPDATE': return 'text-yellow-600';
+        case 'DELETE': return 'text-red-600';
         default: return 'text-gray-500';
     }
 };
@@ -35,128 +33,145 @@ const formatDateTime = (dateString: string) => {
 };
 
 const capitalize = (str: string) => {
+    if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-// ==========================================
-// مكون عرض التفاصيل
-// ==========================================
-export default function AuditLogDetailsClient({ log, onDelete }: AuditLogDetailsProps) {
-    // تجهيز الداتا للعرض
-    const title = `${capitalize(log.category)} ${capitalize(log.action)} By ${log.actorUsername}`;
-    const dateTimeFormatted = formatDateTime(log.createdAt);
+export default function AuditLogDetailsClient({ log }: AuditLogDetailsClientProps) {
+    // حالة التحكم في فتح المودال
+    const [openDelete, setOpenDelete] = useState(false);
 
-    // استخراج الحقول اللي اتعدلت (لو موجودة)
+    // استدعاء هوك المسح
+    const { mutate, isPending } = useDeleteAuditLog();
+
+    const title = `${capitalize(log.category)} ${capitalize(log.action)} By ${log.actorUsername}`;
     const updatedFields = log.metadata?.keys?.join(', ') || 'None';
 
-    // تجهيز الميتاداتا للعرض كـ JSON (بدون مصفوفة الـ keys عشان تظهر زي الصورة)
     const displayMetadata = { ...log.metadata };
-    delete displayMetadata.keys;
+    if (displayMetadata.keys) {
+        delete displayMetadata.keys;
+    }
+
+    const breadcrumbs = [
+        { label: "Audit Log", href: "/dashboard/settings/audit-logs" },
+        { label: title }
+    ];
+
+    // وظيفة تأكيد المسح
+    const handleConfirmDelete = () => {
+        mutate(log.id, {
+            onSettled: () => setOpenDelete(false)
+        });
+    };
 
     return (
-        <div className="flex flex-col w-full min-h-screen bg-gray-100 gap-6">
-
-            {/* ===== Header Section ===== */}
-            <PageHeader>
-                <div className="flex  justify-between sm:items-center gap-4 bg-white ">
-                    <div>
-                        <h1 className="text-xl font-bold text-gray-900 mb-1">{title}</h1>
-                        <div className="flex items-center gap-1 text-sm text-gray-400">
+        <div className="flex flex-col w-full min-h-screen bg-[#F8F9FA]">
+            <PageHeader breadcrumbs={breadcrumbs}>
+                <div className="flex justify-between items-start w-full">
+                    <div className="flex flex-col gap-1">
+                        <h1 className="text-lg font-semibold text-black font-inter">{title}</h1>
+                        <div className="flex items-center gap-1 text-sm text-gray-400 font-medium">
                             <span>Entity:</span>
-                            <span className="underline decoration-gray-300 underline-offset-2 flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+                            <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
                                 {capitalize(log.category)} [{log.entityId}]
-                                <ExternalLink className="w-3 h-3" />
+                                <ExternalLink size={14} />
                             </span>
                         </div>
                     </div>
 
                     <Button
-                        onClick={() => onDelete?.(log.id)}
-                        className="bg-[#DC2626] hover:bg-red-700 text-white flex items-center gap-2 px-6 h-10 shadow-sm"
+                        onClick={() => setOpenDelete(true)}
+                        className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2 px-5 h-10 transition-all"
                     >
                         <Trash2 className="w-4 h-4" />
-                        Delete
+                        <span className="font-medium">Delete</span>
                     </Button>
                 </div>
             </PageHeader>
 
-            {/* ===== Details Card ===== */}
-            <div className="bg-white p-4 border border-gray-100 flex flex-col gap-8">
-
-                {/* Action & Method */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 className="text-sm font-medium text-gray-400 mb-2">Action</h3>
-                        <p className={`font-bold text-sm uppercase ${getActionColor(log.action)}`}>
+            <div className="p-6">
+                <div className="bg-white max-w-7xl mx-auto p-4 flex flex-col gap-10 space-y-2">
+                    <section>
+                        <h3 className="text-sm font-normal text-gray-400">Action</h3>
+                        <p className={`font-bold text-sm ${getActionColor(log.action)}`}>
                             {log.action}
                         </p>
-                    </div>
-                    <div>
-                        <h3 className="text-sm font-medium text-gray-400 mb-2">Method</h3>
-                        <p className="text-gray-900 font-medium text-sm uppercase">
+                    </section>
+
+                    <section>
+                        <h3 className="text-sm font-normal text-gray-400">Method</h3>
+                        <p className="text-gray-800 font-normal text-sm uppercase">
                             {log.httpMethod}
                         </p>
-                    </div>
-                </div>
+                    </section>
 
-                {/* User Info */}
-                <div>
-                    <h3 className="text-sm font-medium text-gray-400 mb-2">User</h3>
-                    <div className="flex flex-col gap-1 text-sm">
-                        <p className="text-gray-900 font-medium">{log.actorUsername}</p>
-                        <p className="text-gray-500 font-mono text-xs">Email: {log.actorEmail}</p>
-                        <p className="text-gray-500 font-mono text-xs">IP Address: {log.ipAddress}</p>
-                        <p className="text-gray-500 font-mono text-xs flex items-center gap-1">
-                            Role:
-                            <span className={log.actorRole === 'SUPER_ADMIN' ? 'text-red-500' : 'text-blue-600'}>
-                                {log.actorRole.replace('_', ' ')}
-                            </span>
-                        </p>
-                    </div>
-                </div>
-
-                {/* Entity */}
-                <div>
-                    <h3 className="text-sm font-medium text-gray-400 mb-2">Entity</h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-900">
-                        <span className="font-medium capitalize">{log.category}:</span>
-                        <span className="font-mono text-gray-700">{log.entityId}</span>
-                        <ExternalLink className="w-4 h-4 text-gray-400 cursor-pointer hover:text-blue-600" />
-                    </div>
-                </div>
-
-                {/* Date & Time */}
-                <div>
-                    <h3 className="text-sm font-medium text-gray-400 mb-2">Date & Time</h3>
-                    <p className="text-gray-900 text-sm font-mono">{dateTimeFormatted}</p>
-                </div>
-
-                {/* Updated Fields */}
-                {log.action === 'UPDATE' && (
-                    <div>
-                        <h3 className="text-sm font-medium text-gray-400 mb-2">Updated Fields</h3>
-                        <p className="text-gray-900 text-sm font-mono">{updatedFields}</p>
-                    </div>
-                )}
-
-                {/* Metadata Raw Data */}
-                {Object.keys(displayMetadata).length > 0 && (
-                    <div>
-                        <h3 className="text-sm font-medium text-gray-400 mb-2">Metadata</h3>
-                        <div className="bg-gray-100 rounded-md p-4 overflow-x-auto">
-                            <pre className="text-xs text-gray-700 font-mono leading-relaxed whitespace-pre-wrap">
-                                {/* بنعرضها كـ JSON منسق ونشيل الأقواس الخارجية عشان تبقى شبه الصورة */}
-                                {JSON.stringify(displayMetadata, null, 2)
-                                    .replace(/^{/, '')
-                                    .replace(/}$/, '')
-                                    .trim()
-                                }
-                            </pre>
+                    <section>
+                        <h3 className="text-sm font-normal text-gray-400">User</h3>
+                        <div className="flex flex-col gap-1.5">
+                            <p className="text-gray-800 font-normal text-sm">{log.actorUsername}</p>
+                            <div className="text-sm font-normal text-gray-400 ">
+                                <p>Email: {log.actorEmail}</p>
+                                <p>IP Address: {log.ipAddress}</p>
+                                <p>Role:
+                                    <span className={`ml-1 font-bold ${log.actorRole === 'SUPER_ADMIN' ? 'text-red-600' : 'text-blue-600'}`}>
+                                        {log.actorRole?.replace('_', ' ')}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    </section>
+
+                    <section>
+                        <h3 className="text-sm font-normal text-gray-400">Entity</h3>
+                        <div className="flex items-center gap-2 text-gray-800 font-normal text-sm ">
+                            <span className="capitalize">{log.category}:</span>
+                            <span>{log.entityId}</span>
+                            <ExternalLink className="w-4 h-4 text-gray-800 cursor-pointer hover:text-blue-600 transition-colors" />
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 className="text-sm font-normal text-gray-400">Date & Time</h3>
+                        <p className="text-gray-800 text-sm font-normal">
+                            {formatDateTime(log.createdAt)}
+                        </p>
+                    </section>
+
+                    {log.action === 'UPDATE' && (
+                        <section>
+                            <h3 className="text-sm font-normal text-gray-400">Updated Fields</h3>
+                            <p className="text-gray-800 text-sm font-normal">
+                                {updatedFields}
+                            </p>
+                        </section>
+                    )}
+
+                    {Object.keys(displayMetadata).length > 0 && (
+                        <section>
+                            <h3 className="text-sm font-normal text-gray-400">Metadata</h3>
+                            <div className="bg-gray-200 p-2.5">
+                                <pre className="text-sm font-normal text-gray-800">
+                                    {JSON.stringify(displayMetadata, null, 2)
+                                        .replace(/^{/, '')
+                                        .replace(/}$/, '')
+                                        .trim()
+                                    }
+                                </pre>
+                            </div>
+                        </section>
+                    )}
+                </div>
             </div>
 
+            {/* المودال الجلوبال للمسح */}
+            <GlobalDeleteModal
+                isOpen={openDelete}
+                onClose={() => setOpenDelete(false)}
+                onConfirm={handleConfirmDelete}
+                isLoading={isPending}
+                title="Delete Audit Log"
+                description={`Are you sure you want to delete log #${log.id}? This action cannot be undone.`}
+            />
         </div>
     );
 }

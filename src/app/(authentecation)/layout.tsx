@@ -1,17 +1,19 @@
 import React from 'react'
 import SideContent from '../../shared/components/custom/sideContent'
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="grid lg:grid-cols-12 min-h-screen">
-            
-            <div className="lg:col-span-5">
+        // ضفنا كلمة flex هنا عشان العناصر تيجي جنب بعض
+        <div className="flex w-full min-h-screen">
+
+            <div className='w-1/2'>
                 <SideContent />
             </div>
 
-            <div className="lg:col-span-7 flex items-center justify-center p-8">
+            <div className="flex items-center justify-center p-8 w-1/2">
                 {children}
             </div>
+
         </div>
     )
 }

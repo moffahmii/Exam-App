@@ -27,7 +27,7 @@ export default function UserDropdown() {
     const isAdmin = user?.role == "ADMIN"
 
     return (
-        <div className="relative w-70.5 h-13.5 mx-auto my-4 px-4 font-mono" ref={dropdownRef}>
+        <div className="relative w-70.5 h-13.5 mx-auto my-4 px-4 " ref={dropdownRef}>
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -75,7 +75,7 @@ export default function UserDropdown() {
                 <div className="relative w-12 h-12 border-2 border-blue-600 p-0.5">
                     <div className="relative w-full h-full">
                         <Image
-                            src={user.profilePhoto || "/default-profile.png"}
+                            src={user.profilePhoto || "/profile.png"}
                             alt="Profile"
                             fill
                             className="object-cover"

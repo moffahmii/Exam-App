@@ -3,7 +3,8 @@ import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
 export async function proxy(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
+    const { pathname } = request.nextUrl;
+
     const token = await getToken({
         req: request,
         secret: process.env.NEXTAUTH_SECRET
@@ -18,15 +19,23 @@ export async function proxy(request: NextRequest) {
         pathname.startsWith('/login') ||
         pathname.startsWith('/register');
 
-    if (isPrivateRoute) {
-        if (token) return NextResponse.next();
+    if (isPrivateRoute && !token) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    if (isAuthRoute) {
-        if (!token) return NextResponse.next();
+    if (isAuthRoute && token) {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
     return NextResponse.next();
 }
+
+export const config = {
+    matcher: [
+        '/dashboard/:path*',
+        '/account/:path*',
+        '/settings/:path*',
+        '/login',
+        '/register',
+    ],
+};

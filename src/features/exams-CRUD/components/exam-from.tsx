@@ -1,5 +1,4 @@
 'use client';
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,14 +8,14 @@ import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Button } from '@/shared/components/ui/button';
 import { ImageUploadField } from '@/features/upload-photo/components/upload-photo';
-import { PageHeader } from '@/features/dashboard-header/components/header-page';
+import { PageHeader } from '@/shared/components/custom/header-page';
 import { useRouter } from 'next/navigation';
 import { ExamField, ExamSchema } from '../shceme/exam-schem';
 import { useCreateExam } from '../hooks/use-add-exam';
 import { useEditExam } from '../hooks/use-update-exam';
 import { IDiploma } from '@/features/dashboard-exams/components/exams-filter';
 import useDiplomas from '@/features/dashboard-diplomas/hooks/use-diplomas-details';
-import * as z from 'zod'; 
+import * as z from 'zod';
 
 interface ExamFormProps {
     initialData?: ExamField;
@@ -27,9 +26,7 @@ type FormValues = z.infer<typeof ExamSchema>;
 export function ExamForm({ initialData, examId }: ExamFormProps) {
     const router = useRouter();
     const isEditMode = !!examId;
-
     const { data: diplomas, isLoading } = useDiplomas();
-
     const createExam = useCreateExam();
     const editExam = useEditExam(examId!);
 
@@ -54,31 +51,30 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
         } : undefined,
     });
 
-    // ✅ تم حل مشكلة handleSubmit هنا لأن الأنواع تطابقت
     const onSubmit = (data: FormValues) => {
         console.log("SUBMIT DATA:", data);
-
-        // نقوم بعمل cast بسيط هنا إذا كان الـ Hook الخاص بك يقبل ExamField فقط
         if (isEditMode) {
             editExam.mutate(data as ExamField);
         } else {
             createExam.mutate(data as ExamField);
         }
     };
-
+    const breadcrumbsData = [
+        { label: "Exams", href: "/dashboard/exams" },
+        { label: isEditMode ? "Edit Exam" : "Add Exam" }
+    ]
     const isSubmitting = createExam.isPending || editExam.isPending;
 
     return (
         <div className="w-full min-h-screen bg-[#f8f9fa] pb-10">
 
-            <PageHeader>
+            <PageHeader breadcrumbs={breadcrumbsData}>
+                {/* كل اللي هنا هينزل في الـ {children} (الصف التاني) */}
                 <div className="flex justify-between items-center w-full">
-
                     <div>
-                        <h2 className="text-lg font-semibold">
+                        <h2 className="text-lg font-semibold text-gray-800">
                             {isEditMode ? "Edit Exam" : "Add New Exam"}
                         </h2>
-
                         {initialData && (
                             <p className="text-sm text-gray-500">
                                 {initialData.title}
@@ -87,11 +83,11 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
                     </div>
 
                     <div className="flex gap-3">
-
                         <Button
                             type="button"
                             variant="outline"
                             onClick={() => router.back()}
+                            className="bg-gray-100 border-none hover:bg-gray-200 text-gray-700"
                         >
                             <CloseIcon size={18} /> Cancel
                         </Button>
@@ -100,12 +96,11 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
                             type="submit"
                             form="exam-form"
                             disabled={isSubmitting}
-                            className="bg-emerald-500 text-white"
+                            className="bg-emerald-500 hover:bg-emerald-600 text-white shadow-none"
                         >
                             <Save size={18} />
                             {isSubmitting ? "Saving..." : isEditMode ? "Update" : "Save"}
                         </Button>
-
                     </div>
                 </div>
             </PageHeader>
@@ -132,13 +127,14 @@ export function ExamForm({ initialData, examId }: ExamFormProps) {
                             <FieldLabel>Diploma</FieldLabel>
                             <select
                                 {...form.register('diplomaId')}
-                                className="w-full p-3 border rounded-md"
+                                className="w-full p-3 border rounded-none focus:outline-none focus:border-blue-500 text-sm bg-white cursor-pointer"
                             >
                                 <option value="">
                                     {isLoading ? "Loading..." : "Select Diploma"}
                                 </option>
 
-                                {diplomas?.map((dip: IDiploma) => (
+                                {/* ✅ حل المشكلة هنا */}
+                                {(Array.isArray(diplomas) ? diplomas : (diplomas as any)?.data || [])?.map((dip: IDiploma) => (
                                     <option key={dip.id} value={dip.id}>
                                         {dip.title}
                                     </option>

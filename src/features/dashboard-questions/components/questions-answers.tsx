@@ -92,7 +92,7 @@ export default function QuestionsAnswers({ ActiveQuestionIndex }: Props) {
                                     variant={isCorrect ? "ghost" : "secondary"}
                                     onClick={() => handleMarkCorrect(index)}
                                     className={`w-full justify-center gap-2${isCorrect
-                                            ? "text-emerald-500 bg-white "
+                                            ? "text-emerald-600 bg-white "
                                             : "text-gray-800 bg-gray-200 hover:bg-gray-100"
                                         }`}
                                 >

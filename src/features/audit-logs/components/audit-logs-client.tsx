@@ -1,112 +1,94 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Trash2 } from 'lucide-react';
-
-import { useAuditLogs } from '../hooks/use-auditlogs';
-import { PageHeader } from '@/features/dashboard-header/components/header-page';
-import { AuditLogsPagination } from './audit-logs-pagination';
-import { AuditLogsSearchFilters } from './audit-logs-filters';
-import AuditLogsTable from './audit-logs-table';
-
+import { useAuditLogs } from '@/features/audit-logs/hooks/use-auditlogs';
+import { AuditLog } from '@/shared/types/audit-logs';
+import { AuditLogsTableSkeleton } from '@/features/audit-logs/components/audit-skeleton';
+import AuditLogsTable from '@/features/audit-logs/components/audit-logs-table';
+import { PageHeader } from '@/shared/components/custom/header-page';
+import { AppPagination } from '@/shared/components/custom/app-pagination';
+import { GlobalFilters } from '@/shared/components/custom/search-filters';
 import { Button } from '@/shared/components/ui/button';
-import { AuditLogsTableSkeleton } from './audit-skeleton';
 
 export function AuditLogsPageClient() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    // =========================
-    // 1. Query Params
-    // =========================
-    const page = Number(searchParams.get('page')) || 1;
-    const limit = Number(searchParams.get('limit')) || 20;
-    const category = searchParams.get('category') || '';
-    const action = searchParams.get('action') || '';
-    const search = searchParams.get('search') || '';
+    // Memoize params to prevent unnecessary recalculations
+    const params = useMemo(() => ({
+        page: Number(searchParams.get('page')) || 1,
+        limit: Number(searchParams.get('limit')) || 20,
+        category: searchParams.get('category') || '',
+        action: searchParams.get('action') || '',
+        search: searchParams.get('search') || '',
+        sort: searchParams.get('sort') || 'createdAt-desc',
+    }), [searchParams]);
 
-    const sort = searchParams.get('sort') || 'createdAt-desc';
-    const [sortField, sortOrder] = sort.split('-');
+    const [sortField, sortOrder] = params.sort.split('-');
 
-    // =========================
-    // 2. API Call
-    // =========================
+    const [localFilters, setLocalFilters] = useState({
+        search: params.search,
+        category: params.category,
+        action: params.action
+    });
+
+    useEffect(() => {
+        setLocalFilters({
+            search: params.search,
+            category: params.category,
+            action: params.action
+        });
+    }, [params.search, params.category, params.action]);
+
     const { data, isLoading, isFetching } = useAuditLogs({
-        page,
-        limit,
-        category: category || undefined,
-        action: action || undefined,
-        search: search || undefined,
+        page: params.page,
+        limit: params.limit,
+        category: params.category || undefined,
+        action: params.action || undefined,
+        search: params.search || undefined,
         sortOrder: sortOrder as 'asc' | 'desc',
         sortBy: sortField,
     });
 
-    const responseData = data as any;
-    const logs = responseData?.payload?.data || [];
+    const logsData = useMemo(() => {
+        if (data?.status === true) {
+            return {
+                logs: data.payload.data || [],
+                meta: data.payload.metadata || { page: 1, totalPages: 1, total: 0, limit: 20 }
+            };
+        }
+        return { logs: [], meta: { page: 1, totalPages: 1, total: 0, limit: 20 } };
+    }, [data]);
 
-    // ✅ وحدنا اسم المتغير لـ meta وهيقرأ من الباك إند سواء كان اسمها metadata أو meta
-    const meta = responseData?.payload?.metadata || responseData?.payload?.meta || {
-        page: 1,
-        totalPages: 1,
-        total: 0,
-        limit: 20
-    };
-
-    // =========================
-    // 3. URL Handler
-    // =========================
     const updateQueryParams = useCallback((newParams: Record<string, string | number | undefined>) => {
-        const params = new URLSearchParams(searchParams.toString());
-
+        const nextParams = new URLSearchParams(searchParams.toString());
         Object.entries(newParams).forEach(([key, value]) => {
-            if (value !== undefined && value !== '') {
-                params.set(key, String(value));
-            } else {
-                params.delete(key);
-            }
+            if (value !== undefined && value !== '') nextParams.set(key, String(value));
+            else nextParams.delete(key);
         });
-
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        router.push(`${pathname}?${nextParams.toString()}`, { scroll: false });
     }, [pathname, router, searchParams]);
 
-    // =========================
-    // 4. Handlers
-    // =========================
-    const handlePageChange = (newPage: number) => {
-        updateQueryParams({ page: newPage });
-    };
+    const auditBreadcrumbs = [
+        { label: "Audit Logs" }
+    ];
 
-    const handleFilterChange = (filters: { search: string; category: string; action: string }) => {
-        updateQueryParams({ ...filters, page: 1 });
-    };
-
-    const handleSortChange = (value: string) => {
-        updateQueryParams({ sort: value, page: 1 });
-    };
-
-    const handleClearAllLogs = () => {
-        if (confirm('Are you sure you want to clear all logs?')) {
-            console.log("Clearing all logs...");
-        }
-    };
-
-    // =========================
-    // 5. UI
-    // =========================
     return (
         <div className="flex flex-col w-full min-h-screen bg-gray-100">
-            <PageHeader>
+            <PageHeader breadcrumbs={auditBreadcrumbs}>
                 <div className="flex items-center gap-4 w-full">
-                    {/* ✅ باصينا الـ meta هنا صح بدون أي Reference Error */}
-                    <AuditLogsPagination
-                        meta={meta}
-                        onPageChange={handlePageChange}
+                    <AppPagination
+                        meta={logsData.meta}
+                        onPageChange={(p) => updateQueryParams({ page: p })}
                         isFetching={isFetching || isLoading}
                     />
-
-                    <Button onClick={handleClearAllLogs} className="ml-auto h-10 px-6 bg-[#EF4444] hover:bg-red-600 text-white flex items-center gap-2">
+                    <Button
+                        onClick={() => confirm('Clear all logs?') && console.log("Cleared")}
+                        className="ml-auto h-10 px-6 bg-red-600 hover:bg-red-600 text-white flex items-center gap-2"
+                    >
                         <Trash2 className="w-4 h-4" />
                         <span className="text-sm font-medium">Clear All Logs</span>
                     </Button>
@@ -114,28 +96,51 @@ export function AuditLogsPageClient() {
             </PageHeader>
 
             <div className="p-4">
-                <AuditLogsSearchFilters
-                    onFilterChange={handleFilterChange}
+                <GlobalFilters
+                    showSearch searchQuery={localFilters.search}
+                    onSearchChange={(v) => setLocalFilters(prev => ({ ...prev, search: v }))}
+                    dropdowns={[
+                        {
+                            value: localFilters.category,
+                            onChange: (v) => setLocalFilters(prev => ({ ...prev, category: v })),
+                            placeholder: "All Categories",
+                            options: [
+                                { label: "All Categories", value: "" },
+                                { label: "DIPLOMA", value: "DIPLOMA" },
+                                { label: "EXAM", value: "EXAM" },
+                                { label: "USER", value: "USER" },
+                            ]
+                        },
+                        {
+                            value: localFilters.action,
+                            onChange: (v) => setLocalFilters(prev => ({ ...prev, action: v })),
+                            placeholder: "All Actions",
+                            options: [
+                                { label: "All Actions", value: "" },
+                                { label: "CREATE", value: "CREATE" },
+                                { label: "UPDATE", value: "UPDATE" },
+                                { label: "DELETE", value: "DELETE" },
+                            ]
+                        }
+                    ]}
                     onClear={() => router.push(pathname)}
-                    isLoading={isFetching || isLoading}
-                    initialValues={{ search, category, action }}
+                    onApply={() => updateQueryParams({ ...localFilters, page: 1 })}
                 />
             </div>
 
             <div className="p-4 relative">
                 {isLoading ? (
-                    <AuditLogsTableSkeleton rows={limit} />
+                    <AuditLogsTableSkeleton rows={params.limit} />
                 ) : (
                     <>
                         <AuditLogsTable
-                            logs={logs}
-                            sortValue={sort}
-                            onSortChange={handleSortChange}
+                            logs={logsData.logs}
+                            sortValue={params.sort}
+                            onSortChange={(v) => updateQueryParams({ sort: v, page: 1 })}
                         />
-
                         {isFetching && (
                             <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-40">
-                                <span className="text-sm text-gray-500">Updating...</span>
+                                <span className="text-sm text-blue-600 font-medium animate-pulse">Updating...</span>
                             </div>
                         )}
                     </>
@@ -143,4 +148,4 @@ export function AuditLogsPageClient() {
             </div>
         </div>
     );
-}
+} 

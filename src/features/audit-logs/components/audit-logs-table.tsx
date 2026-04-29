@@ -3,9 +3,9 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
-import { AuditLog } from '../types/audit-logs';
 import { AuditActions } from './audit-actions';
 import { AuditLogsSort } from './audit-sort';
+import { AuditLog } from '@/shared/types/audit-logs';
 
 interface AuditLogsTableProps {
     logs: AuditLog[];
@@ -24,7 +24,7 @@ const getActionColorHex = (action?: string) => {
 };
 
 const getRoleColorHex = (role: string) => {
-    return role === 'Super Admin' ? '#dc2626' : '#2563eb';
+    return role === 'SUPER_ADMIN' ? '#dc2626' : '#2563eb';
 };
 
 const formatDateTime = (dateString: string) => {
@@ -39,7 +39,6 @@ export default function AuditLogsTable({ logs, sortValue, onSortChange }: AuditL
     return (
         <div className="w-full overflow-visible bg-white">
             <Table className="table-fixed w-full p-4">
-                {/* HEADER */}
                 <TableHeader className="bg-blue-600">
                     <TableRow>
                         <TableHead className="w-30 text-white text-sm font-medium uppercase">Action</TableHead>
@@ -54,7 +53,6 @@ export default function AuditLogsTable({ logs, sortValue, onSortChange }: AuditL
                     </TableRow>
                 </TableHeader>
 
-                {/* BODY */}
                 <TableBody>
                     {logs.length === 0 ? (
                         <TableRow>

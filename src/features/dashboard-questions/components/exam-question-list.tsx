@@ -2,18 +2,11 @@
 
 import React from "react";
 import { ArrowDownUp, Loader2 } from "lucide-react";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/shared/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/shared/components/ui/table";
 import { useExamQuestions } from "../hooks/use-exam-questions";
-import { IQuestion } from "../types/question";
 import { QuestionActions } from "./dropdown";
 import Link from "next/link";
+import { IQuestion } from "@/shared/types/questions";
 
 interface ExamQuestionsListProps {
     examId: string;
@@ -21,29 +14,29 @@ interface ExamQuestionsListProps {
 }
 
 export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProps) {
-    // الهوك دلوقتي بيرجع مصفوفة الأسئلة بشكل مباشر بفضل الـ select
     const { data: questionsList = [], isLoading, isError } = useExamQuestions(examId);
 
     return (
-        <div className="bg-white border rounded-sm shadow-sm w-full">
+        <div className="bg-white w-full">
 
             {/* 1. Header Section */}
-            <div className="bg-blue-600 h-12 px-4 flex justify-between items-center text-white rounded-t-sm">
+            <div className="bg-blue-600 h-12 px-4 flex justify-between items-center text-white">
+
                 <h2 className="font-semibold text-base tracking-wide">
                     Exam Questions
                 </h2>
 
                 <Link
-                    href={`/dashboard/questions/add-bulk/${examId}`}
-                    className="bg-yellow-400 text-black px-4 py-1.5 rounded-sm text-sm font-medium hover:bg-yellow-500 transition-colors"
+                    href={`/dashboard/questions/add-edit/${examId}`}
+                    className="bg-yellow-400 text-white px-2 py-1.5  text-sm font-medium"
                 >
-                    Add Questions
+                    + Add Questions
                 </Link>
             </div>
 
             {/* 2. Shadcn Table Section */}
             <Table>
-                <TableHeader className="bg-gray-100/80">
+                <TableHeader className="bg-gray-200">
                     <TableRow className="hover:bg-transparent">
                         <TableHead className="w-[85%] text-gray-600 font-medium h-10">
                             Title

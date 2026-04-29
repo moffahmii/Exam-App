@@ -1,15 +1,15 @@
 'use server'
 
-import { IExamQuestionsResponse } from "@/shared/types/questions";
+import { IApiResponse } from "@/shared/types/api";
 import { getNextAuthToken } from "@/shared/utils/auth.util";
 
-export const getExamQuestions = async (examId: string): Promise<IExamQuestionsResponse> => {
+export async function deleteQuestionApi(id: string): Promise<IApiResponse<null>> {
     try {
         const jwt = await getNextAuthToken();
         const token = jwt?.token;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/questions/exam/${examId}`, {
-            method: "GET",
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/questions/${id}`, {
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -17,12 +17,12 @@ export const getExamQuestions = async (examId: string): Promise<IExamQuestionsRe
             cache: 'no-store'
         });
 
-        const result = await response.json();
         if (!response.ok) {
-            return { status: false, code: response.status, message: result.message || "Failed to fetch questions" };
+            return { status: false, code: response.status, message: "Failed to delete question" };
         }
-        return result;
+
+        return { status: true, code: 200, payload: null, message: "Deleted successfully" };
     } catch (error) {
         return { status: false, code: 500, message: "Internal server error" };
     }
-};
+}

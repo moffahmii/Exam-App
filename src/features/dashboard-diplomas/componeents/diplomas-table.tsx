@@ -2,10 +2,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/shared/components/ui/table";
-import { Button } from "@/shared/components/ui/button";
-import useDiplomas from "../hooks/use-diplomas-details";
 import { SortDropdown } from "./sort-dropdown";
 import { DiplomaActions } from "./diploma-actions";
+import { TableSkeleton } from "./diploma-table-skeleton";
 
 type SortOption =
     | "title-asc"
@@ -13,31 +12,19 @@ type SortOption =
     | "newest-asc"
     | "newest-desc";
 
-export function DiplomasTable({ searchQuery, immutabilityFilter }: { searchQuery: string; immutabilityFilter: string; }) {
-    const { data, isLoading, isError } = useDiplomas();
+interface DiplomasTableProps {
+    data: any[];
+    isLoading: boolean;
+}
+
+export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
     const [sort, setSort] = useState<SortOption>("title-asc");
 
-
-    if (isLoading) return <p className="p-4">Loading...</p>;
-    if (isError) return <p className="p-4 text-red-500">Error loading diplomas</p>;
-
-    let filteredData = data || [];
-
-    if (searchQuery) {
-        filteredData = filteredData.filter((item: any) =>
-            item.title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    }
-
-    if (immutabilityFilter !== "all") {
-        const checkIsImmutable = immutabilityFilter === "immutable";
-        filteredData = filteredData.filter((item: any) => item.isImmutable === checkIsImmutable);
-    }
-
-    const sortedData = [...filteredData].sort((a: any, b: any) => {
+    // الترتيب (Sorting) بيفضل شغال على البيانات اللي جاية من الصفحة
+    const sortedData = [...(data || [])].sort((a: any, b: any) => {
         switch (sort) {
-            case "title-asc": return a.title.localeCompare(b.title);
-            case "title-desc": return b.title.localeCompare(a.title);
+            case "title-asc": return a.title?.localeCompare(b.title);
+            case "title-desc": return b.title?.localeCompare(a.title);
             case "newest-asc": return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
             case "newest-desc": return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
             default: return 0;
@@ -45,9 +32,9 @@ export function DiplomasTable({ searchQuery, immutabilityFilter }: { searchQuery
     });
 
     return (
-        <div className="border overflow-hidden">
+        <div className=" overflow-hidden bg-white">
             <Table>
-                {/* Header */}
+                {/* Header (ثابت ويظهر دائماً) */}
                 <TableHeader className="bg-blue-600">
                     <TableRow className="hover:bg-blue-600">
                         <TableHead className="text-white w-25">Image</TableHead>
@@ -59,34 +46,48 @@ export function DiplomasTable({ searchQuery, immutabilityFilter }: { searchQuery
                     </TableRow>
                 </TableHeader>
 
-                {/* Body */}
-                <TableBody>
-                    {sortedData.map((item: any) => (
-                        <TableRow key={item.id} className="hover:bg-gray-50 h-25">
-                            <TableCell className="p-2.5">
-                                <div className="relative w-25 h-25">
-                                    {item.image ? (
-                                        <img
-                                            src={item.image}
-                                            alt={item.title}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-[10px] text-gray-400 font-medium">No Image</span>
-                                    )}                                
-                                    </div>
-                            </TableCell>
-                            <TableCell className="font-medium">{item.title}</TableCell>
-                            <TableCell className="text-gray-500 max-w-[500px]">
-                                <p className="line-clamp-2">{item.description}</p>
-                            </TableCell>
-                            <TableCell className="text-right">
-                                <DiplomaActions diplomaId={item.id} />
+                {/* Body: بناءً على حالة التحميل */}
+                {isLoading ? (
+                    <TableSkeleton />
+                ) : !data || data.length === 0 ? (
+                    <TableBody>
+                        <TableRow>
+                            <TableCell colSpan={4} className="h-32 text-center text-gray-500 font-medium">
+                                No diplomas found.
                             </TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
+                    </TableBody>
+                ) : (
+                    <TableBody>
+                        {sortedData.map((item: any) => (
+                            <TableRow key={item.id} className="h-25">
+                                <TableCell className="p-2.5">
+                                    <div className="relative w-25 h-25">
+                                        {item.image ? (
+                                            <Image
+                                                src={item.image}
+                                                alt={item.title}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        ) : (
+                                            <span className="text-[10px] text-gray-400 font-medium flex items-center justify-center h-full w-full bg-gray-100 ">
+                                                No Image
+                                            </span>
+                                        )}
+                                    </div>
+                                </TableCell>
+                                <TableCell className="font-medium text-gray-900">{item.title}</TableCell>
+                                <TableCell className="text-gray-500 max-w-125">
+                                    <p className="line-clamp-2">{item.description}</p>
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    <DiplomaActions diplomaTitle={item.title} diplomaId={item.id} />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                )}
             </Table>
         </div>
     );

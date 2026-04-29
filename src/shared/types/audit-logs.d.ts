@@ -1,14 +1,22 @@
+import { IApiResponse } from '@/shared/types/api';
 
 export type AuditAction = 'CREATE' | 'UPDATE' | 'DELETE';
-export type AuditCategory = 'DIPLOMA' | 'EXAM' | 'USER' | 'CATEGORY' | 'SETTING'; 
+export type AuditCategory = 'DIPLOMA' | 'EXAM' | 'USER' | 'CATEGORY' | 'SETTING';
 export type ActorRole = 'ADMIN' | 'SUPER_ADMIN';
 
+export interface PaginationMeta {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
 export interface AuditLogMetadata {
-    keys?: string[]; 
+    keys?: string[];
     title?: string;
     description?: string;
     image?: string;
-    [key: string]: any; 
+    [key: string]: any;
 }
 
 export interface AuditLog {
@@ -29,7 +37,6 @@ export interface AuditLog {
     path: string;
 }
 
-
 export interface AuditLogsParams {
     page?: number;
     limit?: number;
@@ -41,23 +48,9 @@ export interface AuditLogsParams {
     sortOrder?: 'asc' | 'desc';
 }
 
-export interface PaginationMeta {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
+export interface AuditLogsPayload {
+    data: AuditLog[];
+    metadata: PaginationMeta;
 }
 
-/**
- * 6. الرد الشامل للـ API (API Response)
- * ده النوع اللي الـ Server Action والـ API هيرجعوه
- */
-export interface AuditLogsResponse {
-    status: boolean;
-    code: number;
-    payload: {
-        data: AuditLog[];
-        meta?: PaginationMeta;
-    };
-    message?: string; // اختياري عشان لو رجع رسالة خطأ
-}
+export type AuditLogsResponse = IApiResponse<AuditLogsPayload>;
