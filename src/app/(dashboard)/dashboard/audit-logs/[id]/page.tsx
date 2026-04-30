@@ -5,8 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import LogDetailsView from '@/features/audit-logs/components/audit-log-details';
 import { Loader2 } from 'lucide-react';
+import { AuditLogsResponse } from '@/shared/types/audit-logs';
 // استورد الـ Type بتاع الـ Response
-import { AuditLogsResponse } from '@/features/audit-logs/types/audit-logs';
 
 export default function AuditLogDetailsPage() {
     const { id } = useParams();
@@ -23,10 +23,24 @@ export default function AuditLogDetailsPage() {
         });
 
         // بندور على اللوج بتاعنا
-        for (const [, data] of cachedQueries) {
-            const found = data?.payload?.data?.find((item) => item.id === id);
-            if (found) return found;
-        }
+ // ... نفس الكود اللي قبل الـ loop ...
+
+// بندور على اللوج بتاعنا
+for (const [, data] of cachedQueries) {
+    // 1. نتأكد أولاً إن الداتا موجودة، وإن الـ payload موجود، وإن الـ data (الأري) موجودة
+    const logsArray = data?.payload?.data;
+
+    // 2. نتأكد إنها فعلاً Array (دي الخطوة اللي TypeScript بيحبها جداً عشان يحدد النوع)
+    if (Array.isArray(logsArray)) {
+        // 3. هنا TypeScript خلاص هيعرف إن logsArray هي AuditLog[]
+        // والـ item تلقائياً هيكون نوعه AuditLog بدون ما نحتاج نكتب النوع يدوياً
+        const found = logsArray.find((item) => item.id === String(id));
+        
+        if (found) return found;
+    }
+}
+
+// ... نفس الكود اللي بعد الـ loop ...
 
         return null;
     }, [id, queryClient]);

@@ -19,7 +19,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({
         <div className="space-y-1 w-full">
             {/* عرض الليبل إذا وجد */}
             {label && (
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-gray-800">
                     {label}
                 </label>
             )}

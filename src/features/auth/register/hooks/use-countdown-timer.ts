@@ -9,10 +9,10 @@ export function useCountdownTimer(initialTime: number = 60) {
             setCanResend(true);
             return;
         }
+
         const interval = setInterval(() => {
             setTimer((prev) => {
                 if (prev <= 1) {
-                    clearInterval(interval);
                     setCanResend(true);
                     return 0;
                 }
@@ -21,7 +21,7 @@ export function useCountdownTimer(initialTime: number = 60) {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [timer === initialTime]);
+    }, [timer]);
 
     const resetTimer = useCallback(() => {
         setTimer(initialTime);

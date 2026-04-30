@@ -33,9 +33,9 @@ export default function EmailInputForm() {
                     <div className="space-y-2" data-invalid={fieldState.invalid}>
                         <Label
                             htmlFor={field.name}
-                            className={`text-sm font-medium ${fieldState.invalid ? 'text-red-500' : 'text-gray-700'}`}
+                            className={`text-base font-medium ${fieldState.invalid ? 'text-red-500' : 'text-gray-800'}`}
                         >
-                            Email Address
+                            Email
                         </Label>
 
                         <Input

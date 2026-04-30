@@ -6,9 +6,11 @@ import Cookies from "js-cookie"
 import { Button } from '@/shared/components/ui/button'
 import { PasswordFormValues, passwordSchema } from '@/shared/schemas/auth-schema';
 import useSignup from '../hooks/use-signup';
-import PasswordInput from './password-Input';
+import { ErrorResponse } from '@/shared/types/api';
+import PasswordInput from '../../../../shared/components/custom/password-Input';
 
 export default function PasswordStepForm() {
+
     const { mutate, isPending, error } = useSignup();
     const { register, handleSubmit, formState: { errors }, } = useForm<PasswordFormValues>({
         resolver: zodResolver(passwordSchema),
@@ -53,7 +55,7 @@ export default function PasswordStepForm() {
             </div>
             {error && (
                 <p className="text-sm text-red-500 font-mono bg-red-50 p-3 rounded-md border border-red-100">
-                    {(error as Error).message}
+                    {(error as ErrorResponse).message}
                 </p>
             )}
             <Button

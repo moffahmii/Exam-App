@@ -1,28 +1,13 @@
-'use client';
+import ResetPasswordForm from "@/features/auth/reset-password/components/reset-password-form";
 
-import ForgotPasswordForm from "@/features/auth/components/forgotPasswordForm";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+export default function ResetPasswordPage({ searchParams, }: {
+    searchParams: { token?: string };
+}) {
+    const token = searchParams?.token || null;
 
-export default function ResetPasswordPage() {
-
-    const searchParams = useSearchParams();
-    const token = searchParams.get("token");
-
-    const [password, setPassword] = useState("");
-
-    const handleSubmit = async () => {
-        await fetch("https://exam-app.elevate-bootcamp.cloud/api/reset-password", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                token,
-                password,
-            }),
-        });
-    };
-
-    return <ForgotPasswordForm onSent={handleSubmit} />
+    return (
+        <div className="min-h-screen w-full flex items-center justify-center bg-white">
+            <ResetPasswordForm token={token} />
+        </div>
+    );
 }

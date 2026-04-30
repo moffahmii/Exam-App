@@ -2,7 +2,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { LoginFields } from '../types/auth'
+import { LoginFields } from '../../types/auth'
 export default function useLogin() {
     const router = useRouter()
     return useMutation({

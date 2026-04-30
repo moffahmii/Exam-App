@@ -1,7 +1,7 @@
-import { verifyOTPAction } from "@/features/auth/apis/auth-api";
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { verifyOTPAction } from "../apis/verify-otp.api";
 
 export default function useOTPVerification() {
     const router = useRouter();

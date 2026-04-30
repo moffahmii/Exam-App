@@ -4,12 +4,10 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
-import PasswordInput from '@/features/auth/components/password-Input'
-import { useChangePassword } from '@/features/change-password/hooks/use-change-password'
+import { useChangePassword } from '@/features/account-settings/hooks/use-change-password'
 import { ChangePasswordFormValues, changePasswordSchema } from '@/shared/schemas/auth-schema'
 import { Button } from '@/shared/components/ui/button'
-
-
+import PasswordInput from '@/shared/components/custom/password-Input'
 
 export default function ChangePasswordPage() {
     const { mutate: changePassword, isPending } = useChangePassword();

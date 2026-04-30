@@ -1,11 +1,11 @@
 'use client';
 
-import { QuestionsBulkFormValue } from '@/features/dashboard-questions/types/question';
 import { Input } from '@/shared/components/ui/input';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Label } from '@/shared/components/ui/label';
 import QuestionsAnswers from './questions-answers';
+import { QuestionsBulkFormValue } from '@/shared/types/questions';
 
 interface Props {
     ActiveQuestionIndex: number;

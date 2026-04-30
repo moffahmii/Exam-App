@@ -1,5 +1,4 @@
 import { use } from 'react';
-import { USER_ROLES } from "../../../shared/constants/user.constant";
 
 export interface IUser {
     id: string;

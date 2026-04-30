@@ -1,11 +1,20 @@
 import { SidebarProvider, SidebarTrigger } from "@/shared/components/ui/sidebar";
 import AppSideBar from "@/features/side-bar/components/sideBar";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "../../../auth";
 
 interface Props {
     children: React.ReactNode;
 }
 
-export default function Layout({ children }: Props) {
+export default async function Layout({ children }: Props) {
+    const session = await getServerSession(authOptions);
+
+    // Not logged in
+    if (!session) {
+        redirect("/login");
+    }
     return (
         <SidebarProvider style={{ "--sidebar-width": "346px" } as React.CSSProperties}>
             <AppSideBar />

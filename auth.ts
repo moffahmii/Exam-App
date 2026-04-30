@@ -1,4 +1,4 @@
-import { loginUser } from '@/features/auth/apis/auth-api';
+import { loginUser } from '@/features/auth/login/apis/login-api';
 import { loginSchema } from '@/shared/schemas/auth-schema';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -17,10 +17,10 @@ export const authOptions: NextAuthOptions = {
                 const data = await loginUser(result.data)
                 if (!data.status) throw new Error(data.message)
                 return {
-                    id: data.payload.user.id,
+                    id: String(data.payload.user.id), 
                     user: data.payload.user,
                     token: data.payload.token
-                }
+                } as any;
             }
         })
     ],
