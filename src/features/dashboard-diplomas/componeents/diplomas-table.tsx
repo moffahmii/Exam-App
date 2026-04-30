@@ -1,7 +1,16 @@
 "use client";
+
 import { useState } from "react";
 import Image from "next/image";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/shared/components/ui/table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/shared/components/ui/table";
+
 import { SortDropdown } from "./sort-dropdown";
 import { DiplomaActions } from "./diploma-actions";
 import { TableSkeleton } from "../skeletons/diploma-table-skeleton";
@@ -14,51 +23,61 @@ type SortOption =
     | "newest-desc";
 
 interface DiplomasTableProps {
-    data: IDiplomas[]; 
+    data: IDiplomas[];
     isLoading: boolean;
 }
 
 export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
     const [sort, setSort] = useState<SortOption>("title-asc");
 
-    const sortedData = [...(data || [])].sort((a: IDiplomas, b: IDiplomas) => { 
+    const sortedData = [...(data || [])].sort((a, b) => {
         switch (sort) {
-            case "title-asc": return a.title?.localeCompare(b.title);
-            case "title-desc": return b.title?.localeCompare(a.title);
-            case "newest-asc": return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-            case "newest-desc": return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-            default: return 0;
+            case "title-asc":
+                return a.title?.localeCompare(b.title);
+            case "title-desc":
+                return b.title?.localeCompare(a.title);
+            case "newest-asc":
+                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+            case "newest-desc":
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            default:
+                return 0;
         }
     });
 
     return (
-        <div className=" overflow-hidden bg-white">
+        <div className="overflow-hidden bg-white">
             <Table>
                 <TableHeader className="bg-blue-600">
                     <TableRow>
                         <TableHead className="text-white w-25">Image</TableHead>
                         <TableHead className="text-white w-50">Title</TableHead>
-                        <TableHead className="text-white">Description</TableHead>
+                        <TableHead className="text-white w-50">Description</TableHead>
                         <TableHead className="text-right w-20">
                             <SortDropdown value={sort} onChange={setSort} />
                         </TableHead>
                     </TableRow>
                 </TableHeader>
 
-                {/* Body: بناءً على حالة التحميل */}
-                {isLoading ? (
-                    <TableSkeleton />
-                ) : !data || data.length === 0 ? (
-                    <TableBody>
+                <TableBody>
+                    {/* 🔥 Loading state داخل TableBody */}
+                    {isLoading ? (
                         <TableRow>
-                            <TableCell colSpan={4} className="h-32 text-center text-gray-500 font-medium">
+                            <TableCell colSpan={4} className="p-0">
+                                <TableSkeleton />
+                            </TableCell>
+                        </TableRow>
+                    ) : sortedData.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={4}
+                                className="h-32 text-center text-gray-500 font-medium"
+                            >
                                 No diplomas found.
                             </TableCell>
                         </TableRow>
-                    </TableBody>
-                ) : (
-                    <TableBody>
-                        {sortedData.map((item: IDiplomas) => ( // ✅ استخدام IDiplomas بدل any
+                    ) : (
+                        sortedData.map((item) => (
                             <TableRow key={item.id} className="h-25">
                                 <TableCell className="p-2.5">
                                     <div className="relative w-25 h-25">
@@ -70,23 +89,31 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
                                                 className="object-cover"
                                             />
                                         ) : (
-                                            <span className="text-[10px] text-gray-400 font-medium flex items-center justify-center h-full w-full bg-gray-100 ">
+                                            <span className="text-[10px] text-gray-400 font-medium flex items-center justify-center h-full w-full bg-gray-100">
                                                 No Image
                                             </span>
                                         )}
                                     </div>
                                 </TableCell>
-                                <TableCell className="font-normal text-sm text-gray-800">{item.title}</TableCell>
-                                <TableCell className="text-gray-500 text-sm font-normal max-w-125">
-                                    <p className="line-clamp-2">{item.description}</p>
+
+                                <TableCell className="font-normal text-sm text-gray-800">
+                                    {item.title}
                                 </TableCell>
+
+                                <TableCell className="text-gray-500 text-sm font-normal max-w-125">
+                                    <p className="line-clamp-2 overflow-hidden">{item.description}</p>
+                                </TableCell>
+
                                 <TableCell className="text-right">
-                                    <DiplomaActions diplomaTitle={item.title} diplomaId={item.id} />
+                                    <DiplomaActions
+                                        diplomaTitle={item.title}
+                                        diplomaId={item.id}
+                                    />
                                 </TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                )}
+                        ))
+                    )}
+                </TableBody>
             </Table>
         </div>
     );

@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/shared/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 import { ArrowDownWideNarrow, ArrowUpAZ, ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, MoreHorizontal } from "lucide-react";
-import useDiplomas from "../hooks/use-diplomas-details";
+import useDiplomas from "../hooks/use-diplomas";
 
 export type SortOption = "title-asc" | "title-desc" | "newest-asc" | "newest-desc";
 

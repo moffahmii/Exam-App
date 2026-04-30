@@ -1,17 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { verifyEmailAction } from "../apis/verify-email.api";
+import Cookies from "js-cookie";
+import { verifyEmailAction, } from "../apis/verify-email.api";
+type VerifyEmailPayload = {
+    email: string;
+};
 
 export default function useEmailVerification() {
-    const router = useRouter()
-    const { isPending, mutate, error } = useMutation({
+    return useMutation({
         mutationKey: ['Email Verify'],
-        mutationFn: verifyEmailAction,
-        onSuccess: (data, variables) => {
-            const emailSent = variables;
-            document.cookie = `user_email=${emailSent}; path=/; max-age=3600`;
-            document.cookie = "auth_stage=verify; path=/; max-age=3600";
+
+        mutationFn: (payload: VerifyEmailPayload) => verifyEmailAction(payload.email),
+        onSuccess: (data, variables: VerifyEmailPayload) => {
+            Cookies.set("user_email", variables.email, { expires: 1 / 24 });
+            Cookies.set("auth_stage", "verify", { expires: 1 / 24 });
         },
+        onError: (error: any) => {
+            console.error("Email verification error:", error?.message);
+        }
     });
-    return { isPending, mutate, error };
 }

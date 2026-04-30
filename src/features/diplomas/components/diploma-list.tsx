@@ -17,14 +17,14 @@ export default function DiplomasList() {
         }
     }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
-    const allDiplomas = useMemo(() =>
-        data?.pages.flatMap(page => page.data) || [],
-        [data])
+    const allDiplomas = useMemo(() => {
+        return data?.pages?.flatMap(page => page.data ?? []) ?? [];
+    }, [data]);
 
     // تجهيز البريد كرامب
     const breadcrumbs = [
-        { label: "Home", href: "/" },
-        { label: "Diplomas" }
+        { label: "Home", },
+
     ];
 
     return (

@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { ExamField, ExamSchema } from '../../exams-CRUD/shceme/exam-schem';
 import { useCreateExam } from '../hooks/use-add-exam';
 import { useEditExam } from '../hooks/use-update-exam';
-import useDiplomas from '@/features/dashboard-diplomas/hooks/use-diplomas-details';
+import useDiplomas from '@/features/dashboard-diplomas/hooks/use-diplomas';
 import * as z from 'zod';
 import { IDiplomas } from '@/shared/types/diplomas';
 

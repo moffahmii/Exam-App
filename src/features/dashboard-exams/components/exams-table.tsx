@@ -34,7 +34,7 @@ export function ExamsTable({ exams, isLoading, isFetching, currentSort, onSortCh
                     ) : (
                         exams.map((exam) => (
                             <TableRow key={exam.id} className="h-25">
-                                <TableCell className="pl-6">
+                                <TableCell className="">
                                     <div className="w-23 h-25  bg-white shrink-0">
                                         <Image
                                             src={exam.image || '/placeholder.png'}
@@ -54,7 +54,7 @@ export function ExamsTable({ exams, isLoading, isFetching, currentSort, onSortCh
                                 <TableCell className=" font-medium text-sm text-gray-800">
                                     {exam.questionsCount}
                                 </TableCell>
-                                <TableCell className="text-center">
+                                <TableCell className="text-end">
                                     <ExamActions examId={exam.id} />
                                 </TableCell>
                             </TableRow>

@@ -11,7 +11,7 @@ import { AppPagination } from "@/shared/components/custom/app-pagination";
 // مكونات الصفحة والـ Hooks
 import { useExams } from "../hooks/use-exams";
 import { ExamsTable } from "./exams-table";
-import useDiplomas from "@/features/dashboard-diplomas/hooks/use-diplomas-details";
+import useDiplomas from "@/features/dashboard-diplomas/hooks/use-diplomas";
 import { GlobalFilters } from "@/shared/components/custom/search-filters";
 
 export function ExamsPage() {
@@ -76,7 +76,7 @@ export function ExamsPage() {
     ];
 
     return (
-        <div className="flex flex-col w-7xl min-h-screen bg-[#f8f9fb]">
+        <div className="flex flex-col w-full min-h-screen bg-[#f8f9fb]">
 
             <PageHeader breadcrumbs={pageBreadcrumbs}>
                 <div className="flex items-center">

@@ -7,7 +7,7 @@ import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { EmailFormValues, emailSchema } from '@/shared/schemas/auth-schema'
 import useEmailVerification from '../hooks/use-verify-email'
-import { useRouter } from 'next/navigation' 
+import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 
 export default function EmailInputForm() {
@@ -18,11 +18,14 @@ export default function EmailInputForm() {
         defaultValues: { email: "" },
     })
     const onSubmit = (values: EmailFormValues) => {
-        mutate(values.email, {
-            onSuccess: () => {
-                router.push("/register/verify")
+        mutate(
+            { email: values.email }, 
+            {
+                onSuccess: () => {
+                    router.push("/register/verify")
+                }
             }
-        })
+        )
     }
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 ">
@@ -37,7 +40,6 @@ export default function EmailInputForm() {
                         >
                             Email
                         </Label>
-
                         <Input
                             {...field}
                             id={field.name}
@@ -46,8 +48,8 @@ export default function EmailInputForm() {
                             disabled={isPending}
                             aria-invalid={fieldState.invalid}
                             className={`h-11 transition-all ${fieldState.invalid
-                                    ? "border-red-500 focus-visible:ring-red-500"
-                                    : "focus-visible:ring-blue-400"
+                                ? "border-red-500 focus-visible:ring-red-500"
+                                : "focus-visible:ring-blue-400"
                                 }`}
                         />
 

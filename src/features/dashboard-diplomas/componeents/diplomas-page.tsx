@@ -1,125 +1,112 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+
 import { PageHeader } from "@/shared/components/custom/header-page";
 import { Button } from "@/shared/components/ui/button";
-
-import { DiplomasTable } from "./diplomas-table";
-import useDiplomas from "../hooks/use-diplomas-details";
 import { AppPagination } from "@/shared/components/custom/app-pagination";
 import { GlobalFilters } from "@/shared/components/custom/search-filters";
+
+import { DiplomasTable } from "./diplomas-table";
+import useDiplomas from "../hooks/use-diplomas";
 import { IDiplomas } from "@/shared/types/diplomas";
-// ✅ استيراد التايب بتاعك
 
 export default function DiplomasPage() {
     const router = useRouter();
 
-    const [isMounted, setIsMounted] = useState(false);
-
     const [searchQuery, setSearchQuery] = useState("");
     const [immutabilityFilter, setImmutabilityFilter] = useState("all");
     const [page, setPage] = useState(1);
+
     const ITEMS_PER_PAGE = 10;
 
-    const { data, isFetching, isLoading } = useDiplomas();
+    const { data, isLoading, isError } = useDiplomas();
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+    // 🔥 Normalize data safely
+    const allItems: IDiplomas[] = data?.data ?? [];
 
     const { paginatedData, paginationMeta } = useMemo(() => {
-        // ✅ استخدام IDiplomas[] بدل any[]
-        let allItems: IDiplomas[] = Array.isArray(data) ? data : (data?.data || []);
+        let filtered = [...allItems];
 
         if (searchQuery) {
-            // ✅ استخدام IDiplomas بدل any
-            allItems = allItems.filter((item: IDiplomas) =>
-                item.title?.toLowerCase().includes(searchQuery.toLowerCase())
+            filtered = filtered.filter((item) =>
+                item.title.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
 
         if (immutabilityFilter !== "all") {
-            const checkValue = immutabilityFilter === "immutable"; // true لو immutable، false لو mutable
-            // ✅ استخدام IDiplomas بدل any
-            allItems = allItems.filter((item: IDiplomas) => item.immutable === checkValue);
+            const isImmutable = immutabilityFilter === "immutable";
+            filtered = filtered.filter((item) => item.immutable === isImmutable);
         }
 
-        const total = allItems.length;
+        const total = filtered.length;
         const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
 
-        const startIndex = (page - 1) * ITEMS_PER_PAGE;
-        const endIndex = startIndex + ITEMS_PER_PAGE;
-        const currentData = allItems.slice(startIndex, endIndex);
+        const start = (page - 1) * ITEMS_PER_PAGE;
+
+        const paginated = filtered.slice(start, start + ITEMS_PER_PAGE);
 
         return {
-            paginatedData: currentData,
+            paginatedData: paginated,
             paginationMeta: {
                 page,
                 limit: ITEMS_PER_PAGE,
                 total,
-                totalPages: totalPages === 0 ? 1 : totalPages
-            }
+                totalPages: totalPages || 1,
+            },
         };
-    }, [data, searchQuery, immutabilityFilter, page]);
-
-    const handleSearchChange = (value: string) => {
-        setSearchQuery(value);
-        setPage(1);
-    };
-
-    const handleFilterChange = (value: string) => {
-        setImmutabilityFilter(value);
-        setPage(1);
-    };
+    }, [allItems, searchQuery, immutabilityFilter, page]);
 
     const handleClearFilters = () => {
-        handleSearchChange("");
-        handleFilterChange("all");
+        setSearchQuery("");
+        setImmutabilityFilter("all");
+        setPage(1);
     };
 
-    const pageBreadcrumbs = [
-        { label: "Diplomas" }
-    ];
-
-    if (!isMounted) return null;
+    const breadcrumbs = [{ label: "Diplomas" }];
 
     return (
         <div className="flex flex-col w-full min-h-screen bg-[#f8f9fb]">
-            <PageHeader breadcrumbs={pageBreadcrumbs}>
-                <div className="flex items-center">
-                    <AppPagination
-                        meta={paginationMeta}
-                        onPageChange={(newPage) => setPage(newPage)}
-                        isFetching={false}
-                    />
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button
-                        onClick={() => router.push('/dashboard/diplomas/new')}
-                        className="bg-emerald-500 hover:bg-emerald-600 h-10 text-sm font-medium text-white px-4 py-2 rounded-none"
-                    >
-                        + Add New Diploma
-                    </Button>
-                </div>
+
+            <PageHeader breadcrumbs={breadcrumbs}>
+                <AppPagination
+                    meta={paginationMeta}
+                    onPageChange={setPage}
+                    isFetching={isLoading}
+                />
+
+                <Button
+                    onClick={() => router.push("/dashboard/diplomas/new")}
+                    className="bg-emerald-500 hover:bg-emerald-600 h-10 text-sm font-medium text-white px-4 py-2 rounded-none"
+                >
+                    + Add New Diploma
+                </Button>
             </PageHeader>
 
             <main className="p-8 space-y-6">
+
                 <GlobalFilters
-                    showSearch={true}
+                    showSearch
                     searchQuery={searchQuery}
-                    onSearchChange={handleSearchChange}
+                    onSearchChange={(value) => {
+                        setSearchQuery(value);
+                        setPage(1);
+                    }}
                     searchPlaceholder="Search by title..."
                     dropdowns={[
                         {
                             value: immutabilityFilter,
-                            onChange: handleFilterChange,
+                            onChange: (value) => {
+                                setImmutabilityFilter(value);
+                                setPage(1);
+                            },
                             options: [
                                 { label: "All Diplomas", value: "all" },
                                 { label: "Immutable", value: "immutable" },
                                 { label: "Mutable", value: "mutable" },
-                            ]
-                        }
+                            ],
+                        },
                     ]}
                     onClear={handleClearFilters}
                 />
