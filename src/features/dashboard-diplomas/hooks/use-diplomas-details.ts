@@ -22,6 +22,7 @@ export default function useDiplomas() {
     return useQuery({
         queryKey: ['diplomas'],
         queryFn: fetchAllDiplomas,
+        refetchOnMount: true, 
         staleTime: 10 * 60 * 1000,
     });
 }

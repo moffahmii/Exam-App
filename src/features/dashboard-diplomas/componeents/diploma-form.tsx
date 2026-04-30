@@ -42,14 +42,26 @@ export function DiplomaForm({ initialData, diplomaId }: DiplomaFormProps) {
     });
 
     // --- Handlers ---
+    // داخل DiplomaForm.tsx
+
     const onSubmit = (data: DiplomaField) => {
         if (isEditMode) {
-            editDiploma.mutate(data);
+            editDiploma.mutate(data, {
+                onSuccess: () => {
+                    router.push('/dashboard/diplomas');
+                    router.refresh(); // 👈 بتعمل ريفريش خفي وسريع في الخلفية
+                }
+            });
             return;
         }
-        createDiploma.mutate(data);
-    };
 
+        createDiploma.mutate(data, {
+            onSuccess: () => {
+                router.push('/dashboard/diplomas');
+                router.refresh(); // 👈 بتعمل ريفريش خفي وسريع في الخلفية
+            }
+        });
+    };
     // --- Breadcrumbs Setup ---
     const pageBreadcrumbs = [
         { label: "Diplomas", href: "/dashboard/diplomas" },

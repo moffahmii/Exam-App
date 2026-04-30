@@ -1,3 +1,5 @@
+// use-add-diploma.ts
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createDiploma } from '../apis/add-diploma-api';
 import { DiplomaField } from '@/features/upload-photo/scheme/photo-scheme';
@@ -9,10 +11,9 @@ export function useCreateDiploma() {
         mutationFn: async (data: DiplomaField) => {
             return await createDiploma(data);
         },
-        onSuccess: (res) => {
-            if (res.success) {
-                queryClient.invalidateQueries({ queryKey: ['diplomas'] });
-            }
+        onSuccess: () => {
+            // شيلنا الـ if condition عشان نضمن إن الكاش هيتمسح 100%
+            queryClient.invalidateQueries({ queryKey: ['diplomas'] });
         },
     });
 }
