@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { ExamField } from "../../exams-CRUD/shceme/exam-schem";
+import { ExamField } from "../../../shared/schemas/exam-schem";
 import { updateExamAction } from "../apis/update-exam.api";
 
 export const useEditExam = (examId: string) => {

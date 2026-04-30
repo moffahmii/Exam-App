@@ -1,7 +1,7 @@
 'use server';
 
 import { getNextAuthToken } from "@/shared/utils/auth.util";
-import { ExamField } from "../../exams-CRUD/shceme/exam-schem";
+import { ExamField } from "../../../shared/schemas/exam-schem";
 import { revalidatePath } from "next/cache";
 import { ApiResponse } from "@/shared/types/diplomas";
 import { withPermission } from "@/shared/utils/auth-action";

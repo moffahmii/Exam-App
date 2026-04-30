@@ -10,7 +10,7 @@ import { Button } from '@/shared/components/ui/button';
 import { ImageUploadField } from '@/features/upload-photo/components/upload-photo';
 import { PageHeader } from '@/shared/components/custom/header-page';
 import { useRouter } from 'next/navigation';
-import { ExamField, ExamSchema } from '../../exams-CRUD/shceme/exam-schem';
+import { ExamField, ExamSchema } from '../../../shared/schemas/exam-schem';
 import { useCreateExam } from '../hooks/use-add-exam';
 import { useEditExam } from '../hooks/use-update-exam';
 import useDiplomas from '@/features/dashboard-diplomas/hooks/use-diplomas';

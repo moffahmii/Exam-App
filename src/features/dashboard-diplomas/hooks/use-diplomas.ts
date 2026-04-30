@@ -1,5 +1,5 @@
 import { DiplomasApiResponse, DiplomasPayload } from '@/shared/types/diplomas';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
 export const fetchAllDiplomas = async (): Promise<DiplomasPayload | null> => {
@@ -25,9 +25,7 @@ export default function useDiplomas() {
     return useQuery({
         queryKey: ['diplomas'],
         queryFn: fetchAllDiplomas,
-        enabled: status === "authenticated",
-        refetchOnMount: true,
-        retry: 2,
-        staleTime: 10 * 60 * 1000,
+        placeholderData: keepPreviousData,
+
     });
 }
