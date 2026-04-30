@@ -53,7 +53,7 @@ export default function ExamDetailsPage({ params }: { params: { id: string } }) 
     };
 
     return (
-        <div className="h-auto bg-gray-100 min-h-screen">
+        <div className="h-auto bg-gray-100 w-full min-h-screen">
             {/* HEADER */}
             <PageHeader
                 breadcrumbs={[
@@ -193,12 +193,3 @@ export default function ExamDetailsPage({ params }: { params: { id: string } }) 
     );
 }
 
-// ✅ مكون فرعي صغير لزيادة الـ Clean Code في العرض
-function InfoSection({ label, value }: { label: string; value: string }) {
-    return (
-        <div>
-            <h3 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">{label}</h3>
-            <p className="text-sm font-medium text-gray-900">{value}</p>
-        </div>
-    );
-}

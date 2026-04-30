@@ -17,18 +17,16 @@ export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProp
     const { data: questionsList = [], isLoading, isError } = useExamQuestions(examId);
 
     return (
-        <div className="bg-white w-full">
+        <div className="bg-white w-full h-full">
 
             {/* 1. Header Section */}
             <div className="bg-blue-600 h-12 px-4 flex justify-between items-center text-white">
-
                 <h2 className="font-semibold text-base tracking-wide">
                     Exam Questions
                 </h2>
-
                 <Link
                     href={`/dashboard/questions/add-bulk/${examId}`}
-                    className="bg-yellow-400 text-white px-2 py-1.5  text-sm font-medium"
+                    className=" text-white px-2 py-1.5  text-sm font-medium"
                 >
                     + Add Questions
                 </Link>
@@ -86,7 +84,7 @@ export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProp
                             <TableCell className="font-medium text-gray-800">
                                 {question.text}
                             </TableCell>
-                            <TableCell className="text-right">
+                            <TableCell className="text-left">
                                 <QuestionActions
                                     questionId={question.id}
                                     examId={examId}

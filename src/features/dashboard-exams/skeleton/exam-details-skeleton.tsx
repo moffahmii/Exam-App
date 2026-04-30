@@ -2,7 +2,7 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export function ExamDetailsSkeleton() {
     return (
-        <div className="h-auto bg-gray-100 min-h-screen animate-pulse">
+        <div className="h-auto w-full bg-gray-100 min-h-screen animate-pulse">
             {/* Header Skeleton */}
             <div className="w-full h-32 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
                 <div className="space-y-3">

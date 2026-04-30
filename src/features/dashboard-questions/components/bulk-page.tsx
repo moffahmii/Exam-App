@@ -87,7 +87,7 @@ export default function BulkPage({ params }: PageProps) {
     };
 
     return (
-        <div className="h-auto min-h-screen pb-10">
+        <div className="h-auto w-full min-h-screen pb-10">
             {/* ===== HEADER SECTION ===== */}
             <PageHeader
                 breadcrumbs={[

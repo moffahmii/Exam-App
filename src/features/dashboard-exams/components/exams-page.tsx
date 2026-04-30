@@ -76,7 +76,7 @@ export function ExamsPage() {
     ];
 
     return (
-        <div className="flex flex-col w-full min-h-screen bg-[#f8f9fb]">
+        <div className="flex flex-col w-7xl min-h-screen bg-[#f8f9fb]">
 
             <PageHeader breadcrumbs={pageBreadcrumbs}>
                 <div className="flex items-center">
@@ -89,7 +89,6 @@ export function ExamsPage() {
 
                 <Link
                     href="/dashboard/exams/new"
-                    // استخدام rounded-none للحفاظ على التصميم الشارب
                     className="ml-auto h-10 px-6 bg-emerald-500 hover:bg-emerald-600 transition-colors text-white flex items-center justify-center shrink-0 rounded-none"
                 >
                     <Plus className="w-4 h-4 mr-2 stroke-[3px] text-white" />
