@@ -26,7 +26,7 @@ export default function UserInfoForm() {
                 <div className='flex gap-4'>
                     {/* First Name */}
                     <div className="space-y-2 flex-1">
-                        <Label htmlFor="firstName" className="text-sm font-medium text-slate-700">
+                        <Label htmlFor="firstName" className="text-sm font-medium text-gray-800">
                             First Name
                         </Label>
                         <Input
@@ -39,7 +39,7 @@ export default function UserInfoForm() {
                     </div>
                     {/* Last Name */}
                     <div className="space-y-2 flex-1">
-                        <Label htmlFor="lastName" className="text-sm font-medium text-slate-700 font-sans">
+                        <Label htmlFor="lastName" className="text-sm font-medium text-gray-800 ">
                             Last Name
                         </Label>
                         <Input
@@ -53,7 +53,7 @@ export default function UserInfoForm() {
                 </div>
                 {/* Username */}
                 <div className="space-y-2">
-                    <Label htmlFor="username" className="text-sm font-medium text-slate-700 font-sans">
+                    <Label htmlFor="username" className="text-sm font-medium text-gray-800">
                         Username
                     </Label>
                     <Input
@@ -66,7 +66,7 @@ export default function UserInfoForm() {
                 </div>
                 {/* Phone Number */}
                 <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-sm font-medium text-slate-700 font-sans">
+                    <Label htmlFor="phone" className="text-sm font-medium text-gray-800">
                         Phone Number
                     </Label>
                     <Input
@@ -82,7 +82,7 @@ export default function UserInfoForm() {
             {/* Next Step Button */}
             <Button
                 type="submit"
-                className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-sm"
+                className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all "
             >
                 Next Step
             </Button>

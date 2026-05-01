@@ -47,7 +47,8 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
 
     return (
         <div className="overflow-hidden bg-white">
-            <Table>
+            {/* تم إضافة table-fixed w-full هنا */}
+            <Table className="table-fixed w-full">
                 <TableHeader className="bg-blue-600">
                     <TableRow>
                         <TableHead className="text-white w-25">Image</TableHead>
@@ -97,8 +98,9 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
                                         {item.title}
                                     </TableCell>
 
-                                    <TableCell className="text-gray-500 text-sm font-normal max-w-125">
-                                        <p className="line-clamp-2 overflow-hidden">
+                                    {/* تم إضافة max-w-0 و break-words w-full هنا */}
+                                    <TableCell className="text-gray-500 text-sm font-normal max-w-0">
+                                        <p className="line-clamp-2 overflow-hidden break-words w-full">
                                             {item.description}
                                         </p>
                                     </TableCell>

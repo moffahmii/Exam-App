@@ -1,5 +1,5 @@
 // في ملف الـ page.tsx الأساسي
-import BulkPage from '@/features/dashboard-questions/components/bulk-page'
+import BulkPage from '@/features/dashboard-questions/components/bulk-page';
 import React from 'react'
 
 interface PageProps {

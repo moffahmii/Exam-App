@@ -31,7 +31,13 @@ export default function OTPForm({ email }: { email: string }) {
 
     const onSubmit = (data: OTPFormValues) => {
         if (!email) return;
-        mutate({ email, code: data.otp });
+
+        const cleanCode = data.otp.replace(/\s/g, ""); 
+
+        console.log("RAW OTP:", data.otp);
+        console.log("CLEAN OTP:", cleanCode);
+
+        mutate({ email, code: cleanCode });
     };
 
     const handleResend = () => {
@@ -55,7 +61,7 @@ export default function OTPForm({ email }: { email: string }) {
                         <Field data-invalid={fieldState.invalid} className="flex flex-col items-center">
                             <InputOTP
                                 maxLength={6}
-                                {...field} 
+                                {...field}
                             >
                                 <div className="flex gap-2 justify-center w-full">
                                     {[0, 1, 2, 3, 4, 5].map((i) => (

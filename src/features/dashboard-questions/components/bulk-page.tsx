@@ -174,7 +174,7 @@ export default function BulkPage({ params }: PageProps) {
                             </div>
 
                             {/* Tabs */}
-                            <div className="flex items-end overflow-x-auto bg-gray-50 w-full scrollbar-thin border-b border-gray-200">
+                            <div className="flex items-end overflow-x-auto bg-gray-50 w-full border-b border-gray-200">
                                 {questions.map((q, index) => {
                                     const isActive = activeQuestionIndex === index;
                                     return (
