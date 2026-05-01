@@ -34,9 +34,7 @@ export default function OTPForm({ email }: { email: string }) {
 
         const cleanCode = data.otp.replace(/\s/g, ""); 
 
-        console.log("RAW OTP:", data.otp);
-        console.log("CLEAN OTP:", cleanCode);
-
+  
         mutate({ email, code: cleanCode });
     };
 
@@ -82,7 +80,7 @@ export default function OTPForm({ email }: { email: string }) {
                 />
             </FieldGroup>
 
-            <div className="text-center text-slate-600 font-medium py-2">
+            <div className="text-center text-geay-600 font-medium py-2">
                 {canResend ? (
                     <button
                         type="button"
@@ -97,7 +95,6 @@ export default function OTPForm({ email }: { email: string }) {
                 )}
             </div>
 
-            {/* عرض أخطاء السيرفر (API Errors) */}
             {error && <ErrorAlert message={error.message} />}
 
             <Button

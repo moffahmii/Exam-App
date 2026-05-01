@@ -47,7 +47,7 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
 
     return (
         <div className="overflow-hidden bg-white">
-            {/* تم إضافة table-fixed w-full هنا */}
+   
             <Table className="table-fixed w-full">
                 <TableHeader className="bg-blue-600">
                     <TableRow>
@@ -60,7 +60,6 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
                     </TableRow>
                 </TableHeader>
 
-                {/* 🔥 تم تعديل الشرط ليكون خارج الـ TableBody */}
                 {isLoading ? (
                     <TableSkeleton />
                 ) : (
