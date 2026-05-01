@@ -51,7 +51,7 @@ export default function DiplomaDetailsPage({ params }: { params: { id: string } 
     };
 
     return (
-        <div className="h-auto bg-gray-100 min-h-screen">
+        <div className="h-auto w-full bg-gray-100 min-h-screen">
             <PageHeader breadcrumbs={pageBreadcrumbs}>
                 <div className="flex items-center justify-between w-full">
                     <h2 className="text-black font-semibold font-inter text-xl">

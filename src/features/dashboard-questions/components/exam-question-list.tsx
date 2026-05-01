@@ -26,7 +26,7 @@ export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProp
                 </h2>
                 <Link
                     href={`/dashboard/questions/add-bulk/${examId}`}
-                    className=" text-white px-2 py-1.5  text-sm font-medium"
+                    className=" text-white px-1 py-1.5  text-sm font-medium"
                 >
                     + Add Questions
                 </Link>

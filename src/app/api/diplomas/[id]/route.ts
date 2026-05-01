@@ -5,7 +5,6 @@ export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
-    // 1. استخراج الـ ID
     const { id } = await params;
 
     const token = await getToken({
@@ -18,7 +17,6 @@ export async function GET(
     }
 
     try {
-        // 3. جلب الداتا الحقيقية من الباك إند بتاعكم
         const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/diplomas/${id}`,
             {
@@ -36,7 +34,6 @@ export async function GET(
              );
         }
 
-        // 4. إرجاع الداتا للـ Frontend
         const data = await response.json();
         return NextResponse.json(data);
         

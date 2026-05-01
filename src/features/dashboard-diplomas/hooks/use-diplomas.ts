@@ -1,31 +1,27 @@
 import { DiplomasApiResponse, DiplomasPayload } from '@/shared/types/diplomas';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 
-export const fetchAllDiplomas = async (): Promise<DiplomasPayload | null> => {
-    try {
-        const response = await fetch('/api/diplomas?limit=20');
-        const result: DiplomasApiResponse = await response.json();
+// شيلنا إرجاع الـ null من الـ Promise
+export const fetchAllDiplomas = async (): Promise<DiplomasPayload> => {
+    // ضفنا no-store عشان نضمن إن المتصفح مش مخزن استجابة فاضية بالخطأ
+    const response = await fetch('/api/diplomas?limit=20', {
+        cache: 'no-store'
+    });
+    const result: DiplomasApiResponse = await response.json();
 
-        if (!response.ok || !result.status) {
-            throw new Error(result.message || "Failed to fetch diplomas");
-        }
-
-        return result.payload;
-    } catch (error) {
-        console.error('Error fetching diplomas:', error);
-        return null;
+    if (!response.ok || !result.status) {
+        // رمي Error هنا بيسمح لـ React Query إنه يلقطه ويتعامل معاه
+        throw new Error(result.message || "Failed to fetch diplomas");
     }
+
+    return result.payload;
 };
 
-
 export default function useDiplomas() {
-    const { data: session, status } = useSession();
-
     return useQuery({
-        queryKey: ['diplomas'],
+        // يفضل تخلي الـ Key مخصص أكتر عشان ميحصلش تداخل مع كاش صفحة تانية
+        queryKey: ['diplomas', 'all'],
         queryFn: fetchAllDiplomas,
         placeholderData: keepPreviousData,
-
     });
 }

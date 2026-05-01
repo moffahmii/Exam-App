@@ -59,61 +59,61 @@ export function DiplomasTable({ data, isLoading }: DiplomasTableProps) {
                     </TableRow>
                 </TableHeader>
 
-                <TableBody>
-                    {/* 🔥 Loading state داخل TableBody */}
-                    {isLoading ? (
-                        <TableRow>
-                            <TableCell colSpan={4} className="p-0">
-                                <TableSkeleton />
-                            </TableCell>
-                        </TableRow>
-                    ) : sortedData.length === 0 ? (
-                        <TableRow>
-                            <TableCell
-                                colSpan={4}
-                                className="h-32 text-center text-gray-500 font-medium"
-                            >
-                                No diplomas found.
-                            </TableCell>
-                        </TableRow>
-                    ) : (
-                        sortedData.map((item) => (
-                            <TableRow key={item.id} className="h-25">
-                                <TableCell className="p-2.5">
-                                    <div className="relative w-25 h-25">
-                                        {item.image ? (
-                                            <Image
-                                                src={item.image}
-                                                alt={item.title}
-                                                fill
-                                                className="object-cover"
-                                            />
-                                        ) : (
-                                            <span className="text-[10px] text-gray-400 font-medium flex items-center justify-center h-full w-full bg-gray-100">
-                                                No Image
-                                            </span>
-                                        )}
-                                    </div>
-                                </TableCell>
-
-                                <TableCell className="font-normal text-sm text-gray-800">
-                                    {item.title}
-                                </TableCell>
-
-                                <TableCell className="text-gray-500 text-sm font-normal max-w-125">
-                                    <p className="line-clamp-2 overflow-hidden">{item.description}</p>
-                                </TableCell>
-
-                                <TableCell className="text-right">
-                                    <DiplomaActions
-                                        diplomaTitle={item.title}
-                                        diplomaId={item.id}
-                                    />
+                {/* 🔥 تم تعديل الشرط ليكون خارج الـ TableBody */}
+                {isLoading ? (
+                    <TableSkeleton />
+                ) : (
+                    <TableBody>
+                        {sortedData.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={4}
+                                    className="h-32 text-center text-gray-500 font-medium"
+                                >
+                                    No diplomas found.
                                 </TableCell>
                             </TableRow>
-                        ))
-                    )}
-                </TableBody>
+                        ) : (
+                            sortedData.map((item) => (
+                                <TableRow key={item.id} className="h-25">
+                                    <TableCell className="p-2.5">
+                                        <div className="relative w-25 h-25">
+                                            {item.image ? (
+                                                <Image
+                                                    src={item.image}
+                                                    alt={item.title}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            ) : (
+                                                <span className="text-[10px] text-gray-400 font-medium flex items-center justify-center h-full w-full bg-gray-100">
+                                                    No Image
+                                                </span>
+                                            )}
+                                        </div>
+                                    </TableCell>
+
+                                    <TableCell className="font-normal text-sm text-gray-800">
+                                        {item.title}
+                                    </TableCell>
+
+                                    <TableCell className="text-gray-500 text-sm font-normal max-w-125">
+                                        <p className="line-clamp-2 overflow-hidden">
+                                            {item.description}
+                                        </p>
+                                    </TableCell>
+
+                                    <TableCell className="text-right">
+                                        <DiplomaActions
+                                            diplomaTitle={item.title}
+                                            diplomaId={item.id}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                )}
             </Table>
         </div>
     );
