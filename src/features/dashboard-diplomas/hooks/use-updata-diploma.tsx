@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { editDiploma } from '../apis/edit-diploma';
-import { DiplomaField } from '@/features/upload-photo/scheme/photo-scheme';
+import { DiplomaField } from '@/shared/schemas/photo-scheme';
 
 export function useEditDiploma(diplomaId: string) {
     const queryClient = useQueryClient();

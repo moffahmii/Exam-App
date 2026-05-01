@@ -8,7 +8,6 @@ interface ExamProgressProps {
 }
 
 export function ExamProgress({ currentIndex, total, diplomaName, examTitle }: ExamProgressProps) {
-    // تجهيز النص، لو الأسماء مبعوتة هيعرضهم، لو لأ هيعرض "Quiz Session" كقيمة افتراضية
     const progressTitle = diplomaName && examTitle
         ? `${diplomaName} - ${examTitle} Quiz`
         : "Quiz Session";

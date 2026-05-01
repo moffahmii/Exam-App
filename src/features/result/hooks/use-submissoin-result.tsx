@@ -5,7 +5,7 @@ import { getSubmissionResult } from "../apis/result.api";
 import { SubmissionData } from "@/shared/types/sub,ission";
 
 export function useSubmissionResult(submissionId: string) {
-    return useQuery<SubmissionData, Error>({ // 👈 حددنا نوع الداتا ونوع الخطأ
+    return useQuery<SubmissionData, Error>({ 
         queryKey: ["submission-result", submissionId],
         queryFn: () => getSubmissionResult(submissionId),
         enabled: !!submissionId,

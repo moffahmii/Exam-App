@@ -11,7 +11,7 @@ import {
 
 export default function AppSideBar() {
     return (
-        <Sidebar className="">
+        <Sidebar className="w-90.5">
             <SidebarHeader className="p-0">
                 <LogoSection />
             </SidebarHeader>

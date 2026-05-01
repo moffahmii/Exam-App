@@ -39,7 +39,6 @@ export default function OTPForm({ email }: { email: string }) {
         resendCode({ email }, {
             onSuccess: () => {
                 resetTimer();
-                // بنعمل reset للفورم لما يطلب كود جديد
                 form.reset();
             }
         });
@@ -54,10 +53,9 @@ export default function OTPForm({ email }: { email: string }) {
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid} className="flex flex-col items-center">
-                            {/* الربط المباشر بـ field.value و field.onChange */}
                             <InputOTP
                                 maxLength={6}
-                                {...field} // ده بيربط الـ value والـ onChange والـ onBlur أوتوماتيك
+                                {...field} 
                             >
                                 <div className="flex gap-2 justify-center w-full">
                                     {[0, 1, 2, 3, 4, 5].map((i) => (
@@ -68,7 +66,6 @@ export default function OTPForm({ email }: { email: string }) {
                                 </div>
                             </InputOTP>
 
-                            {/* عرض رسالة الخطأ من السكيما */}
                             {fieldState.error && (
                                 <div className="mt-2 text-center w-full">
                                     <FieldError errors={[fieldState.error]} />
@@ -100,7 +97,6 @@ export default function OTPForm({ email }: { email: string }) {
             <Button
                 type="submit"
                 variant="ghost"
-                // الزرار هيفضل disabled لو في pending أو لو الفورم لسه مكملتش الـ 6 أرقام (حسب السكيما)
                 disabled={isPending || !email || !form.formState.isValid}
                 className="w-full h-10 bg-transparent hover:bg-slate-50 border-none shadow-none text-black font-medium transition-colors"
             >

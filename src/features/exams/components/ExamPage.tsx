@@ -1,6 +1,7 @@
 'use client';
 
-import { useDiplomaExams } from '@/features/exams/hooks/use-diploma-exams';
+// استدعينا الهوك بالاسم الجديد
+import { useDiplomaDetails } from '@/features/exams/hooks/use-diploma-exams';
 import ExamCard from '@/features/exams/components/ExamCard';
 import LoadingExams from '@/features/exams/components/ExamSkeleton';
 import { BookOpenCheck } from 'lucide-react';
@@ -12,20 +13,23 @@ interface ExamPageContentProps {
 }
 
 export default function ExamPageContent({ id }: ExamPageContentProps) {
-    const { data: exams, isLoading, isError } = useDiplomaExams(id);
+    // 🔥 بنسحب الداتا اللي الهوك رجعها
+    const { data, isLoading, isError } = useDiplomaDetails(id);
 
-    const diplomaTitle = exams?.[0]?.diploma?.title;
+    // 🔥 فصلنا الاسم عن الامتحانات
+    const diplomaTitle = data?.title || 'Loading...';
+    const exams = data?.exams || [];
 
     const breadcrumbs = [
         { label: 'Diplomas', href: '/' },
-        { label: diplomaTitle ?? 'Loading...' }
+        { label: diplomaTitle }
     ];
 
     if (isLoading) {
         return (
             <main className="min-h-screen bg-gray-50">
                 <WebsiteHeader
-                    title="Loading..."
+                    title={diplomaTitle}
                     icon={<BookOpenCheck size={32} />}
                     breadcrumbs={breadcrumbs}
                 />
@@ -36,7 +40,7 @@ export default function ExamPageContent({ id }: ExamPageContentProps) {
         );
     }
 
-    if (isError || !exams) {
+    if (isError) {
         return (
             <main className="min-h-screen bg-gray-50">
                 <WebsiteHeader
@@ -54,25 +58,26 @@ export default function ExamPageContent({ id }: ExamPageContentProps) {
     return (
         <main className="min-h-screen bg-gray-50">
             <WebsiteHeader
-                title={diplomaTitle ?? 'Diploma Exams'}
+                title={diplomaTitle}
                 icon={<BookOpenCheck size={32} />}
                 breadcrumbs={breadcrumbs}
             />
 
-            <div className="container mx-auto max-w-7xl p-4">
-                <div className="bg-white p-6 space-y-4  ">
+            <div className="container mx-auto max-w-7xl px-4">
+                <div className="bg-white p-6 space-y-4">
                     {exams.length > 0 ? (
                         exams.map((exam: IExam) => (
                             <ExamCard key={exam.id} exam={exam} diplomaId={id} />
                         ))
                     ) : (
                         <div className="text-center py-10 text-gray-500">
-                            No exams available.
+                            {/* 🔥 استخدمنا الاسم هنا كمان عشان الرسالة تكون مخصصة */}
+                            No exams available for {diplomaTitle}.
                         </div>
                     )}
 
-                    <div className="text-center py-4 border-t border-gray-100">
-                        <p className="text-gray-400 font-mono text-sm">
+                    <div className="text-center py-2">
+                        <p className="text-gray-500text-sm">
                             End of list
                         </p>
                     </div>

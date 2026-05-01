@@ -1,11 +1,15 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-// في ملف exam-schem.ts تأكد إنه مكتوب كده:
 export const ExamSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().optional(),
-    image: z.string().optional(),
-    duration: z.coerce.number().min(1, "Duration is required"), // 🔥 التغيير هنا
-    diplomaId: z.string().min(1, "Diploma is required"),
+    title: z.string().min(3, "Title is too short"),
+    description: z.string().min(10, "Description is too short"),
+    image: z.string().min(1, "Image is required"),
+
+    duration: z.coerce.number().pipe(
+        z.number().min(1, "Duration must be at least 1")
+    ),
+
+    diplomaId: z.string().min(1, "Diploma ID is required"),
 });
+
 export type ExamField = z.infer<typeof ExamSchema>;

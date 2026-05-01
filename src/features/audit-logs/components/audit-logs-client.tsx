@@ -4,7 +4,6 @@ import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Trash2 } from 'lucide-react';
 import { useAuditLogs } from '@/features/audit-logs/hooks/use-auditlogs';
-import { AuditLog } from '@/shared/types/audit-logs';
 import { AuditLogsTableSkeleton } from '@/features/audit-logs/components/audit-skeleton';
 import AuditLogsTable from '@/features/audit-logs/components/audit-logs-table';
 import { PageHeader } from '@/shared/components/custom/header-page';
@@ -95,7 +94,7 @@ export function AuditLogsPageClient() {
                 </div>
             </PageHeader>
 
-            <div className="p-4">
+            <div className="px-4">
                 <GlobalFilters
                     showSearch searchQuery={localFilters.search}
                     onSearchChange={(v) => setLocalFilters(prev => ({ ...prev, search: v }))}

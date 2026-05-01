@@ -48,7 +48,7 @@ export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProp
                 </TableHeader>
 
                 <TableBody>
-                    {/* حالة التحميل */}
+                    {/* Loading State */}
                     {isLoading && (
                         <TableRow>
                             <TableCell colSpan={2} className="h-24 text-center">
@@ -60,7 +60,7 @@ export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProp
                         </TableRow>
                     )}
 
-                    {/* حالة الخطأ */}
+                    {/* Error State */}
                     {isError && (
                         <TableRow>
                             <TableCell colSpan={2} className="h-24 text-center text-red-500">
@@ -69,7 +69,7 @@ export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProp
                         </TableRow>
                     )}
 
-                    {/* حالة عدم وجود بيانات */}
+                    {/* Empty State */}
                     {!isLoading && !isError && questionsList.length === 0 && (
                         <TableRow>
                             <TableCell colSpan={2} className="h-24 text-center text-gray-500">
@@ -78,7 +78,7 @@ export function ExamQuestionsList({ examId, isImmutable }: ExamQuestionsListProp
                         </TableRow>
                     )}
 
-                    {/* حالة عرض البيانات */}
+                    {/* Data State */}
                     {!isLoading && !isError && questionsList.length > 0 && questionsList.map((question: IQuestion) => (
                         <TableRow key={question.id} className="hover:bg-gray-50/50">
                             <TableCell className="font-medium text-gray-800">

@@ -14,12 +14,14 @@ import { useExamDetails } from '@/features/dashboard-exams/hooks/use-exam-detail
 import { useAddBulkQuestions } from '../hooks/use-add-bulk';
 import QuestionFromBody from './form-body';
 import { QuestionsBulkFormValue } from '@/shared/types/questions';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface PageProps {
     params: Promise<{ id: string }>;
 }
 
 export default function BulkPage({ params }: PageProps) {
+    const queryClient = useQueryClient()
     const router = useRouter();
     const resolvedParams = use(params);
     const examIdFromUrl = resolvedParams.id;
@@ -72,6 +74,8 @@ export default function BulkPage({ params }: PageProps) {
 
         addBulkQuestions({ examId: data.examId, payload }, {
             onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["exam-questions", data.examId] });
+                queryClient.invalidateQueries({ queryKey: ["exam-details", data.examId] });
                 router.push(`/dashboard/exams/${data.examId}`);
             },
         });
@@ -178,7 +182,7 @@ export default function BulkPage({ params }: PageProps) {
                                             key={q.id}
                                             onClick={() => setActiveQuestionIndex(index)}
                                             className={`relative h-11 flex items-center justify-center shrink-0 w-32 cursor-pointer transition-colors ${isActive
-                                                ? "bg-white border-x border-t border-blue-200 text-blue-600 z-10 translate-y-px font-bold"
+                                                ? "bg-white border-x border-t border-blue-600 text-blue-600 z-10 translate-y-px font-bold"
                                                 : "border-l border-transparent text-gray-600 hover:bg-gray-100"
                                                 }`}
                                         >
@@ -217,7 +221,7 @@ export default function BulkPage({ params }: PageProps) {
                                     <Plus size={18} />
                                 </Button>
 
-                                {/* مساحة فارغة لتكملة الخط السفلي للتابس */}
+                                {/* Separator */}
                                 <div className="flex-1 h-11 border-b border-gray-200"></div>
                             </div>
 

@@ -16,9 +16,8 @@ export function Stepper() {
 
     const step = getStep();
 
-    // دالة مساعدة لرسم الخطوط المقطعة والملونة
     const RenderLine = ({ index }: { index: number }) => (
-        <div className="flex-1 mx-2 relative h-[2px]">
+        <div className="flex-1 mx-2 relative h-0.5">
             <div
                 className="absolute inset-0 h-full w-full"
                 style={{

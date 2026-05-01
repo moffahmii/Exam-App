@@ -38,10 +38,7 @@ const capitalize = (str: string) => {
 };
 
 export default function AuditLogDetailsClient({ log }: AuditLogDetailsClientProps) {
-    // حالة التحكم في فتح المودال
     const [openDelete, setOpenDelete] = useState(false);
-
-    // استدعاء هوك المسح
     const { mutate, isPending } = useDeleteAuditLog();
 
     const title = `${capitalize(log.category)} ${capitalize(log.action)} By ${log.actorUsername}`;

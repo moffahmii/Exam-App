@@ -13,7 +13,7 @@ import { Button } from '@/shared/components/ui/button';
 import { PageHeader } from '@/shared/components/custom/header-page';
 
 import { ImageUploadField } from '@/features/upload-photo/components/upload-photo';
-import { DiplomaField, DiplomaScheme } from '@/features/upload-photo/scheme/photo-scheme';
+import { DiplomaField, DiplomaScheme } from '@/shared/schemas/photo-scheme';
 import { useEditDiploma } from '../hooks/use-updata-diploma';
 import { useCreateDiploma } from '../hooks/use-add-diploma';
 

@@ -1,7 +1,6 @@
 'use server';
 
 export async function verifyEmailAction(payload: any) {
-    // التريكة هنا: بنشوف هل اللي جاي string ولا object، وبنطلع منه الإيميل غصب عنه
     const userEmail = typeof payload === 'string' ? payload : payload.email;
     if (!userEmail) {
         throw new Error("Email is required");

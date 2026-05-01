@@ -1,6 +1,6 @@
 'use server';
 
-import { DiplomaField } from '@/features/upload-photo/scheme/photo-scheme';
+import { DiplomaField } from '@/shared/schemas/photo-scheme';
 import { ApiResponse } from '@/shared/types/diplomas';
 import { getNextAuthToken } from '@/shared/utils/auth.util';
 import { revalidatePath } from "next/cache";

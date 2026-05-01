@@ -1,20 +1,29 @@
 "use client";
 
-import React from "react";
 import { Pie, PieChart, Cell } from "recharts";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/components/ui/chart";
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/shared/components/ui/chart";
 
 interface ResultsChartProps {
     correctAnswers: number;
     wrongAnswers: number;
 }
 
+/**
+ * ResultsChart component displays a visual breakdown of exam results using a donut chart.
+ */
 export function ResultsChart({ correctAnswers, wrongAnswers }: ResultsChartProps) {
+    // Data structure for Recharts Pie component
     const chartData = [
         { name: "Correct", value: correctAnswers, fill: "rgba(0, 188, 125, 1)" },
         { name: "Incorrect", value: wrongAnswers, fill: "rgba(239, 68, 68, 1)" },
     ];
 
+    // Configuration for the shadcn/ui chart wrapper
     const chartConfig = {
         correct: { label: "Correct", color: "rgba(0, 188, 125, 1)" },
         incorrect: { label: "Incorrect", color: "rgba(239, 68, 68, 1)" },
@@ -27,7 +36,10 @@ export function ResultsChart({ correctAnswers, wrongAnswers }: ResultsChartProps
                 className="mx-auto aspect-square w-full"
             >
                 <PieChart>
-                    <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                    <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideLabel />}
+                    />
                     <Pie
                         data={chartData}
                         dataKey="value"
@@ -43,7 +55,7 @@ export function ResultsChart({ correctAnswers, wrongAnswers }: ResultsChartProps
                 </PieChart>
             </ChartContainer>
 
-            {/* مفتاح الرسم البياني */}
+            {/* Legend section for explicit score counts */}
             <div className="flex flex-col gap-3 mt-8 text-sm font-bold text-black">
                 <div className="flex items-center gap-3">
                     <div className="w-4 h-4 bg-[#00c46a]" />

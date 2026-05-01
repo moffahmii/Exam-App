@@ -64,13 +64,11 @@ export function WebsiteHeader({ title, icon, breadcrumbs }: WebsiteHeaderProps) 
             )}
 
             <div className="p-6">
-                {/* استخدام items-stretch ليأخذ الزرار والبانر نفس الارتفاع تلقائياً */}
                 <div className="flex items-stretch gap-2">
                     {!isHomePage && (
                         <button
                             onClick={() => router.back()}
-                            // تم ضبط العرض ليكون 36px (w-[36px]) والارتفاع ليطابق البانر 77px (h-[77px])
-                            className="flex-shrink-0 w-[36px] h-[77px] flex items-center justify-center border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition-colors"
+                            className="shrink-0 w-9 h-19 flex items-center justify-center border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition-colors"
                         >
                             <ChevronLeft size={24} />
                         </button>

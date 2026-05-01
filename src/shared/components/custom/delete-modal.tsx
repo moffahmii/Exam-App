@@ -44,12 +44,11 @@ export function GlobalDeleteModal({
                         </div>
                     </div>
 
-                    {/* Text Section - التعديل هنا لضبط المساحات */}
                     <div className="w-full text-center space-y-3">
-                        <h3 className="text-red-600 text-lg font-bold leading-tight break-words px-2">
+                        <h3 className="text-red-600 text-lg font-bold leading-tight wrap-break-words px-2">
                             {title}
                         </h3>
-                        <p className="text-sm text-gray-500 leading-relaxed break-words px-4">
+                        <p className="text-sm text-gray-500 leading-relaxed wrap-break-words px-4">
                             {description}
                         </p>
                     </div>

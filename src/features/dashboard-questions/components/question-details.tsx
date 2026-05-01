@@ -104,7 +104,7 @@ export function QuestionDetails({ questionId }: QuestionDetailsProps) {
 
             <div className="max-w-7xl mx-auto p-6 flex flex-col gap-6">
                 <div className="bg-white border shadow-sm overflow-hidden">
-                    <div className="bg-blue-600 text-white p-3 font-semibold h-[50px] flex items-center px-6">
+                    <div className="bg-blue-600 text-white p-3 font-semibold h-12.5 flex items-center px-6">
                         Question Information
                     </div>
                     <div className="p-6 space-y-6">
@@ -126,7 +126,7 @@ export function QuestionDetails({ questionId }: QuestionDetailsProps) {
                 </div>
             </div>
 
-            {/* استدعاء المودال كمكون وتمرير البيانات */}
+            {/* Delete Modal */}
             <GlobalDeleteModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

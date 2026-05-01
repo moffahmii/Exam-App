@@ -40,9 +40,9 @@ export const GlobalFilters = React.memo(function GlobalFilters({
     const [isVisible, setIsVisible] = useState(true);
 
     return (
-        <div className="w-full bg-white mb-6">
+        <div className="w-full bg-white">
             {/* Header (Always Visible) */}
-            <div className="bg-[#2563eb] flex justify-between items-center px-4 py-3 text-white">
+            <div className="bg-[#2563eb] flex justify-between items-center px-4 py-4 text-white">
                 <div className="flex items-center gap-2 text-sm font-medium">
                     <SlidersHorizontal className="w-4 h-4" />
                     <span>Search & Filters</span>

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { CircleQuestionMark, HelpCircle } from "lucide-react";
+import { CircleHelp } from "lucide-react";
 
 import CircularTimer from "./CircularTimer";
 import { ExamNavigation } from "./ExamNavigation";
@@ -12,8 +12,11 @@ import { useSubmitExam } from "../hooks/use-submit-exam";
 import { AnswersForm, ExamFormProps } from "@/shared/types/exam-quetions-site";
 import { WebsiteHeader } from "@/shared/components/custom/website-header";
 
-// 💡 استدعي الجلوبال هيدر بتاعك (تأكد من المسار الصح عندك)
-
+/**
+ * ExamForm Component
+ * Manages the multi-step exam process, including question navigation,
+ * timer integration, and final submission.
+ */
 export default function ExamForm({
     examId,
     questions,
@@ -25,6 +28,7 @@ export default function ExamForm({
     const { sendSubmission, isSubmitting, error: submitError } = useSubmitExam();
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    // Initialize form with default values for tracking answers and start time
     const { handleSubmit, watch, control } = useForm<AnswersForm>({
         defaultValues: {
             examId,
@@ -42,7 +46,6 @@ export default function ExamForm({
         sendSubmission(data.examId, data.answers);
     };
 
-    // 💡 تجهيز الداتا للجلوبال هيدر
     const breadcrumbsData = [
         { label: "Diplomas", href: "/diplomas" },
         { label: diplomaName || "Diploma Details", href: `/diplomas/${diplomaId}` },
@@ -50,25 +53,23 @@ export default function ExamForm({
     ];
 
     const HeaderIcon = (
-        <CircleQuestionMark size={45} className="text-white" strokeWidth={2} />
+        <CircleHelp size={45} className="text-white" strokeWidth={2} />
     );
 
     return (
-        <div className="w-full min-h-screen ">
-
-            {/* ✅ استخدام الجلوبال هيدر بتاعك هنا */}
+        <div className="w-full min-h-screen">
             <WebsiteHeader
                 title={`${examTitle || "Exam"} Questions`}
                 icon={HeaderIcon}
                 breadcrumbs={breadcrumbsData}
             />
 
-            <div className="max-w-7xl mx-auto px-6  space-y-6">
-                {/* كارد الامتحان الأبيض */}
+            <div className="max-w-7xl mx-auto px-6 space-y-6">
                 <div className="bg-white h-auto p-4">
                     <div className="flex flex-col lg:flex-row gap-6">
                         <div className="flex-1">
-                            {/* Header: Progress Bar & Timer */}
+
+                            {/* Header: Progress tracking and countdown timer */}
                             <div className="flex justify-between items-center mb-6">
                                 <div className="flex-1 mr-8">
                                     <ExamProgress
@@ -86,10 +87,10 @@ export default function ExamForm({
                                 </div>
                             </div>
 
-                            {/* Form: Question, Answers & Navigation */}
+                            {/* Form Content: Displays current question and navigation controls */}
                             <form onSubmit={handleSubmit(onSubmit)}>
-                                <div>
-                                    <h2 className="text-2xl font-semibold mb-6 text-blue-600 leading-relaxed">
+                                <div className="space-y-6">
+                                    <h2 className="text-2xl font-semibold text-blue-600 leading-relaxed">
                                         {currentQuestion.text}
                                     </h2>
 
@@ -110,9 +111,9 @@ export default function ExamForm({
                                     />
 
                                     {submitError && (
-                                        <p className="text-red-500 text-center mt-6 bg-red-50 p-3 rounded-md border border-red-100">
+                                        <div className="text-red-500 text-center mt-6 bg-red-50 p-3 rounded-md border border-red-100 font-mono">
                                             {submitError}
-                                        </p>
+                                        </div>
                                     )}
                                 </div>
                             </form>

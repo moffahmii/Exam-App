@@ -2,6 +2,7 @@ declare interface ErrorResponse {
     status: false;
     message: string;
     code: number;
+    payload?: T
     errors?: Array<{
         path: string;
         message: string;

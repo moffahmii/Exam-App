@@ -12,10 +12,8 @@ interface Props {
 }
 
 export default function QuestionsAnswers({ isSingleMode = false, ActiveQuestionIndex = 0 }: Props) {
-    // استخدمنا any هنا عشان الـ FormContext ممكن يكون SingleQuestionFormValue أو QuestionsBulkFormValue
     const form = useFormContext<any>();
 
-    // 💡 تحديد المسار الأساسي (basePath) بناءً على المود
     const basePath = isSingleMode
         ? "answers"
         : `questions.${ActiveQuestionIndex}.answers`;
@@ -96,8 +94,8 @@ export default function QuestionsAnswers({ isSingleMode = false, ActiveQuestionI
                                     variant={isCorrect ? "ghost" : "secondary"}
                                     onClick={() => handleMarkCorrect(index)}
                                     className={`w-full justify-center gap-2 ${isCorrect
-                                            ? "text-emerald-600 bg-white"
-                                            : "text-gray-800 bg-gray-200 hover:bg-gray-100"
+                                        ? "text-emerald-600 bg-white"
+                                        : "text-gray-800 bg-gray-200 hover:bg-gray-100"
                                         }`}
                                 >
                                     <Check className={`h-4 w-4 ${isCorrect ? "stroke-[3px]" : ""}`} />

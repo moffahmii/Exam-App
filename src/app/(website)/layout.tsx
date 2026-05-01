@@ -18,13 +18,13 @@ export default async function Layout({ children }: Props) {
     return (
         <SidebarProvider style={{ "--sidebar-width": "346px" } as React.CSSProperties}>
             <AppSideBar />
-            <main className="flex-1 flex flex-col h-screen overflow-y-auto w-full bg-gray-100">
+            <main className="flex-1 flex flex-col h-screen overflow-y-auto w-full px-4 bg-gray-50">
                 <div className="flex items-center gap-2">
                     <div className="md:hidden">
                         <SidebarTrigger className="-ml-2" />
                     </div>
                 </div>
-                <div className="flex-1 bg-gray-100">
+                <div className="flex-1 bg-gray-50">
                     {children}
                 </div>
             </main>

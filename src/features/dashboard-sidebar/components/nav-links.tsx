@@ -17,7 +17,7 @@ const NAV_LINKS = [
     },
     {
         label: "Account Settings",
-        href: "/dashboard/account-setting",
+        href: "/account-setting",
         icon: Settings,
     },
     {
@@ -34,10 +34,9 @@ export default function DashboardSidebarnavLinks() {
     return (
         <nav className="p-6 space-y-2 bg-gray-800 h-full">
 
-            {/* 2. عملنا Map لتقليل التكرار وبناء اللينكات ديناميكياً */}
             {NAV_LINKS.map((link) => {
                 const active = isActive(link.href);
-                const Icon = link.icon; // بنخزن الأيقونة في متغير بحرف كابيتال عشان React يقراها كمكون
+                const Icon = link.icon; 
 
                 return (
                     <Link

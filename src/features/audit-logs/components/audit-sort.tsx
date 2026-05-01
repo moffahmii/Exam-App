@@ -6,26 +6,42 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuPortal,
-    DropdownMenuGroup, // ✅ استدعينا الـ Group هنا
 } from "@/shared/components/ui/dropdown-menu";
-import { Check, ArrowUp, ArrowDown, ArrowDownUp } from "lucide-react";
+import { 
+    ArrowDownAz, 
+    ArrowUpAz, 
+    CalendarArrowDown, 
+    CalendarArrowUp, 
+    ArrowDownUp 
+} from "lucide-react";
+import { cn } from "@/shared/utils/cn.util";
 
-type SortField = 'action' | 'user' | 'entity' | 'createdAt';
-type SortOrder = 'asc' | 'desc';
+/**
+ * التصميم الجديد يعتمد على دمج الحقل مع الاتجاه في خيار واحد
+ * لتسهيل تجربة المستخدم كما في الصورة المرفقة.
+ */
+
+type SortValue = 
+    | 'action-desc' | 'action-asc' 
+    | 'user-desc' | 'user-asc' 
+    | 'entity-desc' | 'entity-asc' 
+    | 'createdAt-desc' | 'createdAt-asc';
 
 interface SortOption {
-    field: SortField;
     label: string;
+    value: SortValue;
+    icon: React.ElementType;
 }
 
-const SORT_FIELDS: SortOption[] = [
-    { field: 'action', label: 'Action' },
-    { field: 'user', label: 'User' },
-    { field: 'entity', label: 'Entity' },
-    { field: 'createdAt', label: 'Newest' },
+const SORT_OPTIONS: SortOption[] = [
+    { label: 'Action', value: 'action-desc', icon: ArrowDownAz },
+    { label: 'Action', value: 'action-asc', icon: ArrowUpAz },
+    { label: 'User', value: 'user-desc', icon: ArrowDownAz },
+    { label: 'User', value: 'user-asc', icon: ArrowUpAz },
+    { label: 'Entity', value: 'entity-desc', icon: ArrowDownAz },
+    { label: 'Entity', value: 'entity-asc', icon: ArrowUpAz },
+    { label: 'Newest', value: 'createdAt-desc', icon: CalendarArrowDown },
+    { label: 'Newest', value: 'createdAt-asc', icon: CalendarArrowUp },
 ];
 
 interface AuditLogsSortProps {
@@ -34,78 +50,49 @@ interface AuditLogsSortProps {
 }
 
 export function AuditLogsSort({ value, onChange }: AuditLogsSortProps) {
-    const [field, order] = value.split('-') as [SortField, SortOrder];
-
-    const handleFieldChange = (newField: SortField) => {
-        if (newField === field) {
-            const newOrder = order === 'asc' ? 'desc' : 'asc';
-            onChange(`${newField}-${newOrder}`);
-        } else {
-            onChange(`${newField}-desc`);
-        }
-    };
-
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger
-                className="flex items-center gap-1.5 hover:bg-blue-700 px-3 py-1.5 rounded-md transition-colors outline-none cursor-pointer border-none bg-transparent text-white select-none"
-            >
-                <span className="uppercase text-sm font-medium">Sort</span>
-                <ArrowDownUp className="w-4 h-4" />
+            <DropdownMenuTrigger >
+                <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-none transition-colors outline-none font-mono text-xs font-bold uppercase tracking-widest shadow-sm">
+                    <span>Sort</span>
+                    <ArrowDownUp className="w-4 h-4" />
+                </button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuPortal>
-                <DropdownMenuContent
-                    align="end"
-                    sideOffset={5}
-                    className="w-56 bg-white z-[999] shadow-xl border border-gray-200 p-1 rounded-lg"
-                >
-                    {/* ✅ غلفنا الجزء الأول في Group */}
-                    <DropdownMenuGroup>
-                        <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold text-gray-500 uppercase">Sort by</DropdownMenuLabel>
-                        {SORT_FIELDS.map((item) => {
-                            const isActive = item.field === field;
-                            return (
-                                <DropdownMenuItem
-                                    key={item.field}
-                                    onClick={() => handleFieldChange(item.field)}
-                                    className="flex items-center justify-between px-2 py-2 text-sm cursor-pointer hover:bg-blue-50 rounded-md outline-none"
-                                >
-                                    <span>{item.label}</span>
-                                    {isActive && (
-                                        <div className="flex items-center gap-1">
-                                            {order === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-                                            <Check className="w-4 h-4 text-blue-600" />
-                                        </div>
-                                    )}
-                                </DropdownMenuItem>
-                            );
-                        })}
-                    </DropdownMenuGroup>
+            <DropdownMenuContent 
+                align="end" 
+                className="w-64 rounded-none border border-gray-200 bg-white p-0 shadow-xl"
+            >
+                <div className="flex flex-col py-1">
+                    {SORT_OPTIONS.map((option) => {
+                        const isActive = value === option.value;
+                        const isDescending = option.value.includes('desc');
+                        const Icon = option.icon;
 
-                    <DropdownMenuSeparator className="my-1 bg-gray-100" />
-
-                    {/* ✅ غلفنا الجزء التاني في Group */}
-                    <DropdownMenuGroup>
-                        <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold text-gray-500 uppercase">Order</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => onChange(`${field}-asc`)}
-                            className="flex justify-between px-2 py-2 text-sm cursor-pointer hover:bg-blue-50 rounded-md outline-none"
-                        >
-                            <span className="flex items-center gap-2"><ArrowUp className="w-4 h-4" /> Ascending</span>
-                            {order === 'asc' && <Check className="w-4 h-4 text-blue-600" />}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => onChange(`${field}-desc`)}
-                            className="flex justify-between px-2 py-2 text-sm cursor-pointer hover:bg-blue-50 rounded-md outline-none"
-                        >
-                            <span className="flex items-center gap-2"><ArrowDown className="w-4 h-4" /> Descending</span>
-                            {order === 'desc' && <Check className="w-4 h-4 text-blue-600" />}
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-
-                </DropdownMenuContent>
-            </DropdownMenuPortal>
+                        return (
+                            <DropdownMenuItem
+                                key={option.value}
+                                onClick={() => onChange(option.value)}
+                                className={cn(
+                                    "flex items-center gap-3 px-4 py-3 cursor-pointer outline-none transition-colors rounded-none",
+                                    isActive ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50 text-gray-700"
+                                )}
+                            >
+                                <Icon className={cn("w-5 h-5", isActive ? "text-blue-600" : "text-gray-400")} />
+                                
+                                <div className="flex items-center gap-1.5 flex-1">
+                                    <span className={cn("text-sm font-bold font-mono", isActive ? "text-blue-900" : "text-gray-900")}>
+                                        {option.label}
+                                    </span>
+                                    <span className="text-[10px] text-gray-400 font-mono mt-0.5">
+                                        ({isDescending ? 'descending' : 'ascending'})
+                                    </span>
+                                </div>
+                            </DropdownMenuItem>
+                        );
+                    })}
+                </div>
+            </DropdownMenuContent>
         </DropdownMenu>
     );
 }

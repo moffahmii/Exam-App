@@ -63,7 +63,7 @@
                             {/* عرض خطأ السيرفر (React Query) */}
                             {serverError && !fieldState.error && (
                                 <p className="text-xs text-red-500 font-medium">
-                                    {(serverError as Error).message}
+                                    Email already exists
                                 </p>
                             )}
                         </div>

@@ -37,10 +37,10 @@ export default function LoginForm() {
                         <Field data-invalid={fieldState.invalid}>
                             <FieldLabel>Username</FieldLabel>
 
-                            <Input 
-                            className="h-10"
-                            placeholder="user123"
-                            {...field} autoComplete="username" />
+                            <Input
+                                className="h-10"
+                                placeholder="user123"
+                                {...field} autoComplete="username" />
 
                             {fieldState.error && (
                                 <FieldError errors={[fieldState.error]} />
@@ -60,8 +60,8 @@ export default function LoginForm() {
                             <FieldLabel>Password</FieldLabel>
 
                             <PasswordInput
-                            placeholder="*********"
-                             {...field} autoComplete="current-password" />
+                                placeholder="*********"
+                                {...field} autoComplete="current-password" />
 
                             {fieldState.error && (
                                 <FieldError errors={[fieldState.error]} />

@@ -27,11 +27,8 @@ export function QuestionActions({ questionId, examId, questionText }: QuestionAc
     return (
         <>
             <GlobalActionsMenu
-                // View هنا هيروح لصفحة التفاصيل
                 viewHref={`/dashboard/questions/view/${questionId}`}
-                // Edit هيروح لصفحة التعديل (أو نفس صفحة الفيو حسب تصميمك)
                 editHref={`/dashboard/exams/${examId}/questions/edit/${questionId}`}
-                // عند الضغط على مسح بنفتح المودال
                 onDelete={() => setOpenDelete(true)}
             />
 
@@ -41,7 +38,7 @@ export function QuestionActions({ questionId, examId, questionText }: QuestionAc
                 onConfirm={handleDeleteConfirm}
                 isLoading={isDeleting}
                 title="Delete Question"
-                description={`Are you sure you want to delete this question? This action cannot be undone.`}
+                description={`Are you sure you want to delete this question?`}
             />
         </>
     );

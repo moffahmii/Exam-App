@@ -3,20 +3,25 @@ import { getExamQuestions } from "@/features/questions/apis/exam-questions.api";
 import { IApiResponse } from "@/shared/types/api";
 import { ExamQuestionsResponse, Question } from "@/shared/types/exam-quetions-site";
 
+/**
+ * Custom hook to fetch exam questions and metadata based on examId.
+ */
 export const useExam = (examId: string | null) => {
-    const query = useQuery<IApiResponse<ExamQuestionsResponse>>({
+    const query = useQuery({
         queryKey: ["exam-questions", examId],
-        queryFn: () => getExamQuestions(examId!),
+        // Cast the API response to enforce our clean interface types
+        queryFn: async () => {
+            const response = await getExamQuestions(examId!);
+            return response as unknown as IApiResponse<ExamQuestionsResponse>;
+        },
         enabled: !!examId,
-        staleTime: 1000 * 60 * 5,
+        staleTime: 1000 * 60 * 5, // Cache for 5 minutes
     });
 
     const payload = query.data?.status ? query.data.payload : undefined;
 
-    const questions: Question[] = query.data?.status && payload?.questions ? payload.questions : [];
-
-
-    const duration: number = query.data?.status && payload?.duration ? payload.duration : 60;
+    const questions: Question[] = payload?.questions ?? [];
+    const duration: number = payload?.duration ?? 60;
 
     return {
         questions,

@@ -1,5 +1,7 @@
-import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+"use client";
+
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 
 interface ExamNavigationProps {
     currentIndex: number;
@@ -10,6 +12,10 @@ interface ExamNavigationProps {
     onNext: () => void;
 }
 
+/**
+ * ExamNavigation component using Shadcn UI Buttons.
+ * Manages the transition between questions and the final submission.
+ */
 export function ExamNavigation({
     currentIndex,
     total,
@@ -18,34 +24,48 @@ export function ExamNavigation({
     onPrev,
     onNext,
 }: ExamNavigationProps) {
+    const isLastQuestion = currentIndex === total - 1;
+
     return (
-        <div className="flex justify-between items-center pt-8 gap-6 ">
-            <button
+        <div className="flex justify-between items-center pt-8 gap-6">
+            {/* Previous Question Button */}
+            <Button
                 type="button"
+                variant="secondary"
                 onClick={onPrev}
                 disabled={currentIndex === 0}
-                className="flex-1 flex items-center justify-center px-6 py-3 text-gray-500 font-medium text-sm disabled:opacity-40 bg-gray-100 hover:bg-gray-200  transition-colors cursor-pointer"
+                className="flex-1 h-auto py-3 px-6 rounded-none text-gray-500 font-medium text-sm bg-gray-100 hover:bg-gray-200 transition-colors"
             >
-                <ChevronLeft className="mr-2 w-5 h-5" /> Previous
-            </button>
+                <ChevronLeft className="mr-2 w-5 h-5" />
+                Previous
+            </Button>
 
-            {currentIndex < total - 1 ? (
-                <button
+            {/* Conditional Rendering: Next Question or Finish Exam */}
+            {!isLastQuestion ? (
+                <Button
                     type="button"
                     onClick={onNext}
                     disabled={!canNext}
-                    className="flex-1 flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm cursor-pointer font-medium  transition-colors disabled:opacity-50"
+                    className="flex-1 h-auto py-3 px-6 rounded-none bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
                 >
-                    Next <ChevronRight className="ml-2 w-5 h-5" />
-                </button>
+                    Next
+                    <ChevronRight className="ml-2 w-5 h-5" />
+                </Button>
             ) : (
-                <button
+                <Button
                     type="submit"
                     disabled={isSubmitting || !canNext}
-                    className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold  disabled:bg-gray-400 disabled:opacity-50 transition-colors cursor-pointer"
+                    className="flex-1 h-auto py-3 px-6 rounded-none bg-green-600 hover:bg-green-700 text-white font-bold transition-colors disabled:bg-gray-400"
                 >
-                    {isSubmitting ? "Submitting..." : "Finish Exam"}
-                </button>
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Submitting...
+                        </>
+                    ) : (
+                        "Finish Exam"
+                    )}
+                </Button>
             )}
         </div>
     );

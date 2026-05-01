@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createDiploma } from '../apis/add-diploma-api';
-import { DiplomaField } from '@/features/upload-photo/scheme/photo-scheme';
+import { DiplomaField } from '@/shared/schemas/photo-scheme';
 
 export function useCreateDiploma() {
     const queryClient = useQueryClient();
