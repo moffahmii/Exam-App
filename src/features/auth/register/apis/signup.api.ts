@@ -6,7 +6,6 @@ export async function signupAction(data: {
     password: string;
 }) {
     console.log("=== [START] signupAction ===");
-    // طبعت الداتا بس خفيت الباسورد عشان الـ Security في اللوجز
     console.log("1. Payload:", { username: data.username, email: data.email, password: "***" });
 
     try {
