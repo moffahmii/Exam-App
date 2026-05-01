@@ -9,7 +9,7 @@ export const ExamSchema = z.object({
         z.number().min(1, "Duration must be at least 1")
     ),
 
-    diplomaId: z.string().min(1, "Diploma ID is required"),
+    diplomaId: z.string().min(1, "Diploma Name is required"),
 });
 
 export type ExamField = z.infer<typeof ExamSchema>;

@@ -122,10 +122,10 @@ export function ImageUploadField({
                 };
 
                 return (
-                    <Field data-invalid={!!errorMessage} className="w-full mb-4">
+                    <Field data-invalid={!!errorMessage} className="w-full">
                         {label && (
-                            <FieldLabel className="text-gray-900 block text-base font-mono mb-2">
-                                {label}
+                            <FieldLabel className="text-gray-900 block text-base">
+                                Image
                             </FieldLabel>
                         )}
 
@@ -146,7 +146,7 @@ export function ImageUploadField({
                                             <ImageIcon size={44} strokeWidth={1} className="text-gray-300" />
                                         </div>
 
-                                        <div className="grow flex justify-center items-center gap-2 text-sm font-mono text-gray-500">
+                                        <div className="grow flex justify-center items-center gap-2 text-sm  text-gray-500">
                                             <CloudUpload size={20} />
                                             <span>
                                                 Drop image here or <span className="text-blue-500">select from your computer</span>
@@ -178,14 +178,14 @@ export function ImageUploadField({
                                             />
                                         </div>
 
-                                        <span className="text-sm font-mono text-gray-600 truncate max-w-xs">
+                                        <span className="text-sm  text-gray-600 truncate max-w-xs">
                                             {localFile?.name || value?.split('/').pop() || "Uploaded_Image"}
                                         </span>
                                     </div>
 
                                     <div className="flex items-center gap-4 shrink-0 pl-4">
                                         {localFile?.size && (
-                                            <span className="text-sm font-mono text-gray-400">
+                                            <span className="text-sm  text-gray-400">
                                                 {formatFileSize(localFile.size)}
                                             </span>
                                         )}
@@ -224,7 +224,7 @@ export function ImageUploadField({
 
                         {/* Display combined local and RHF errors */}
                         {errorMessage && (
-                            <p className="mt-2 text-sm text-red-500 font-mono">
+                            <p className="mt-2 text-sm text-red-500 ">
                                 {errorMessage}
                             </p>
                         )}
