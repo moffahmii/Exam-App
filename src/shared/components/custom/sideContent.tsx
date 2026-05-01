@@ -5,15 +5,14 @@ export default function SideContent() {
     return (
         <div className="flex flex-col justify-center px-16 bg-gray-100 relative  min-h-screen">
 
-            <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute inset-0 blur-3xl opacity-60 pointer-events-none">
                 <BackCircle
-                    size={350}
-                    className="top-25 left-25"
+                    size="w-[350px] h-[350px]"
+                    className="absolute top-5 left-90"
                 />
-
                 <BackCircle
-                    size={400}
-                    className="top-10 left-60"
+                    size="w-[350px] h-[350px]"
+                    className="absolute top-100 right-100"
                 />
             </div>
 
@@ -23,7 +22,7 @@ export default function SideContent() {
                     <div className="bg-blue-600 text-white px-2 py-1 rounded">
                         <FolderCode />
                     </div>
-                    <span className="font-semibold text-blue-600">
+                    <span className="font-semibold text-2xl text-blue-600">
                         Exam App
                     </span>
                 </div>
@@ -76,6 +75,7 @@ export default function SideContent() {
                     </div>
                 </div>
             </div>
+
         </div>
     );
 }

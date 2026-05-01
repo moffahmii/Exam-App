@@ -1,18 +1,21 @@
-import React from "react";
+import { cn } from "@/shared/utils/cn.util";
 
 interface BackgroundCircleProps {
     className?: string;
-    size?: number | string; // يقبل رقم أو نص
+    size?: string;
 }
 
 export function BackCircle({
-    className = "",
-    size = 300, // المقاس الافتراضي
+    className,
+    size = "w-[300px] h-[300px]",
 }: BackgroundCircleProps) {
     return (
         <div
-            style={{ width: size, height: size }} // الحل القاطع هنا
-            className={`absolute rounded-full bg-blue-400 blur-3xl opacity-40 shrink-0 ${className}`}
+            className={cn(
+                "absolute rounded-full z-10 bg-blue-400",
+                size,
+                className
+            )}
         />
     );
 }
