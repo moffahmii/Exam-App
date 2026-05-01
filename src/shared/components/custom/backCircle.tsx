@@ -12,7 +12,7 @@ export function BackCircle({
     return (
         <div
             className={cn(
-                "absolute rounded-full z-10 bg-blue-400",
+                "absolute rounded-full over z-10 bg-blue-400",
                 size,
                 className
             )}

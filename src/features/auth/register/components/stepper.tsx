@@ -1,4 +1,5 @@
 "use client";
+
 import React from 'react';
 import { usePathname } from "next/navigation";
 import { cn } from '@/shared/utils/cn.util';
@@ -16,17 +17,19 @@ export function Stepper() {
 
     const step = getStep();
 
-    const RenderLine = ({ index }: { index: number }) => (
-        <div className="flex-1 mx-2 relative h-0.5">
+    const renderLine = (index: number) => (
+        <div className="flex-1 relative h-[2px] self-center">
+            {/* الخط المنقط الخلفي */}
             <div
-                className="absolute inset-0 h-full w-full"
+                className="absolute inset-0 w-full h-full"
                 style={{
-                    backgroundImage: `linear-gradient(to right, #94a3b8 50%, transparent 50%)`,
-                    backgroundSize: '10px 2px',
+                    backgroundImage: `linear-gradient(to right, #3b82f6 50%, transparent 50%)`,
+                    backgroundSize: '8px 2px',
                     backgroundRepeat: 'repeat-x',
-                    opacity: 0.3
+                    opacity: 0.4
                 }}
             />
+            {/* الخط الأزرق المتصل (التقدم) */}
             <div
                 className={cn(
                     "absolute inset-0 h-full bg-blue-600 transition-all duration-700 ease-in-out origin-left",
@@ -52,15 +55,19 @@ export function Stepper() {
         );
     };
 
+    const renderDiamond = (index: number) => (
+        <RenderDiamond index={index} />
+    );
+
     return (
-        <div className="flex items-center w-full px-1 py-4">
-            <RenderDiamond index={1} />
-            <RenderLine index={1} />
-            <RenderDiamond index={2} />
-            <RenderLine index={2} />
-            <RenderDiamond index={3} />
-            <RenderLine index={3} />
-            <RenderDiamond index={4} />
+        <div className="flex items-center w-full max-w-md mx-auto px-4 py-8">
+            {renderDiamond(1)}
+            {renderLine(1)}
+            {renderDiamond(2)}
+            {renderLine(2)}
+            {renderDiamond(3)}
+            {renderLine(3)}
+            {renderDiamond(4)}
         </div>
     );
 }

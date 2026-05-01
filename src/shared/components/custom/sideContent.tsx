@@ -3,15 +3,15 @@ import { BackCircle } from "./backCircle";
 
 export default function SideContent() {
     return (
-        <div className="flex flex-col justify-center px-16 bg-gray-100 relative  min-h-screen">
+        <div className="flex flex-col justify-center px-16 overflow-hidden bg-gray-100 relative  min-h-screen">
 
-            <div className="absolute inset-0 blur-3xl opacity-60 pointer-events-none">
+            <div className="absolute  inset-0 blur-3xl  opacity-60 pointer-events-none">
                 <BackCircle
                     size="w-[350px] h-[350px]"
                     className="absolute top-5 left-90"
                 />
                 <BackCircle
-                    size="w-[350px] h-[350px]"
+                    size="w-[350px] h-[350px] "
                     className="absolute top-100 right-100"
                 />
             </div>

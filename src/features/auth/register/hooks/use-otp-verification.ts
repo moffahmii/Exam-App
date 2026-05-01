@@ -8,12 +8,23 @@ export default function useOTPVerification() {
 
     return useMutation({
         mutationKey: ['Verify OTP'],
-        mutationFn: verifyOTPAction,
-        onSuccess: (data) => {
+        mutationFn: async (data: { email: string; code: string }) => {
+            const result = await verifyOTPAction(data);
+
+            // هنا بنجبر ريأكت كويري يدخل في الـ onError لو فيه مشكلة
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            return result.data;
+        },
+        onSuccess: () => {
+            // لن يتم الوصول لهنا إلا إذا كان الكود صحيحاً
             Cookies.set("auth_stage", "completed", { expires: 1 / 24 });
             router.push("/register/complete");
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
+            // سيتم عرض الخطأ هنا وفي مكون الفورم تلقائياً
             console.error("OTP Error:", error.message);
         }
     });
