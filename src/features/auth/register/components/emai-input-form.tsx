@@ -53,14 +53,12 @@
                                     }`}
                             />
 
-                            {/* عرض خطأ الـ Validation (Zod) */}
                             {fieldState.error && (
                                 <p className="text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1">
                                     {fieldState.error.message}
                                 </p>
                             )}
 
-                            {/* عرض خطأ السيرفر (React Query) */}
                             {serverError && !fieldState.error && (
                                 <p className="text-xs text-red-500 font-medium">
                                     Email already exists

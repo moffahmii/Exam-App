@@ -19,7 +19,6 @@ export function Stepper() {
 
     const renderLine = (index: number) => (
         <div className="flex-1 relative h-[2px] self-center">
-            {/* الخط المنقط الخلفي */}
             <div
                 className="absolute inset-0 w-full h-full"
                 style={{
@@ -29,7 +28,6 @@ export function Stepper() {
                     opacity: 0.4
                 }}
             />
-            {/* الخط الأزرق المتصل (التقدم) */}
             <div
                 className={cn(
                     "absolute inset-0 h-full bg-blue-600 transition-all duration-700 ease-in-out origin-left",

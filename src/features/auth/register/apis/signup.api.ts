@@ -22,7 +22,6 @@ export async function signupAction(data: {
             return { error: result.message  };
         }
 
-        // لو الريكويست نجح
         return { success: true, data: result };
 
     } catch (error) {
