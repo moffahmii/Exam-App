@@ -48,7 +48,7 @@ export default function SideContent() {
                     </span>
                 </div>
 
-                <h1 className="text-3xl font-bold text-gray-800 mb-12">
+                <h1 className="text-3xl font-bold text-gray-800 mb-12 font-inter">
                     Empower your learning journey with our smart exam platform.
                 </h1>
 
