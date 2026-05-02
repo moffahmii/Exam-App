@@ -8,6 +8,7 @@ import { PasswordFormValues, passwordSchema } from '@/shared/schemas/auth-schema
 import useSignup from '../hooks/use-signup';
 import { ErrorResponse } from '@/shared/types/api';
 import PasswordInput from '../../../../shared/components/custom/password-Input';
+import ErrorAlert from '@/shared/components/custom/ErrorAlert';
 
 export default function PasswordStepForm() {
 
@@ -16,6 +17,7 @@ export default function PasswordStepForm() {
         resolver: zodResolver(passwordSchema),
         mode: "onChange",
     });
+
     const onSubmit = (values: PasswordFormValues) => {
         const email = Cookies.get("user_email");
         const infoData = JSON.parse(Cookies.get("user_info_step") || "{}");
@@ -30,6 +32,7 @@ export default function PasswordStepForm() {
         };
         mutate(finalPayload as any);
     };
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
@@ -53,11 +56,11 @@ export default function PasswordStepForm() {
                     />
                 </div>
             </div>
+
             {error && (
-                <p className="text-sm text-red-500 font-mono bg-red-50 p-3 rounded-md border border-red-100">
-                    {(error as ErrorResponse).message}
-                </p>
+                <ErrorAlert message={error.message} />
             )}
+
             <Button
                 type="submit"
                 disabled={isPending}
