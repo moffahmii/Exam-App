@@ -11,6 +11,7 @@ async function handleResponse<T>(response: Response): Promise<IApiResponse<T>> {
     } catch (err) {
         return {
             status: false,
+            code: 500, 
             message: "Invalid server response",
             payload: null as T,
         };
@@ -19,6 +20,7 @@ async function handleResponse<T>(response: Response): Promise<IApiResponse<T>> {
     if (!response.ok) {
         return {
             status: false,
+            code: response.status, 
             message: data?.message || "Request failed",
             payload: null as T,
         };
@@ -44,6 +46,7 @@ export async function loginUser(
             headers: {
                 "Content-Type": "application/json",
             },
+            cache: "no-store", // ضروري جداً لبيئة Vercel لمنع تخزين طلبات تسجيل الدخول
             body: JSON.stringify(credentials),
         }
     );
